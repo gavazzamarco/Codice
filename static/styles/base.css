@@ -1,0 +1,35 @@
+:root {
+    --aqua: #00a3ff;
+    --kazuma: #2ecc71;
+    --megumin: #e74c3c;
+    --darkness: #f1c40f;
+    --dark: #1a1a24;
+    --grey: #2c2c38; 
+}
+
+.base-container {
+    padding: 10px 40px;
+    border-bottom: 2px solid var(--aqua);
+}
+
+.base-logo-header {
+    width: 90px;
+    height: 90px;
+    border-radius: 50%;
+}
+
+.base-nav-link {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: black;
+}
+
+.base-footer {
+    border-top: 2px solid var(--aqua);
+}
+
+.base-logo-footer {
+    width: 140px;
+    height: 90px;
+    border-radius: 8px;
+}
