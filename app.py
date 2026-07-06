@@ -33,13 +33,13 @@ def load_user(user_id):
 
 @app.route("/register")
 def register():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    
     return render_template("register.html")
 
 @app.route("/create_account", methods=["POST"])
 def create_account():
-    if current_user.is_authenticated:
-        return redirect(url_for('home'))
-    
     name = request.form.get("name")
     surname = request.form.get("surname")
     username = request.form.get("username")
@@ -49,3 +49,36 @@ def create_account():
     users_dao.create_user(name, surname, username, password, profile_img)
     flash('Registration successful! Please log in.', 'success')
     redirect(url_for('login'))
+
+@app.route("/login")
+def login():
+    if current_user.is_authenticated:
+        return redirect(url_for('home'))
+    
+    return render_template("login.html")
+
+@app.route("/validation")
+def validation():
+    username = request.form.get("username")
+    password = request.form.get("password")
+
+    db_user = users_dao.get_user_by_email(username)
+    if not db_user:
+        flash("The user does not exist", "danger")
+        return redirect(url_for("login"))
+    elif not check_password_hash(db_user["password"], password):
+        flash("The password is wrong", "danger")
+        return redirect(url_for("login"))
+    else:
+        new = User(
+            id=db_user["id"],
+            name=db_user["name"],
+            surname=db_user["surname"],
+            email=db_user["email"],
+            password=db_user["password"],
+            profile_img=db_user["profile_img"],
+        )
+        login_user(new)
+        flash("Welcome back! " + db_user["name"] + " " + db_user["surname"] + "!", "success")
+
+    return redirect(url_for("home"))

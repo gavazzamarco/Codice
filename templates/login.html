@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}
+Login
+{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-center">
+    <div class="col-6 justify-content-center">
+        <form action="url_for{{ validation }}" method="POST">
+            <h2 class="text-center">Welcome back</h2>
+
+            <label for="username">Username *</label>
+            <input type="text" id="username" name="username" class="form-control" placeholder="luigirossi2026" required>
+
+            <label for="password">Password *</label>
+            <input type="password" id="password" name="password" class="form-control" required>
+
+            <div class="d-flex">
+                <button class="w-50" type="reset">Cancel</button>
+                <button class="w-50" type="submit">Create</button>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}
