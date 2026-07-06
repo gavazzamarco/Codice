@@ -7,7 +7,7 @@ Register
 {% block content %}
 <div class="d-flex justify-content-center">
     <div class="col-6 justify-content-center">
-        <form action="url_for{{ create_account }}" method="POST">
+        <form action="{{ url_for('create_account') }}" method="POST" enctype="multipart/form-data">
             <h2 class="text-center">The adventure begins.</h2>
             <div class="row">
                 <div class="col-6">
@@ -26,8 +26,8 @@ Register
             <label for="password">Password *</label>
             <input type="password" id="password" name="password" class="form-control" required>
 
-            <label for="ruolo">Role *</label>
-            <select id="ruolo" class="form-control">
+            <label for="role">Role *</label>
+            <select id="role" name="role" class="form-control">
                 <option value="None">Select a role</option>
                 <option value="adventurer">Adventure</option>
                 <option value="master">Guild Master</option>

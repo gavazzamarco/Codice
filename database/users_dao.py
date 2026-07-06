@@ -1,12 +1,15 @@
+import os
 import sqlite3
 
-DB_PATH = "Konosuba_db.db"
+# Per pythonanywhere
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+DB_PATH = os.path.join(BASE_DIR, "Konosuba.db")
 
 def get_user_by_id(user_id):
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-    query = "SELECT * FROM Users WHERE Users.id=?"
+    query = "SELECT * FROM users WHERE users.id=?"
     cursor.execute(query, (user_id,))
     db_user = cursor.fetchone()
     conn.commit()
@@ -14,21 +17,21 @@ def get_user_by_id(user_id):
     conn.close()
     return db_user
 
-def create_user(name, surname, username, password, profile_img):
+def create_user(name, surname, username, password, role, profile_img):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    query = "INSERT INTO Users (name, surname, email, password, profile_img) VALUES (?,?,?,?,?)"
-    cursor.execute(query, (name, surname, username, password, profile_img))
+    query = "INSERT INTO users (name, surname, username, password, role, profile_img) VALUES (?,?,?,?,?,?)"
+    cursor.execute(query, (name, surname, username, password, role, profile_img))
     conn.commit()
     cursor.close()
     conn.close()
 
-def get_user_by_email(username):
+def get_user_by_username(username):
     conn = sqlite3.connect(DB_PATH)
     conn.row_factory = sqlite3.Row
     cursor = conn.cursor()
-    query = "SELECT * FROM Users WHERE Users.username=?"
-    cursor.execute(query, (username))
+    query = "SELECT * FROM users WHERE users.username=?"
+    cursor.execute(query, (username,))
     db_user = cursor.fetchone()
     conn.commit()
     cursor.close()

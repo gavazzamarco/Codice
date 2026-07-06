@@ -7,7 +7,7 @@ Login
 {% block content %}
 <div class="d-flex justify-content-center">
     <div class="col-6 justify-content-center">
-        <form action="url_for{{ validation }}" method="POST">
+        <form action="{{ url_for('validation') }}" method="POST">
             <h2 class="text-center">Welcome back</h2>
 
             <label for="username">Username *</label>
