@@ -96,3 +96,10 @@ def logout():
     flash('You have been logged out.', 'info')
     return redirect(url_for("home"))
 
+@app.route("/quest_create")
+@login_required
+def quest_create():
+    if (not current_user.is_authenticated) or current_user.role!="master":
+        flash("You do not have permission to access this page.", "danger")
+        return redirect(url_for('home'))
+    render_template("quest_create.html")

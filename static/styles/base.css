@@ -9,7 +9,7 @@
 
 .base-container {
     padding: 10px 40px;
-    border-bottom: 2px solid var(--aqua);
+    border-bottom: 5px solid var(--aqua);
 }
 
 .base-logo-header {
@@ -18,10 +18,46 @@
     border-radius: 50%;
 }
 
+.base-title {
+    font-style: italic;
+    font-size: 2rem;
+    font-weight: 800;
+}
+
+.base-red { color: var(--megumin); }
+.base-yellow { color: var(--darkness); }
+.base-green { color: var(--kazuma); }
+.base-blue { color: var(--aqua); }
+
+.base-nav-item {
+    border: 2px solid var(--darkness);
+    border-radius: 25px;
+    margin-right: 10px;
+    box-shadow: 4px 4px 0px rgb(229, 219, 26);
+}
+
+.base-nav-item:hover {
+    border-color: var(--megumin);
+    box-shadow: 4px 4px 0px rgb(171, 32, 1);
+}
+
+.base-nav-item.active {
+    border-color: var(--kazuma);
+    box-shadow: 4px 4px 0px rgb(0, 144, 27);
+}
+
+.base-nav-item.active .base-nav-link {
+    color: var(--kazuma);
+}
+
 .base-nav-link {
     font-size: 1.3rem;
-    font-weight: 600;
-    color: black;
+    font-weight: 800;
+    color: rgb(255, 170, 0);
+}
+
+.base-nav-link:hover {
+    color: var(--megumin);
 }
 
 .base-flash {
@@ -33,11 +69,42 @@
 }
 
 .base-footer {
-    border-top: 2px solid var(--aqua);
+    border-top: 5px solid var(--aqua);
 }
 
 .base-logo-footer {
     width: 140px;
     height: 90px;
     border-radius: 8px;
+}
+
+.base-button {
+    font-size: 1.5rem;
+    font-weight: 700;
+    border-radius: 10px;
+    padding: 10px 0px;
+}
+
+.base-approve {
+    color: var(--kazuma);
+    background-color: #025123;
+    border: 2px solid var(--kazuma);
+}
+
+.base-approve:hover {
+    color: #025123;
+    background-color: var(--kazuma);
+    border-color: #025123;
+}
+
+.base-cancel {
+    color: var(--megumin);
+    background-color: #ffeb51;
+    border: 2px solid var(--megumin);
+}
+
+.base-cancel:hover {
+    color: #ffeb51;
+    background-color: var(--megumin);
+    border: 2px solid #ffeb51;
 }

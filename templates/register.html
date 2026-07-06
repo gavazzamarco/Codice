@@ -4,14 +4,24 @@
 Register
 {% endblock %}
 
+{% block register_active %}
+active
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/auth.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="d-flex justify-content-center">
-    <div class="col-6 justify-content-center">
+    <div class="col-6 justify-content-center auth-card">
         <form action="{{ url_for('create_account') }}" method="POST" enctype="multipart/form-data">
-            <h2 class="text-center">The adventure begins.</h2>
+            <h1 class="text-center auth-title">
+                <span class="base-red">The</span> <span class="base-yellow">adve</span><span class="base-green">nture</span> <span class="base-blue">begin</span>
+            </h1>
             <div class="row">
                 <div class="col-6">
-                    <label for="name">Name *</label>
+                    <label for="name" class="auth-label">Name *</label>
                     <input type="text" id="name" name="name" class="form-control" placeholder="Luigi" required>
                 </div>
                 <div class="col-6">
@@ -37,11 +47,11 @@ Register
             <input type="file" id="profile_img" name="profile_img" class="form-control">
 
             <label for="bio">Biography (optional)</label>
-            <textarea class="form-control" rows="4"></textarea>
+            <textarea class="form-control" rows="4" placeholder="Share your past story and let others know about your achievements."></textarea>
 
             <div class="d-flex">
-                <button class="w-50" type="reset">Cancel</button>
-                <button class="w-50" type="submit">Create</button>
+                <button class="w-50 base-button base-cancel m-1" type="reset">Cancel</button>
+                <button class="w-50 base-button base-approve m-1" type="submit">Create</button>
             </div>
         </form>
     </div>

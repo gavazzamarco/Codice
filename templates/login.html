@@ -4,11 +4,21 @@
 Login
 {% endblock %}
 
+{% block login_active %}
+active
+{% endblock %}
+
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/auth.css') }}">
+{% endblock %}
+
 {% block content %}
 <div class="d-flex justify-content-center">
-    <div class="col-6 justify-content-center">
+    <div class="col-5 justify-content-center auth-card">
         <form action="{{ url_for('validation') }}" method="POST">
-            <h2 class="text-center">Welcome back</h2>
+            <h1 class="text-center auth-title">
+                <span class="base-red">Wel</span><span class="base-yellow">come</span> <span class="base-green">ba</span><span class="base-blue">ck</span>
+            </h1>
 
             <label for="username">Username *</label>
             <input type="text" id="username" name="username" class="form-control" placeholder="luigirossi2026" required>
@@ -17,8 +27,8 @@ Login
             <input type="password" id="password" name="password" class="form-control" required>
 
             <div class="d-flex">
-                <button class="w-50" type="reset">Cancel</button>
-                <button class="w-50" type="submit">Login</button>
+                <button class="w-50 base-button base-cancel m-1" type="reset">Cancel</button>
+                <button class="w-50 base-button base-approve m-1" type="submit">Login</button>
             </div>
         </form>
     </div>
