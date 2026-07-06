@@ -15,6 +15,7 @@ def inizializza_database():
         "password" TEXT NOT NULL,
         "role" TEXT NOT NULL,
         "profile_img" TEXT,
+        "bio" TEXT,
         PRIMARY KEY("id" AUTOINCREMENT)
     );
     """

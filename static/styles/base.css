@@ -24,6 +24,14 @@
     color: black;
 }
 
+.base-flash {
+    position: fixed;
+    top: 80px;
+    max-width: 600px;
+    display: flex;
+    flex-wrap: wrap;
+}
+
 .base-footer {
     border-top: 2px solid var(--aqua);
 }

@@ -17,11 +17,11 @@ def get_user_by_id(user_id):
     conn.close()
     return db_user
 
-def create_user(name, surname, username, password, role, profile_img):
+def create_user(name, surname, username, password, role, profile_img, bio):
     conn = sqlite3.connect(DB_PATH)
     cursor = conn.cursor()
-    query = "INSERT INTO users (name, surname, username, password, role, profile_img) VALUES (?,?,?,?,?,?)"
-    cursor.execute(query, (name, surname, username, password, role, profile_img))
+    query = "INSERT INTO users (name, surname, username, password, role, profile_img) VALUES (?,?,?,?,?,?,?)"
+    cursor.execute(query, (name, surname, username, password, role, profile_img, bio))
     conn.commit()
     cursor.close()
     conn.close()

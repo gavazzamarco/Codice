@@ -7,7 +7,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "secret-key-konosuba"
 
-login_manager = LoginManager()
+login_manager=LoginManager()
 login_manager.init_app(app)
 
 @app.route("/")
@@ -16,7 +16,7 @@ def home():
 
 @login_manager.user_loader
 def load_user(user_id):
-    db_user = users_dao.get_user_by_id(user_id)
+    db_user=users_dao.get_user_by_id(user_id)
     if db_user is not None:
         user = User(
             id=db_user["id"],
@@ -26,6 +26,7 @@ def load_user(user_id):
             password=db_user["password"],
             role=db_user["role"],
             profile_img=db_user["profile_img"],
+            bio=db_user["bio"],
         )
     else:
         user = None
@@ -39,16 +40,20 @@ def register():
 
 @app.route("/create_account", methods=["POST"])
 def create_account():
-    name = request.form.get("name")
-    surname = request.form.get("surname")
-    username = request.form.get("username")
-    password = generate_password_hash(request.form.get("password"))
-    role = request.form.get("role")
-    profile_img = request.form.get("profile_img")
-    if users_dao.get_user_by_username(username):
+    name=request.form.get("name")
+    surname=request.form.get("surname")
+    username=request.form.get("username")
+    password=generate_password_hash(request.form.get("password"))
+    role=request.form.get("role")
+    profile_img=request.form.get("profile_img")
+    bio=request.form.get("bio")
+    if users_dao.get_user_by_username(username) is not None:
         flash('A user with this username already exists.', 'danger')
-        redirect(url_for('register'))
-    users_dao.create_user(name, surname, username, password, role, profile_img)
+        return redirect(url_for('register'))
+    if role!="adventurer" or role!="master":
+        flash('Please select a valid role', 'danger')
+        return redirect(url_for('register'))
+    users_dao.create_user(name, surname, username, password, role, profile_img, bio)
     flash('Registration successful! Please log in.', 'success')
     return redirect(url_for('login'))
 
@@ -60,9 +65,9 @@ def login():
 
 @app.route("/validation", methods=["POST"])
 def validation():
-    username = request.form.get("username")
-    password = request.form.get("password")
-    db_user = users_dao.get_user_by_username(username)
+    username=request.form.get("username")
+    password=request.form.get("password")
+    db_user=users_dao.get_user_by_username(username)
     if not db_user:
         flash("The user does not exist", "danger")
         return redirect(url_for("login"))
@@ -70,7 +75,7 @@ def validation():
         flash("The password is wrong", "danger")
         return redirect(url_for("login"))
     else:
-        new = User(
+        new=User(
             id=db_user["id"],
             name=db_user["name"],
             surname=db_user["surname"],
@@ -78,7 +83,16 @@ def validation():
             password=db_user["password"],
             role=db_user["role"],
             profile_img=db_user["profile_img"],
+            bio=db_user["bio"],
         )
         login_user(new)
         flash("Welcome back! " + db_user["name"] + " " + db_user["surname"] + "!", "success")
     return redirect(url_for("home"))
+
+@app.route("/logout")
+@login_required
+def logout():
+    logout_user()
+    flash('You have been logged out.', 'info')
+    return redirect(url_for("home"))
+
