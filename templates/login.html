@@ -13,17 +13,17 @@ active
 {% endblock %}
 
 {% block content %}
-<div class="d-flex justify-content-center">
+<section class="d-flex justify-content-center">
     <div class="col-5 justify-content-center auth-card">
         <form action="{{ url_for('validation') }}" method="POST">
             <h1 class="text-center auth-title">
                 <span class="base-red">Wel</span><span class="base-yellow">come</span> <span class="base-green">ba</span><span class="base-blue">ck</span>
             </h1>
 
-            <label for="username">Username *</label>
+            <label for="username">Username*</label>
             <input type="text" id="username" name="username" class="form-control" placeholder="luigirossi2026" required>
 
-            <label for="password">Password *</label>
+            <label for="password">Password*</label>
             <input type="password" id="password" name="password" class="form-control" required>
 
             <div class="d-flex">
@@ -32,5 +32,5 @@ active
             </div>
         </form>
     </div>
-</div>
+</section>
 {% endblock %}

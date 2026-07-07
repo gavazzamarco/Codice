@@ -1,0 +1,26 @@
+.home-intro {
+    position: relative;
+    width: 100%;
+}
+
+.home-intro-testo-container {
+    position: absolute;
+    top: 25px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.home-intro-testo {
+    font-family: fantasy;
+    font-size: 5.5rem;
+    font-weight: 800;
+    letter-spacing: 3px;
+    background-color: var(--dark);
+    border-bottom: 4px solid var(--kazuma);
+    border-top: 4px solid var(--megumin);
+    border-left: 4px solid var(--darkness);
+    border-right: 4px solid var(--aqua);
+    border-radius: 15px;
+    padding: 0px 15px;
+}

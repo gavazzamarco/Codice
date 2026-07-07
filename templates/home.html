@@ -8,8 +8,52 @@ Home
 active
 {% endblock %}
 
-{% block content %}
-<div >
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
+{% endblock %}
 
-</div>
+{% block content %}
+<section class="home-intro">
+    <!-- Classe boostrap "img-fluid" che implementa la responsività -->
+    <img src="{{ url_for('static', filename='images/quests2.png') }}" class="img-fluid" alt="Logo Konosuba">
+    <div class="home-intro-testo-container">
+        <h1 class="home-intro-testo">
+            <span class="base-red">The</span> <span class="base-yellow">Antechamber</span> <span
+                class="base-green">of</span> <span class="base-blue">Glory</span>
+        </h1>
+    </div>
+</section>
+
+<section class="d-flex justify-content-center">
+    <div class="col-10 row">
+        <div class="col-3">
+            <label for="day">Day</label>
+            <select id="day" name="day" class="form-control">
+                <option></option>
+            </select>
+        </div>
+        <div class="col-3">
+            <label for="type">Type</label>
+            <select id="type" name="type" class="form-control">
+                <option></option>
+            </select>
+        </div>
+        <div class="col-3">
+            <label for="difficulty">Difficulty</label>
+            <select id="difficulty" name="difficulty" class="form-control">
+                <option></option>
+            </select>
+        </div>
+        <div class="col-3">
+            <label for="role">Role</label>
+            <select id="role" name="role" class="form-control">
+                <option></option>
+            </select>
+        </div>
+    </div>
+</section>
+
+<section>
+
+</section>
 {% endblock %}
