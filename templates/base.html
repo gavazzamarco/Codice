@@ -13,34 +13,49 @@
 </head>
 
 <body class="min-vh-100">
-    <div class="base-container sticky-top">
-        <header class="d-flex flex-wrap justify-content-between align-items-center py-2 mb-2">
-            <a href="{{ url_for('home') }}" class="d-flex align-items-center text-decoration-none">
-                <img src="{{ url_for('static', filename='images/logo-header.jpg') }}" class="base-logo-header" alt="Logo Konosuba">
-                <span class="base-title ms-1">
-                    <span class="base-red">Ko</span> <span class="base-yellow">no</span> <span class="base-green">su</span> <span class="base-blue">ba</span>
-                </span>
-            </a>
+    <div class="sticky-top">
+        <div class="base-container">
+            <header class="d-flex flex-wrap justify-content-between align-items-center py-2 mb-2">
+                <a href="{{ url_for('home') }}" class="d-flex align-items-center text-decoration-none">
+                    <img src="{{ url_for('static', filename='images/logo-header.jpg') }}" class="base-logo-header"
+                        alt="Logo Konosuba">
+                    <span class="base-title ms-1">
+                        <span class="base-color-red">Ko</span> <span class="base-color-yellow">no</span> <span
+                            class="base-color-green">su</span> <span class="base-color-blue">ba</span>
+                    </span>
+                </a>
 
-            <ul class="nav nav-pills align-items-center">
-                <li class="nav-item base-nav-item {% block home_active %}{% endblock %}">
-                    <a href="{{ url_for('home') }}" class="nav-link base-nav-link">Home</a>
-                </li>
-                {% if not current_user.is_authenticated %}
-                <li class="nav-item base-nav-item {% block login_active %}{% endblock %}">
-                    <a href="{{ url_for('login') }}" class="nav-link base-nav-link">Login</a>
-                </li>
-                <li class="nav-item base-nav-item {% block register_active %}{% endblock %}">
-                    <a href="{{ url_for('register') }}" class="nav-link base-nav-link">Register</a>
-                </li>
-                {% endif %}
-                {% if current_user.is_authenticated %}
-                <li class="nav-item">
-                    <a href="{{ url_for('logout') }}" class="nav-link base-nav-link">Logout</a>
-                </li>
-                {% endif %}
-            </ul>
-        </header>
+                <ul class="nav nav-pills align-items-center">
+                    <li class="nav-item base-nav-item {% block home_active %}{% endblock %}">
+                        <a href="{{ url_for('home') }}" class="nav-link base-nav-link">Home</a>
+                    </li>
+                    {% if not current_user.is_authenticated %}
+                    <li class="nav-item base-nav-item {% block login_active %}{% endblock %}">
+                        <a href="{{ url_for('login') }}" class="nav-link base-nav-link">Login</a>
+                    </li>
+                    <li class="nav-item base-nav-item {% block register_active %}{% endblock %}">
+                        <a href="{{ url_for('register') }}" class="nav-link base-nav-link">Register</a>
+                    </li>
+                    {% endif %}
+                    {% if current_user.is_authenticated %}
+                    {% if current_user.role=="master" %}
+                    <li class="nav-item base-nav-item {% block create_active %}{% endblock %}">
+                        <a href="{{ url_for('quest_create') }}" class="nav-link base-nav-link">New Quest</a>
+                    </li>
+                    {% endif %}
+                    <li class="nav-item base-nav-item">
+                        <a href="{{ url_for('logout') }}" class="nav-link base-nav-link">Logout</a>
+                    </li>
+                    {% endif %}
+                </ul>
+            </header>
+        </div>
+        <div class="base-border-multicolor">
+            <div class="base-background-red col-3 h-100"></div>
+            <div class="base-background-yellow col-3 h-100"></div>
+            <div class="base-background-green col-3 h-100"></div>
+            <div class="base-background-blue col-3 h-100"></div>
+        </div>
     </div>
 
     <div class="base-flash">
@@ -61,7 +76,13 @@
         {% endblock %}
     </main>
 
-    <footer class="base-footer">
+    <footer>
+        <div class="base-border-multicolor flex-row-reverse">
+            <div class="base-background-red col-3 h-100"></div>
+            <div class="base-background-yellow col-3 h-100"></div>
+            <div class="base-background-green col-3 h-100"></div>
+            <div class="base-background-blue col-3 h-100"></div>
+        </div>
         <a href="{{ url_for('home') }}" class="d-flex align-items-center text-decoration-none">
             <img src="{{ url_for('static', filename='images/logo-footer.jpg') }}" class="base-logo-footer"
                 alt="Logo Konosuba">

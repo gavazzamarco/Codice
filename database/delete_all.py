@@ -41,7 +41,7 @@ def delete_all():
     esame_dir = os.path.dirname(BASE_DIR)
     
     cartelle_foto = [
-        os.path.join(esame_dir, 'static', 'images', 'profile_pics'),
+        os.path.join(esame_dir, 'static', 'images', 'profile_imgs'),
         os.path.join(esame_dir, 'static', 'images', 'tour_photos'),
         os.path.join(esame_dir, 'static', 'images', 'stop_photos'),   # AGGIUNTO: Foto tappe itinerario
         os.path.join(esame_dir, 'static', 'images', 'report_photos')   # AGGIUNTO: Foto resoconti post-tour

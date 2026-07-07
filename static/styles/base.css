@@ -9,7 +9,7 @@
 
 .base-container {
     padding: 10px 40px;
-    border-bottom: 5px solid var(--aqua);
+    background-color: var(--dark);
 }
 
 .base-logo-header {
@@ -24,10 +24,15 @@
     font-weight: 800;
 }
 
-.base-red { color: var(--megumin); }
-.base-yellow { color: var(--darkness); }
-.base-green { color: var(--kazuma); }
-.base-blue { color: var(--aqua); }
+.base-color-red { color: var(--megumin); }
+.base-color-yellow { color: var(--darkness); }
+.base-color-green { color: var(--kazuma); }
+.base-color-blue { color: var(--aqua); }
+
+.base-background-red { background-color: var(--megumin); }
+.base-background-yellow { background-color: var(--darkness); }
+.base-background-green { background-color: var(--kazuma); }
+.base-background-blue { background-color: var(--aqua); }
 
 .base-nav-item {
     border: 2px solid var(--darkness);
@@ -61,16 +66,20 @@
     color: var(--megumin);
 }
 
-.base-flash {
-    position: fixed;
-    top: 80px;
-    max-width: 600px;
+.base-border-multicolor {
+    width: 100%;
+    height: 5px;
     display: flex;
-    flex-wrap: wrap;
 }
 
-.base-footer {
-    border-top: 5px solid var(--aqua);
+.base-flash {
+    position: fixed;
+    top: 160px;
+    max-width: 350px;
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 1.3rem;
+    z-index: 100;
 }
 
 .base-logo-footer {
@@ -84,12 +93,13 @@
     font-weight: 700;
     border-radius: 10px;
     padding: 10px 0px;
+    border: 3px solid;
 }
 
 .base-approve {
     color: var(--kazuma);
     background-color: #025123;
-    border: 2px solid var(--kazuma);
+    border-color: var(--kazuma);
 }
 
 .base-approve:hover {
@@ -101,11 +111,11 @@
 .base-cancel {
     color: var(--megumin);
     background-color: #ffeb51;
-    border: 2px solid var(--megumin);
+    border-color: var(--megumin);
 }
 
 .base-cancel:hover {
     color: #ffeb51;
     background-color: var(--megumin);
-    border: 2px solid #ffeb51;
+    border-color: #ffeb51;
 }

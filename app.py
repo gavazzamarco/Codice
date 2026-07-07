@@ -3,6 +3,8 @@ from flask_login import LoginManager, current_user, login_user, logout_user, log
 from database import users_dao
 from models import User
 from werkzeug.security import generate_password_hash, check_password_hash
+from werkzeug.utils import secure_filename
+from datetime import datetime
 
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "secret-key-konosuba"
@@ -38,6 +40,16 @@ def register():
         return redirect(url_for('home'))
     return render_template("register.html")
 
+def check_and_save_photo(photo):
+    estensioni_consentite = {"jpg", "jpeg", "png", "webp"}
+    if not photo or ('.' not in photo.filename) or (photo.filename.rsplit('.', 1)[-1] not in estensioni_consentite):
+        return ""
+    filename_secure = secure_filename(photo.filename)
+    secs = str(int(datetime.now().timestamp()))
+    new_path = "static/images/profile_imgs/"+secs+"_"+filename_secure
+    photo.save(new_path)
+    return new_path
+
 @app.route("/create_account", methods=["POST"])
 def create_account():
     name=request.form.get("name")
@@ -45,15 +57,24 @@ def create_account():
     username=request.form.get("username")
     password=generate_password_hash(request.form.get("password"))
     role=request.form.get("role")
-    profile_img=request.form.get("profile_img")
+    profile_img=request.files["profile_img"]
     bio=request.form.get("bio")
     if users_dao.get_user_by_username(username) is not None:
         flash('A user with this username already exists.', 'danger')
         return redirect(url_for('register'))
-    if role!="adventurer" or role!="master":
+    if role!="adventurer" and role!="master":
         flash('Please select a valid role', 'danger')
         return redirect(url_for('register'))
-    users_dao.create_user(name, surname, username, password, role, profile_img, bio)
+    if role=="master" and users_dao.get_master():
+        flash('There is already a Game Master; choose another role.', 'danger')
+        return redirect(url_for('register'))
+    photo_path=None
+    if profile_img and profile_img.filename != "":
+        photo_path=check_and_save_photo(profile_img)
+        if photo_path=="":
+            flash('The photo format provided is incorrect. Only jpg, jpeg, png, and webp are allowed.', 'danger')
+            return redirect(url_for('register'))
+    users_dao.create_user(name, surname, username, password, role, photo_path, bio)
     flash('Registration successful! Please log in.', 'success')
     return redirect(url_for('login'))
 
@@ -92,8 +113,8 @@ def validation():
 @app.route("/logout")
 @login_required
 def logout():
-    logout_user()
     flash('You have been logged out.', 'info')
+    logout_user()
     return redirect(url_for("home"))
 
 @app.route("/quest_create")
@@ -102,4 +123,4 @@ def quest_create():
     if (not current_user.is_authenticated) or current_user.role!="master":
         flash("You do not have permission to access this page.", "danger")
         return redirect(url_for('home'))
-    render_template("quest_create.html")
+    return render_template("quest_create.html")

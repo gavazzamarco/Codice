@@ -36,8 +36,8 @@ def inizializza_database():
         "day" INTEGER NOT NULL,
         "start_time" TEXT NOT NULL,
         "location" TEXT NOT NULL,
-        PRIMARY KEY("id" AUTOINCREMENT)
-        FOREIGN KEY (quest_id) REFERENCES users(id)
+        PRIMARY KEY("id" AUTOINCREMENT),
+        FOREIGN KEY (quest_id) REFERENCES quests(id)
     );
     """
 
