@@ -6,15 +6,21 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime
 
+SIMULATE_DAY = 3 # Wednesday
+SIMULATE_HOUR = "18.34"
+DAY_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+
 app = Flask(__name__)
 app.config["SECRET_KEY"] = "secret-key-konosuba"
 
 login_manager=LoginManager()
 login_manager.init_app(app)
 
+
 @app.route("/")
 def home():
     return render_template("home.html")
+
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -34,21 +40,24 @@ def load_user(user_id):
         user = None
     return user
 
+
 @app.route("/register")
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     return render_template("register.html")
 
-def check_and_save_photo(photo):
+
+def check_and_save_photo(photo, path="static/images/"):
     estensioni_consentite = {"jpg", "jpeg", "png", "webp"}
     if not photo or ('.' not in photo.filename) or (photo.filename.rsplit('.', 1)[-1] not in estensioni_consentite):
         return ""
     filename_secure = secure_filename(photo.filename)
     secs = str(int(datetime.now().timestamp()))
-    new_path = "static/images/profile_imgs/"+secs+"_"+filename_secure
+    new_path = path+secs+"_"+filename_secure
     photo.save(new_path)
     return new_path
+
 
 @app.route("/create_account", methods=["POST"])
 def create_account():
@@ -59,24 +68,28 @@ def create_account():
     role=request.form.get("role")
     profile_img=request.files["profile_img"]
     bio=request.form.get("bio")
+
     if users_dao.get_user_by_username(username) is not None:
-        flash('A user with this username already exists.', 'danger')
+        flash('A user with this username already exists', 'danger')
         return redirect(url_for('register'))
     if role!="adventurer" and role!="master":
         flash('Please select a valid role', 'danger')
         return redirect(url_for('register'))
     if role=="master" and users_dao.get_master():
-        flash('There is already a Game Master; choose another role.', 'danger')
+        flash('There is already a Game Master; choose another role', 'danger')
         return redirect(url_for('register'))
+    
     photo_path=None
     if profile_img and profile_img.filename != "":
-        photo_path=check_and_save_photo(profile_img)
+        photo_path=check_and_save_photo(profile_img, "static/images/profile_imgs")
         if photo_path=="":
-            flash('The photo format provided is incorrect. Only jpg, jpeg, png, and webp are allowed.', 'danger')
+            flash('The photo format provided is incorrect. Only jpg, jpeg, png, and webp are allowed', 'danger')
             return redirect(url_for('register'))
+        
     users_dao.create_user(name, surname, username, password, role, photo_path, bio)
-    flash('Registration successful! Please log in.', 'success')
+    flash('Registration successful! Please log in', 'success')
     return redirect(url_for('login'))
+
 
 @app.route("/login")
 def login():
@@ -84,11 +97,13 @@ def login():
         return redirect(url_for('home')) 
     return render_template("login.html")
 
+
 @app.route("/validation", methods=["POST"])
 def validation():
     username=request.form.get("username")
     password=request.form.get("password")
     db_user=users_dao.get_user_by_username(username)
+
     if not db_user:
         flash("The user does not exist", "danger")
         return redirect(url_for("login"))
@@ -110,17 +125,57 @@ def validation():
         flash("Welcome back! " + db_user["name"] + " " + db_user["surname"] + "!", "success")
     return redirect(url_for("home"))
 
+
 @app.route("/logout")
 @login_required
 def logout():
-    flash('You have been logged out.', 'info')
+    flash('You have been logged out', 'info')
     logout_user()
     return redirect(url_for("home"))
+
 
 @app.route("/quest_create")
 @login_required
 def quest_create():
     if (not current_user.is_authenticated) or current_user.role!="master":
-        flash("You do not have permission to access this page.", "danger")
+        flash("You do not have permission to access this page", "danger")
         return redirect(url_for('home'))
     return render_template("quest_create.html")
+
+
+@app.route("/quest_check_and_save", methods=["POST"])
+@login_required
+def quest_check_and_save():
+    if current_user.role != "master":
+        flash("You do not have permission to access this page", "danger")
+        return redirect(url_for('home'))
+
+    title=request.form.get("title")
+    description=request.form.get("description")
+    duration=request.form.get("duration")
+    location=request.form.get("location")
+    type=request.form.get("type")
+    difficulty=request.form.get("difficulty")
+    illustration=request.files["illustration"]
+    days=request.form.getlist("day")
+    starts=request.form.getlist("start")
+
+    errors=[]
+    if not title:
+        errors.append("The title is mandatory")
+    if not description:
+        errors.append("The description is mandatory")
+    if not duration:
+        errors.append("The duration is mandatory")
+    if not location:
+        errors.append("The location is mandatory")
+    if not type:
+        errors.append("The type is mandatory")
+    if not difficulty:
+        errors.append("The difficulty is mandatory")
+    if check_and_save_photo(illustration, "static/images/illustrations")=="":
+        errors.append("The illustration is mandatory. Only jpg, jpeg, png, and webp are allowed")
+    if len(days)==0 or len(starts)==0:
+        errors.append("The quest must have at least one session")
+
+    return redirect(url_for('home'))

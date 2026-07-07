@@ -23,6 +23,7 @@ def inizializza_database():
         "id" INTEGER NOT NULL UNIQUE,
         "title" TEXT NOT NULL,
         "duration" INTEGER NOT NULL,
+        "location" TEXT NOT NULL,
         "type" TEXT NOT NULL,
         "difficulty" TEXT NOT NULL,
         "description" TEXT NOT NULL,
@@ -35,7 +36,6 @@ def inizializza_database():
         "quest_id" INTEGER NOT NULL,
         "day" INTEGER NOT NULL,
         "start_time" TEXT NOT NULL,
-        "location" TEXT NOT NULL,
         PRIMARY KEY("id" AUTOINCREMENT),
         FOREIGN KEY (quest_id) REFERENCES quests(id)
     );
