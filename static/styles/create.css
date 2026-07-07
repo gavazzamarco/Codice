@@ -1,0 +1,6 @@
+.create-session-card {
+    margin: 2px;
+    border: 2px solid var(--grey);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
