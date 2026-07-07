@@ -1,3 +1,18 @@
+.create-container {
+    background: var(--grey);
+}
+
+.auth-card {
+    background: white;
+}
+
+.create-section-title {
+    text-align: center;
+    font-family: fantasy;
+    font-size: 3.7rem;
+    margin-bottom: 25px;
+}
+
 .create-session-card {
     margin: 2px;
     border: 2px solid var(--grey);

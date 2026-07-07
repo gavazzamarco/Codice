@@ -17,37 +17,55 @@ active
     <!-- Classe boostrap "img-fluid" che implementa la responsività -->
     <img src="{{ url_for('static', filename='images/quests2.png') }}" class="img-fluid" alt="Logo Konosuba">
     <div class="home-intro-testo-container">
-        <h1 class="home-intro-testo">
+        <h1 class="home-intro-testo base-bordi-multicolor">
             <span class="base-color-red">The</span> <span class="base-color-yellow">Antechamber</span> <span
                 class="base-color-green">of</span> <span class="base-color-blue">Glory</span>
         </h1>
     </div>
+    <div class="base-border-multicolor">
+        <div class="base-background-red col-3 h-100"></div>
+        <div class="base-background-yellow col-3 h-100"></div>
+        <div class="base-background-green col-3 h-100"></div>
+        <div class="base-background-blue col-3 h-100"></div>
+    </div>
 </section>
 
-<section class="d-flex justify-content-center">
-    <div class="col-10 row">
+<section class="d-flex justify-content-center home-filtri-container">
+    <div class="col-10 row home-filtri-box base-bordi-multicolor">
         <div class="col-3">
-            <label for="day">Day</label>
+            <label for="day" class="home-filtri-label">Day</label>
             <select id="day" name="day" class="form-control">
-                <option></option>
+                <option value="">Select a day</option>
+                {% for day in days %}
+                <option value="{{ day }}">{{ day }}</option>
+                {% endfor %}
             </select>
         </div>
         <div class="col-3">
-            <label for="type">Type</label>
+            <label for="type" class="home-filtri-label">Type</label>
             <select id="type" name="type" class="form-control">
-                <option></option>
+                <option value="">Select a type</option>
+                {% for type in types %}
+                <option value="{{ type }}">{{ type }}</option>
+                {% endfor %}
             </select>
         </div>
         <div class="col-3">
-            <label for="difficulty">Difficulty</label>
+            <label for="difficulty" class="home-filtri-label">Difficulty</label>
             <select id="difficulty" name="difficulty" class="form-control">
-                <option></option>
+                <option value="">Select a difficulty</option>
+                {% for difficulty in difficulties %}
+                <option value="{{ difficulty }}">{{ difficulty }}</option>
+                {% endfor %}
             </select>
         </div>
         <div class="col-3">
-            <label for="role">Role</label>
+            <label for="role" class="home-filtri-label">Role</label>
             <select id="role" name="role" class="form-control">
-                <option></option>
+                <option value="">Select a role</option>
+                {% for role in roles %}
+                <option value="{{ role }}">{{ role }}</option>
+                {% endfor %}
             </select>
         </div>
     </div>
