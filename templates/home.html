@@ -17,7 +17,7 @@ active
     <!-- Classe boostrap "img-fluid" che implementa la responsività -->
     <img src="{{ url_for('static', filename='images/quests2.png') }}" class="img-fluid" alt="Logo Konosuba">
     <div class="home-intro-testo-container">
-        <h1 class="home-intro-testo base-bordi-multicolor">
+        <h1 class="home-intro-testo base-bordi-multicolor text-center">
             <span class="base-color-red">The</span> <span class="base-color-yellow">Antechamber</span> <span
                 class="base-color-green">of</span> <span class="base-color-blue">Glory</span>
         </h1>
@@ -36,41 +36,47 @@ active
             <!-- Ho dovuto mettere qua row se no per qualche motivo veniva mal formattato -->
             <!-- L'ho dovuto spostare dalla div sopra la form a qua, creando una div apposita -->
             <div class="row">
-                <div class="col-3">
+                <div class="col">
                     <label for="day" class="home-filtri-label base-color-red">Day</label>
                     <select id="day" name="day" class="form-control">
                         <option value="">Select a day</option>
                         {% for day in days %}
-                        <option value="{{ day }}">{{ day }}</option>
+                        <option value="{{ day }}" {% if day==giorno %} selected {% endif %}>{{ day }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-3">
+                <div class="col">
                     <label for="type" class="home-filtri-label base-color-yellow">Type</label>
                     <select id="type" name="type" class="form-control">
                         <option value="">Select a type</option>
                         {% for type in types %}
-                        <option value="{{ type }}">{{ type }}</option>
+                        <option value="{{ type }}" {% if type==tipo %} selected {% endif %}>{{ type }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-3">
+                <div class="col">
                     <label for="difficulty" class="home-filtri-label base-color-green">Difficulty</label>
                     <select id="difficulty" name="difficulty" class="form-control">
                         <option value="">Select a difficulty</option>
                         {% for difficulty in difficulties %}
-                        <option value="{{ difficulty }}">{{ difficulty }}</option>
+                        <option value="{{ difficulty }}" {% if difficulty==difficolta %} selected {% endif %}>{{ difficulty }}</option>
                         {% endfor %}
                     </select>
                 </div>
-                <div class="col-3">
+                <div class="col">
                     <label for="role" class="home-filtri-label base-color-blue">Role</label>
                     <select id="role" name="role" class="form-control">
                         <option value="">Select a role</option>
                         {% for role in roles %}
-                        <option value="{{ role }}">{{ role }}</option>
+                        <option value="{{ role }}"  {% if role==ruolo %} selected {% endif %}>{{ role }}</option>
                         {% endfor %}
                     </select>
+                </div>
+                <div class="col-auto d-flex flex-column align-items-center justify-content-center">
+                    <button type="submit" class="base-nav-item base-nav-link home-button-search">Search</button>
+                    {% if giorno or tipo or difficolta or ruolo %}
+                    <a href="{{ url_for('home') }}" class="base-nav-item base-nav-link home-button-search mt-3 home-button-reset">Reset</a>
+                    {% endif %}
                 </div>
             </div>
         </form>
@@ -84,12 +90,12 @@ active
     </h2>
     <!-- Ho dovuto aggiungere container-flui per evitare lo strabordamento -->
     <div class="container-fluid">
-        <div class="row">
-            {% if quests %}
-            {% for quest in quests %}
-            <div class="col-2 home-lateral-img-container">
+        {% if quests %}
+        {% for quest in quests %}
+        <div class="row base-row-margin">
+            <div class="col-2 d-flex align-items-center justify-content-center">
                 {% if quest.foto_sinistra %}
-                <img src="{{ url_for('static', filename=quest.foto_sinistra) }}" class="home-lateral-img-sx"
+                <img src="{{ url_for('static', filename=quest.foto_sinistra) }}" class="img-fluid"
                     alt="Decoration photo">
                 {% endif %}
             </div>
@@ -102,53 +108,54 @@ active
                             <div class="w-75">
                                 <h3 class="card-title home-card-title">{{ quest.title }}</h3>
                                 <div class="home-card-subtitle">
-                                    <div class="home-location"><span>Location:</span> <span>{{ quest.location }}</span>
+                                    <div class="home-location"><span>Location:</span> <span>{{ quest.location
+                                            }}</span>
                                     </div>
                                     <div class="home-type"><span>Type:</span> <span>{{ quest.type }}</span></div>
                                     <div class="home-difficulty"><span>Difficulty:</span> <span>{{ quest.difficulty
                                             }}</span></div>
-                                    <div class="home-duration"><span>Duration:</span> <span>{{ quest.duration }}</span>
+                                    <div class="home-duration"><span>Duration:</span> <span>{{ quest.duration
+                                            }}</span>
                                     </div>
                                 </div>
                             </div>
                             <div class="w-25 d-flex justify-content-center align-items-center">
-                                <a href="{{ url_for('home') }}" class="home-detail-button">View</a>
+                                <a href="{{ url_for('quest_detail') }}" class="home-detail-button">View</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </article>
-            <div class="col-2 home-lateral-img-container">
+            <div class="col-2 d-flex align-items-center justify-content-center">
                 {% if quest.foto_destra %}
-                <img src="{{ url_for('static', filename=quest.foto_destra) }}" class="home-lateral-img-dx"
-                    alt="Decoration photo">
+                <img src="{{ url_for('static', filename=quest.foto_destra) }}" class="img-fluid" alt="Decoration photo">
                 {% endif %}
             </div>
-            {% endfor %}
-            {% else %}
-            <div class="d-flex justify-content-center">
-                <div class="col-8">
-                    <div class="card position-relative home-card-container">
-                        <img src="{{ url_for('static', filename='images/filtraggio.png') }}"
-                            class="card-img object-fit-cover" alt="Image no quest found">
-                        <div class="card-img-overlay">
-                            <div class="home-noquest-title-container w-100">
-                                <div class="d-flex align-items-center justify-content-center text-center">
-                                    <h3 class="card-title home-noquest-title">
-                                        There are no quests currently available or that match the filters you set
-                                    </h3>
-                                </div>
-                                <div class="d-flex justify-content-center align-items-center">
-                                    <a href="{{ url_for('home') }}"
-                                        class="home-detail-button home-noquest-button">Cancel filter</a>
-                                </div>
+        </div>
+        {% endfor %}
+        {% else %}
+        <div class="d-flex justify-content-center">
+            <div class="col-8">
+                <div class="card position-relative home-card-container">
+                    <img src="{{ url_for('static', filename='images/filtraggio.png') }}"
+                        class="card-img object-fit-cover" alt="Image no quest found">
+                    <div class="card-img-overlay">
+                        <div class="home-noquest-title-container w-100">
+                            <div class="d-flex align-items-center justify-content-center text-center">
+                                <h3 class="card-title home-noquest-title">
+                                    There are no quests currently available or that match the filters you set
+                                </h3>
+                            </div>
+                            <div class="d-flex justify-content-center align-items-center">
+                                <a href="{{ url_for('home') }}" class="home-detail-button home-noquest-button">Cancel
+                                    filter</a>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-            {% endif %}
         </div>
+        {% endif %}
     </div>
 </section>
 {% endblock %}

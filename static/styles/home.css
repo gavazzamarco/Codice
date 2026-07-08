@@ -41,6 +41,33 @@
     margin-bottom: 5px;
 }
 
+.home-button-search {
+    width: 160px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 1.6rem;
+    font-family: fantasy;
+    font-weight: 400;
+    padding: 6px;
+    margin-right: 0px;
+}
+
+.home-button-search:hover {
+    color: var(--megumin);
+}
+
+.home-button-reset {
+    color: var(--aqua);
+    border-color: var(--aqua);
+    box-shadow: 4px 4px 0px rgb(0, 200, 236);
+}
+
+.home-button-reset:hover {
+    color: var(--kazuma);
+    border-color: var(--kazuma);
+    box-shadow: 4px 4px 0px rgb(0, 105, 7);
+}
+
 .home-quest-container { 
     background: var(--grey); 
     padding-bottom: 80px;
@@ -53,22 +80,8 @@
     margin-bottom: 40px;
 }
 
-.home-lateral-img-container {
-    position: relative;
-}
-
-.home-lateral-img-sx {
-    position: absolute;
-    top: 0px;
-    right: 2px;
-    height: 420px;
-}
-
-.home-lateral-img-dx {
-    position: absolute;
-    top: 0px;
-    left: 2px;
-    height: 420px;
+.base-row-margin {
+    margin-bottom: 50px;
 }
 
 .home-card-container {
@@ -99,6 +112,8 @@
     font-family: fantasy;
     font-weight: 800;
     letter-spacing: 2px;
+    color: rgb(255, 221, 0);
+    text-shadow: 5px 5px 0px black;
 }
 
 .home-card-subtitle {
@@ -113,6 +128,7 @@
     margin-right: 10px;
     font-family: sans-serif;
     font-weight: 600;
+    margin-bottom: 3px;
 }
 
 .home-location {

@@ -49,7 +49,7 @@ def home_filter():
     errors=[]
     if day!="" and day not in DAYS_OF_WEEK:
         errors.append("The day must be selected from the available options")
-    day=DAYS_OF_WEEK.index(day) if day else None
+    day_index=DAYS_OF_WEEK.index(day) if day else None
     if type!="" and type not in TYPES:
         errors.append("The type must be selected from the available options")
     if difficulty!="" and difficulty not in DIFFICULTY:
@@ -59,9 +59,9 @@ def home_filter():
     if len(errors)>0:
         stampa_errori(errors)
         return redirect(url_for('home'))
-    filtered_quests=[dict(row) for row in quests_dao.get_filtered_quest()]
+    filtered_quests=[dict(row) for row in quests_dao.get_filtered_quest(day_index, type, difficulty, role)]
     filtered_quests=assegna_foto(filtered_quests)
-    return render_template("home.html", days=DAYS_OF_WEEK, types=TYPES, difficulties=DIFFICULTY, roles=ROLES, quests=filtered_quests)
+    return render_template("home.html", days=DAYS_OF_WEEK, types=TYPES, difficulties=DIFFICULTY, roles=ROLES, quests=filtered_quests, giorno=day, tipo=type, difficolta=difficulty, ruolo=role)
 
 
 @login_manager.user_loader
@@ -292,6 +292,6 @@ def quest_check_and_save():
     return redirect(url_for('home'))
 
 
-@app.route("/quest_detail")
-def quest_detail():
-    return redirect('quest_detail.html')
+@app.route("/quest/<int:quest_id>")
+def quest_detail(quest_id):
+    return render_template('quest_detail.html')
