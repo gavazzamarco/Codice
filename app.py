@@ -6,15 +6,15 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime
 
-SIMULATE_DAY = 3 # Wednesday
-SIMULATE_HOUR = "18.34"
-DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-LOCATIONS = ["Axel", "Kingdom of Elroad", "Arcanletia"]
-DIFFICULTY = ["Easy", "Medium", "Hard", "Legendary"]
-TYPES = ["Combact", "Exploration", "Stealth", "Magic", "Survival"]
-ROLES = ["Warrior", "Mage", "Healer"]
+SIMULATE_DAY=2 # Wednesday
+SIMULATE_HOUR="18.34"
+DAYS_OF_WEEK=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+LOCATIONS=["Axel", "Kingdom of Elroad", "Arcanletia"]
+DIFFICULTY=["Easy", "Medium", "Hard", "Legendary"]
+TYPES=["Combact", "Exploration", "Stealth", "Magic", "Survival"]
+ROLES=["Warrior", "Mage", "Healer"]
 
-app = Flask(__name__)
+app=Flask(__name__)
 app.config["SECRET_KEY"] = "secret-key-konosuba"
 
 login_manager=LoginManager()
@@ -23,14 +23,38 @@ login_manager.init_app(app)
 
 @app.route("/")
 def home():
-    return render_template("home.html", days=DAYS_OF_WEEK, types=TYPES, difficulties=DIFFICULTY, roles=ROLES)
+    filtered_quests=quests_dao.get_all_quest()
+    return render_template("home.html", days=DAYS_OF_WEEK, types=TYPES, difficulties=DIFFICULTY, roles=ROLES, quests=filtered_quests)
+
+@app.route("/home_filter", methods=["POST"])
+def home_filter():
+    day=request.form.get("day")
+    type=request.form.get("type")
+    difficulty=request.form.get("difficulty")
+    role=request.form.get("role")
+
+    errors=[]
+    if day!="" and day not in DAYS_OF_WEEK:
+        errors.append("The day must be selected from the available options")
+    day=DAYS_OF_WEEK.index(day) if day else None
+    if type!="" and type not in TYPES:
+        errors.append("The type must be selected from the available options")
+    if difficulty!="" and difficulty not in DIFFICULTY:
+        errors.append("The difficulty must be selected from the available options")
+    if role!="" and role not in ROLES:
+        errors.append("The role must be selected from the available options")
+    if len(errors)>0:
+        stampa_errori(errors)
+        return redirect(url_for('home'))
+    quests_filtered=quests_dao.quest_filtered(day, type, difficulty, role)
+    return render_template("home.html", days=DAYS_OF_WEEK, types=TYPES, difficulties=DIFFICULTY, roles=ROLES, quests=quests_filtered)
 
 
 @login_manager.user_loader
 def load_user(user_id):
     db_user=users_dao.get_user_by_id(user_id)
     if db_user is not None:
-        user = User(
+        user=User(
             id=db_user["id"],
             name=db_user["name"],
             surname=db_user["surname"],
@@ -41,7 +65,7 @@ def load_user(user_id):
             bio=db_user["bio"],
         )
     else:
-        user = None
+        user=None
     return user
 
 
@@ -52,15 +76,16 @@ def register():
     return render_template("register.html")
 
 
-def check_and_save_photo(photo, path="static/images/"):
-    estensioni_consentite = {"jpg", "jpeg", "png", "webp"}
+def check_and_save_photo(photo, path):
+    estensioni_consentite={"jpg", "jpeg", "png", "webp"}
     if not photo or ('.' not in photo.filename) or (photo.filename.rsplit('.', 1)[-1] not in estensioni_consentite):
         return ""
-    filename_secure = secure_filename(photo.filename)
-    secs = str(int(datetime.now().timestamp()))
-    new_path = path+secs+"_"+filename_secure
-    photo.save(new_path)
-    return new_path
+    filename_secure=secure_filename(photo.filename)
+    secs=str(int(datetime.now().timestamp()))
+    without_static_path=path+secs+"_"+filename_secure
+    with_static_path="static/"+without_static_path
+    photo.save(with_static_path)
+    return without_static_path
 
 
 @app.route("/create_account", methods=["POST"])
@@ -85,7 +110,7 @@ def create_account():
     
     photo_path=None
     if profile_img and profile_img.filename != "":
-        photo_path=check_and_save_photo(profile_img, "static/images/profile_imgs/")
+        photo_path=check_and_save_photo(profile_img, "images/profile_imgs/")
         if photo_path=="":
             flash('The photo format provided is incorrect. Only jpg, jpeg, png, and webp are allowed', 'danger')
             return redirect(url_for('register'))
@@ -236,7 +261,7 @@ def quest_check_and_save():
         stampa_errori(errors)
         return redirect(url_for('quest_create'))
     # Da mettere alla fine solo se non si vuole salvare sempre ed inutilmente altre foto
-    path_photo = check_and_save_photo(illustration, "static/images/illustrations/")
+    path_photo = check_and_save_photo(illustration, "images/illustrations/")
     if path_photo=="":
         flash("The illustration is mandatory. Only jpg, jpeg, png, and webp are allowed", 'danegr')
         return redirect(url_for('quest_create'))

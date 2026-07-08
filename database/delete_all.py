@@ -18,6 +18,8 @@ def delete_all():
     
     tabelle = [
         "users",
+        "quests",
+        "sessions",
         "sqlite_sequence"     # Per azzerare gli ID incrementali
     ]
     
@@ -42,9 +44,7 @@ def delete_all():
     
     cartelle_foto = [
         os.path.join(esame_dir, 'static', 'images', 'profile_imgs'),
-        os.path.join(esame_dir, 'static', 'images', 'tour_photos'),
-        os.path.join(esame_dir, 'static', 'images', 'stop_photos'),   # AGGIUNTO: Foto tappe itinerario
-        os.path.join(esame_dir, 'static', 'images', 'report_photos')   # AGGIUNTO: Foto resoconti post-tour
+        os.path.join(esame_dir, 'static', 'images', 'illustrations'),
     ]
     
     print("Inizio rimozione file multimediali...")

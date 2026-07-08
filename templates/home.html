@@ -31,47 +31,75 @@ active
 </section>
 
 <section class="d-flex justify-content-center home-filtri-container">
-    <div class="col-10 row home-filtri-box base-bordi-multicolor">
-        <div class="col-3">
-            <label for="day" class="home-filtri-label">Day</label>
-            <select id="day" name="day" class="form-control">
-                <option value="">Select a day</option>
-                {% for day in days %}
-                <option value="{{ day }}">{{ day }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col-3">
-            <label for="type" class="home-filtri-label">Type</label>
-            <select id="type" name="type" class="form-control">
-                <option value="">Select a type</option>
-                {% for type in types %}
-                <option value="{{ type }}">{{ type }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col-3">
-            <label for="difficulty" class="home-filtri-label">Difficulty</label>
-            <select id="difficulty" name="difficulty" class="form-control">
-                <option value="">Select a difficulty</option>
-                {% for difficulty in difficulties %}
-                <option value="{{ difficulty }}">{{ difficulty }}</option>
-                {% endfor %}
-            </select>
-        </div>
-        <div class="col-3">
-            <label for="role" class="home-filtri-label">Role</label>
-            <select id="role" name="role" class="form-control">
-                <option value="">Select a role</option>
-                {% for role in roles %}
-                <option value="{{ role }}">{{ role }}</option>
-                {% endfor %}
-            </select>
-        </div>
+    <div class="col-10 home-filtri-box base-bordi-multicolor">
+        <form action="{{ url_for('home_filter') }}" method="POST">
+            <!-- Ho dovuto mettere qua row se no per qualche motivo veniva mal formattato -->
+            <!-- L'ho dovuto spostare dalla div sopra la form a qua, creando una div apposita -->
+            <div class="row">
+                <div class="col-3">
+                    <label for="day" class="home-filtri-label base-color-red">Day</label>
+                    <select id="day" name="day" class="form-control">
+                        <option value="">Select a day</option>
+                        {% for day in days %}
+                        <option value="{{ day }}">{{ day }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label for="type" class="home-filtri-label base-color-yellow">Type</label>
+                    <select id="type" name="type" class="form-control">
+                        <option value="">Select a type</option>
+                        {% for type in types %}
+                        <option value="{{ type }}">{{ type }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label for="difficulty" class="home-filtri-label base-color-green">Difficulty</label>
+                    <select id="difficulty" name="difficulty" class="form-control">
+                        <option value="">Select a difficulty</option>
+                        {% for difficulty in difficulties %}
+                        <option value="{{ difficulty }}">{{ difficulty }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="col-3">
+                    <label for="role" class="home-filtri-label base-color-blue">Role</label>
+                    <select id="role" name="role" class="form-control">
+                        <option value="">Select a role</option>
+                        {% for role in roles %}
+                        <option value="{{ role }}">{{ role }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+        </form>
     </div>
 </section>
 
 <section>
+    <h2>Available quests</h2>
+    <div class="row">
+        {% for quest in quests %}
+        <div class="col-2">
+            ciao
+        </div>
+        <article class="col-8">
+            <div class="card text-bg-dark">
+                <!-- DA MODIFICARE, SOLO PER PROVA -->
+                <img src="{{ url_for('static', filename='images/quests.png') }}" class="card-img" alt="">
+                <div class="card-img-overlay">
+                    <h5 class="card-title">Card title</h5>
+                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
+                        additional content. This content is a little bit longer.</p>
+                    <p class="card-text"><small>Last updated 3 mins ago</small></p>
+                </div>
+            </div>
+        </article>
+        <div class="col-2">
 
+        </div>
+        {% endfor %}
+    </div>
 </section>
 {% endblock %}

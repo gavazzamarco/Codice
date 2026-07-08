@@ -13,9 +13,9 @@
 </head>
 
 <body class="min-vh-100">
-    <div class="sticky-top">
+    <header class="sticky-top">
         <div class="base-container">
-            <header class="d-flex flex-wrap justify-content-between align-items-center py-2 mb-2">
+            <div class="d-flex flex-wrap justify-content-between align-items-center py-2 mb-2">
                 <a href="{{ url_for('home') }}" class="d-flex align-items-center text-decoration-none">
                     <img src="{{ url_for('static', filename='images/logo-header.jpg') }}" class="base-logo-header"
                         alt="Logo Konosuba">
@@ -48,7 +48,7 @@
                     </li>
                     {% endif %}
                 </ul>
-            </header>
+            </div>
         </div>
         <div class="base-border-multicolor">
             <div class="base-background-red col-3 h-100"></div>
@@ -56,7 +56,7 @@
             <div class="base-background-green col-3 h-100"></div>
             <div class="base-background-blue col-3 h-100"></div>
         </div>
-    </div>
+    </header>
 
     <div class="base-flash">
         {% with messages = get_flashed_messages(with_categories=true) %}
