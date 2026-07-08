@@ -290,3 +290,8 @@ def quest_check_and_save():
     else:
         return redirect(url_for('quest_create'))
     return redirect(url_for('home'))
+
+
+@app.route("/quest_detail")
+def quest_detail():
+    return redirect('quest_detail.html')

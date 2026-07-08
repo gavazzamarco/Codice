@@ -157,3 +157,32 @@
     border-color: var(--megumin);
     box-shadow: 4px 4px 0px rgb(171, 32, 1);
 }
+
+.home-noquest-title-container {
+    position: absolute;
+    bottom: 30px;
+}
+
+.home-noquest-title {
+    font-family: fantasy;
+    font-size: 3rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    width: 850px;
+    color: var(--darkness);
+    display: flex;
+    flex-wrap: wrap;
+    text-shadow: 3px 3px 0px black;
+}
+
+.home-noquest-button {
+    color: var(--aqua);
+    border-color: var(--aqua);
+    box-shadow: 4px 4px 0px rgb(0, 21, 139);
+}
+
+.home-noquest-button:hover {
+    color: var(--kazuma);
+    border-color: var(--kazuma);
+    box-shadow: 4px 4px 0px rgb(0, 97, 21);
+}
