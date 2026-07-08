@@ -85,7 +85,7 @@ def create_account():
     
     photo_path=None
     if profile_img and profile_img.filename != "":
-        photo_path=check_and_save_photo(profile_img, "static/images/profile_imgs")
+        photo_path=check_and_save_photo(profile_img, "static/images/profile_imgs/")
         if photo_path=="":
             flash('The photo format provided is incorrect. Only jpg, jpeg, png, and webp are allowed', 'danger')
             return redirect(url_for('register'))
@@ -144,25 +144,34 @@ def quest_create():
     if (not current_user.is_authenticated) or current_user.role!="master":
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for('home'))
-    return render_template("quest_create.html", future_days=DAYS_OF_WEEK, types=TYPES, difficulties=DIFFICULTY, locations=LOCATIONS)
+    return render_template("quest_create.html", days=DAYS_OF_WEEK, types=TYPES, difficulties=DIFFICULTY, locations=LOCATIONS)
 
 
 def conversione_minuti_assoluti(day, hour, minute):
     MINUTES_IN_DAY=60*24
     return int(MINUTES_IN_DAY*int(day) + int(hour)*60 + int(minute))
 
-def check_overlap(day, hour, minute, durata, sessions):
-    current={}
-    current["start"]=conversione_minuti_assoluti(day, hour, minute)
-    current["end"]=current["start"]+int(durata)
-    for session in sessions:
-        saved={}
-        quest=quests_dao.get_quest_by_id(session["quest_id"])
-        saved["start"]=conversione_minuti_assoluti(session["day"], session["hour"], session["minute"])
-        saved["end"]=saved["start"]+int(quest["duration"])
-        if (max(saved["start"], current["start"])) < min(saved["end"], current["end"]):
-            return session
-    return None
+def check_overlap(days, starts_hours, starts_minutes, duration, location):
+    valid_session=[]
+    sessions=quests_dao.get_all_session()
+    for index in range(min(len(days), len(starts_hours), len(starts_minutes))):
+        day=DAYS_OF_WEEK.index(days[index])
+        hour=int(starts_hours[index])
+        minute=int(starts_minutes[index])
+        current={}
+        current["start"]=conversione_minuti_assoluti(day, hour, minute)
+        current["end"]=current["start"]+int(duration)
+        for session in sessions:
+            quest=quests_dao.get_quest_by_id(session["quest_id"])
+            if location==quest["location"]:
+                saved={}
+                saved["start"]=conversione_minuti_assoluti(session["day"], session["hour"], session["minute"])
+                saved["end"]=saved["start"]+int(quest["duration"])
+                if (max(saved["start"], current["start"])) < min(saved["end"], current["end"]):
+                    flash("The session of ["+DAYS_OF_WEEK[day]+" h"+str(hour)+":"+str(minute)+"] conflicts with the quest ["+quest["title"] +"]", 'danger')
+                    continue
+        valid_session.append((day, hour, minute))
+    return valid_session
 
 def stampa_errori(errors):
     for error in errors:
@@ -171,7 +180,7 @@ def stampa_errori(errors):
 @app.route("/quest_check_and_save", methods=["POST"])
 @login_required
 def quest_check_and_save():
-    if current_user.role != "master":
+    if (not current_user.is_authenticated) or current_user.role!="master":
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for('home'))
 
@@ -199,8 +208,6 @@ def quest_check_and_save():
         errors.append("The type is mandatory")
     if not difficulty:
         errors.append("The difficulty is mandatory")
-    if len(days)==0 or len(starts_hours)==0 or len(starts_minutes)==0:
-        errors.append("The quest must have at least one session")
     duration=int(duration)
     if duration<=0:
         errors.append("The quest duration must be positive")
@@ -210,44 +217,37 @@ def quest_check_and_save():
         errors.append("The type must be selected from the available options")
     if difficulty not in DIFFICULTY:
         errors.append("The difficulty must be selected from the available options")
-    for day in days:
-        if day not in DAYS_OF_WEEK:
-            errors.append("The day must be selected from the available options")
-            break
-    for hour in starts_hours:
-        hour=int(hour)
-        if hour<0 or hour>23:
-            errors.append("The hour can only take value between 0 and 24")
-    for minutes in starts_minutes:
-        minutes=int(minutes)
-        if minutes<0 or minutes>59:
-            errors.append("The minutes can only take values between 0 and 60")
+    if len(days)==0 or len(starts_hours)==0 or len(starts_minutes)==0:
+        errors.append("The quest must have at least one session")
+    else:
+        for day in days:
+            if day not in DAYS_OF_WEEK:
+                errors.append("The day must be selected from the available options")
+                break
+        for hour in starts_hours:
+            hour=int(hour)
+            if hour<0 or hour>23:
+                errors.append("The hour can only take value between 0 and 23")
+        for minutes in starts_minutes:
+            minutes=int(minutes)
+            if minutes<0 or minutes>59:
+                errors.append("The minutes can only take values between 0 and 59")
+    if len(errors)>0:
+        stampa_errori(errors)
+        return redirect(url_for('quest_create'))
+    # Da mettere alla fine solo se non si vuole salvare sempre ed inutilmente altre foto
+    path_photo = check_and_save_photo(illustration, "static/images/illustrations/")
+    if path_photo=="":
+        flash("The illustration is mandatory. Only jpg, jpeg, png, and webp are allowed", 'danegr')
+        return redirect(url_for('quest_create'))
 
-    correct=0
-    quest_id=None
-    sessions=quests_dao.get_all_session()
-    for index in range(min(len(days), len(starts_hours), len(starts_minutes))):
-        giorno=DAYS_OF_WEEK.index(days[index])
-        ora=int(starts_hours[index])
-        minuti=int(starts_minutes[index])
-        session=check_overlap(giorno, ora, minuti, int(duration), sessions)
-        if session:
-            quest=quests_dao.get_quest_by_id(session["quest_id"])
-            errors.append("The session conflicts with the quest"+quest["title"])
-            continue
-        correct+=1
-        if correct==1:
-            # Da mettere alla fine solo se non si vuole salvare sempre ed inutilmente altre foto
-            path_photo = check_and_save_photo(illustration, "static/images/illustrations")
-            if path_photo=="":
-                errors.append("The illustration is mandatory. Only jpg, jpeg, png, and webp are allowed")
-                stampa_errori(errors)
-                return redirect(url_for('quest_create'))
-            if len(errors)>0:
-                stampa_errori(errors)
-                return redirect(url_for('quest_create'))
-            quest_id=quests_dao.create_quest(title, duration, location, type, difficulty, description, path_photo)
-        if correct>0:
-            quests_dao.create_session(quest_id, giorno, ora, minuti)
-
+    valid_sessions=check_overlap(days, starts_hours, starts_minutes, duration, location)
+    if len(valid_sessions)>0:
+        quest_id=quests_dao.create_quest(title, duration, location, type, difficulty, description, path_photo)
+        flash("The quest has at least one valid session, so it was created correctly", 'success')
+        for session in valid_sessions:
+            quests_dao.create_session(quest_id, session[0], session[1], session[2])
+            flash("The session of ["+DAYS_OF_WEEK[session[0]]+" h"+str(session[1])+":"+str(session[2])+"] is created correctly", 'success')
+    else:
+        return redirect(url_for('quest_create'))
     return redirect(url_for('home'))

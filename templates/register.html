@@ -17,7 +17,8 @@ active
     <div class="col-6 auth-card">
         <form action="{{ url_for('create_account') }}" method="POST" enctype="multipart/form-data">
             <h1 class="text-center auth-title">
-                <span class="base-color-red">The</span> <span class="base-color-yellow">adve</span><span class="base-color-green">nture</span> <span class="base-color-blue">begin</span>
+                <span class="base-color-red">The</span> <span class="base-color-yellow">adve</span><span
+                    class="base-color-green">nture</span> <span class="base-color-blue">begin</span>
             </h1>
             <div class="row">
                 <div class="col-6">
@@ -32,22 +33,29 @@ active
 
             <label for="username">Username*</label>
             <input type="text" id="username" name="username" class="form-control" placeholder="luigirossi2026" required>
-
+            
             <label for="password">Password*</label>
             <input type="password" id="password" name="password" class="form-control" required>
 
-            <label for="role">Role*</label>
-            <select id="role" name="role" class="form-control">
-                <option value="None">Select a role</option>
-                <option value="adventurer">Adventure</option>
-                <option value="master">Guild Master</option>
-            </select>
-
-            <label for="profile_img">Profile image (optional)</label>
-            <input type="file" id="profile_img" name="profile_img" class="form-control" accept="jpg,jpeg,webp,png">
+            <div class="row">
+                <div class="col-6">
+                    <label for="role">Role*</label>
+                    <select id="role" name="role" class="form-control">
+                        <option value="None">Select a role</option>
+                        <option value="adventurer">Adventure</option>
+                        <option value="master">Guild Master</option>
+                    </select>
+                </div>
+                <div class="col-6">
+                    <label for="profile_img">Profile image (optional)</label>
+                    <input type="file" id="profile_img" name="profile_img" class="form-control"
+                        accept="jpg,jpeg,webp,png">
+                </div>
+            </div>
 
             <label for="bio">Biography (optional)</label>
-            <textarea id="bio" name="bio" class="form-control" rows="4" placeholder="Share your past story and let others know about your achievements."></textarea>
+            <textarea id="bio" name="bio" class="form-control" rows="4"
+                placeholder="Share your past story and let others know about your achievements."></textarea>
 
             <div class="d-flex">
                 <button class="w-50 base-button base-cancel m-1" type="reset">Cancel</button>

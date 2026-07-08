@@ -1,5 +1,6 @@
 const addSession = document.querySelector("#add-session");
 const container = document.querySelector("#session-container");
+const DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 addSession.addEventListener("click", function () {
     const newSession = document.createElement("div");
@@ -21,8 +22,15 @@ addSession.addEventListener("click", function () {
         </div>
         <div class="col-2 create-button-delete-container">
             <button type="button" class="create-button-delete">X</button>
-        </div>
-    `;
+        </div>`;
+
+    const select = newSession.querySelector("select");
+    DAYS_OF_WEEK.forEach((day) => {
+        const option = document.createElement("option");
+        option.value = day;
+        option.textContent = day;
+        select.appendChild(option);
+    });
     container.appendChild(newSession);
 });
 

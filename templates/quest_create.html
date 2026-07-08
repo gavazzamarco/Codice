@@ -94,7 +94,7 @@ active
                                 <label for="day">Day*</label>
                                 <select id="day" name="day" class="form-control" required>
                                     <option value="">Select a day</option>
-                                    {% for day in future_days %}
+                                    {% for day in days %}
                                     <option value="{{ day }}">{{ day }}</option>
                                     {% endfor %}
                                 </select>
