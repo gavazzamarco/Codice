@@ -4,6 +4,37 @@
 Quest detail
 {% endblock %}
 
-{% block content %}
+{% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/detail.css') }}">
+{% endblock %}
 
+{% block content %}
+<section class="container-fluid">
+    <h1 class="detail-title text-center">
+        <span class="base-color-red">{{ titolo[0] }}</span><span class="base-color-yellow">{{ titolo[1] }}</span><span class="base-color-green">{{ titolo[2] }}</span><span class="base-color-blue">{{ titolo[3] }}</span>
+    </h1>
+    <div class="row">
+        <div class="col-8">
+            <div class="detail-illustration-container">
+                <img src="{{ url_for('static', filename=quest.illustration) }}" class="img-fluid w-100 rounded" alt="Quest's image: {{quest.illustration}}">
+            </div>
+            <article class="detail-illustration-container detail-description-container">
+                <h2 class="home-card-title d-flex justify-content-center mt-3 mb-4">Quest Description</h2>
+                <p class="detail-description text-center">{{ quest.description }}</p>
+            </article>
+        </div>
+        <div class="col-4">
+            <article class="detail-info-container">
+                <h2 class="home-card-title d-flex justify-content-center mt-3 mb-4 pb-3 detail-border-bottom-red">QuestInfo</h2>
+                <div>
+                    ciao
+                </div>
+                <div>
+                    ciao
+                </div>
+            </article>
+        </div>
+    </div>
+</section>
 {% endblock %}

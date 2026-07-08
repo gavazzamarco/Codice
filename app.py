@@ -49,7 +49,7 @@ def home_filter():
     errors=[]
     if day!="" and day not in DAYS_OF_WEEK:
         errors.append("The day must be selected from the available options")
-    day_index=DAYS_OF_WEEK.index(day) if day else None
+    day_index=DAYS_OF_WEEK.index(day) if (day and day in DAYS_OF_WEEK) else None
     if type!="" and type not in TYPES:
         errors.append("The type must be selected from the available options")
     if difficulty!="" and difficulty not in DIFFICULTY:
@@ -277,7 +277,7 @@ def quest_check_and_save():
     # Da mettere alla fine solo se non si vuole salvare sempre ed inutilmente altre foto
     path_photo = check_and_save_photo(illustration, "images/illustrations/")
     if path_photo=="":
-        flash("The illustration is mandatory. Only jpg, jpeg, png, and webp are allowed", 'danegr')
+        flash("The illustration is mandatory. Only jpg, jpeg, png, and webp are allowed", 'danger')
         return redirect(url_for('quest_create'))
 
     valid_sessions=check_overlap(days, starts_hours, starts_minutes, duration, location)
@@ -291,7 +291,16 @@ def quest_check_and_save():
         return redirect(url_for('quest_create'))
     return redirect(url_for('home'))
 
+def split_title(title):
+    b=len(title)//4
+    r=len(title)%4
+    return [title[i*b + min(i, r) : (i+1)*b + min(i+1, r)] for i in range(4)]
 
 @app.route("/quest/<int:quest_id>")
 def quest_detail(quest_id):
-    return render_template('quest_detail.html')
+    quest_db=quests_dao.get_quest_by_id(quest_id)
+    if not quest_db:
+        flash("Quest non trovata", "danger")
+        return redirect(url_for('home'))
+    title=split_title(quest_db["title"])
+    return render_template('quest_detail.html', quest=quest_db, titolo=title)
