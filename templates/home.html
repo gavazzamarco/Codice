@@ -77,27 +77,44 @@ active
     </div>
 </section>
 
-<section>
-    <h2>Available quests</h2>
+<section class="home-quest-container">
+    <h2 class="home-quest-title">
+        <span class="base-color-red">AVAIL</span><span class="base-color-yellow">ABLE</span> 
+        <span class="base-color-green">QUE</span><span class="base-color-blue">ST</span>
+    </h2>
     <div class="row">
         {% for quest in quests %}
-        <div class="col-2">
-            ciao
+        <div class="col-2 home-lateral-img-container">
+            {% if quest.foto_sinistra %}
+            <img src="{{ url_for('static', filename=quest.foto_sinistra) }}" class="home-lateral-img-sx" alt="Decoration photo">
+            {% endif %}
         </div>
         <article class="col-8">
-            <div class="card text-bg-dark">
-                <!-- DA MODIFICARE, SOLO PER PROVA -->
-                <img src="{{ url_for('static', filename='images/quests.png') }}" class="card-img" alt="">
+            <div class="card position-relative home-card-container">
+                <img src="{{ url_for('static', filename=quest.illustration) }}"
+                    class="card-img object-fit-cover home-quest-img" alt="">
                 <div class="card-img-overlay">
-                    <h5 class="card-title">Card title</h5>
-                    <p class="card-text">This is a wider card with supporting text below as a natural lead-in to
-                        additional content. This content is a little bit longer.</p>
-                    <p class="card-text"><small>Last updated 3 mins ago</small></p>
+                    <div class="home-card-text w-100 d-flex justify-content-between">
+                        <div class="w-75">
+                            <h3 class="card-title home-card-title">{{ quest.title }}</h3>
+                            <div class="home-card-subtitle">
+                                <div class="home-location"><span>Location:</span> <span>{{ quest.location }}</span></div>
+                                <div class="home-type"><span>Type:</span> <span>{{ quest.type }}</span></div>
+                                <div class="home-difficulty"><span>Difficulty:</span> <span>{{ quest.difficulty }}</span></div>
+                                <div class="home-duration"><span>Duration:</span> <span>{{ quest.duration }}</span></div>
+                            </div>
+                        </div>
+                        <div class="w-25 d-flex justify-content-center align-items-center">
+                            <a href="{{ url_for('home') }}" class="home-detail-button">View</a>
+                        </div>
+                    </div>
                 </div>
             </div>
         </article>
-        <div class="col-2">
-
+        <div class="col-2 home-lateral-img-container">
+            {% if quest.foto_destra %}
+            <img src="{{ url_for('static', filename=quest.foto_destra) }}" class="home-lateral-img-dx" alt="Decoration photo">
+            {% endif %}
         </div>
         {% endfor %}
     </div>

@@ -49,7 +49,7 @@ def get_all_quest():
     conn.close()
     return all_quest
 
-def quest_filtered(day, type, difficulty, role):
+def get_filtered_quest(day, type, difficulty, role):
     # Da modificare per tenere traccia di role
     conn=sqlite3.connect(DB_PATH)
     conn.row_factory=sqlite3.Row

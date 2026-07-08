@@ -20,10 +20,23 @@ app.config["SECRET_KEY"] = "secret-key-konosuba"
 login_manager=LoginManager()
 login_manager.init_app(app)
 
+def assegna_foto(filtered_quests):
+    for index, quest in enumerate(filtered_quests):
+        quest["foto_destra"]=quest["foto_sinistra"]=""
+        if (index%4==0):
+            quest["foto_sinistra"]='images/home/aqua.png'
+        elif (index%4==1):
+            quest["foto_destra"]='images/home/megumin.png'
+        elif (index%4==2):
+            quest["foto_sinistra"]='images/home/darkness.png'
+        else:
+            quest["foto_destra"]='images/home/kazuma.png'
+    return filtered_quests
 
 @app.route("/")
 def home():
-    filtered_quests=quests_dao.get_all_quest()
+    filtered_quests=[dict(row) for row in quests_dao.get_all_quest()]
+    filtered_quests=assegna_foto(filtered_quests)
     return render_template("home.html", days=DAYS_OF_WEEK, types=TYPES, difficulties=DIFFICULTY, roles=ROLES, quests=filtered_quests)
 
 @app.route("/home_filter", methods=["POST"])
@@ -46,8 +59,9 @@ def home_filter():
     if len(errors)>0:
         stampa_errori(errors)
         return redirect(url_for('home'))
-    quests_filtered=quests_dao.quest_filtered(day, type, difficulty, role)
-    return render_template("home.html", days=DAYS_OF_WEEK, types=TYPES, difficulties=DIFFICULTY, roles=ROLES, quests=quests_filtered)
+    filtered_quests=[dict(row) for row in quests_dao.get_filtered_quest()]
+    filtered_quests=assegna_foto(filtered_quests)
+    return render_template("home.html", days=DAYS_OF_WEEK, types=TYPES, difficulties=DIFFICULTY, roles=ROLES, quests=filtered_quests)
 
 
 @login_manager.user_loader
