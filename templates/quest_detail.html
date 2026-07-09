@@ -7,17 +7,21 @@ Quest detail
 {% block css %}
 <link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='styles/detail.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/auth.css') }}">
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/create.css') }}">
 {% endblock %}
 
 {% block content %}
 <section class="container-fluid">
     <h1 class="detail-title text-center">
-        <span class="base-color-red">{{ titolo[0] }}</span><span class="base-color-yellow">{{ titolo[1] }}</span><span class="base-color-green">{{ titolo[2] }}</span><span class="base-color-blue">{{ titolo[3] }}</span>
+        <span class="base-color-red">{{ titolo[0] }}</span><span class="base-color-yellow">{{ titolo[1] }}</span><span
+            class="base-color-green">{{ titolo[2] }}</span><span class="base-color-blue">{{ titolo[3] }}</span>
     </h1>
     <div class="row">
         <div class="col-8">
             <div class="detail-illustration-container">
-                <img src="{{ url_for('static', filename=quest.illustration) }}" class="img-fluid w-100 rounded" alt="Quest's image: {{quest.illustration}}">
+                <img src="{{ url_for('static', filename=quest.illustration) }}" class="img-fluid w-100 rounded"
+                    alt="Quest's image: {{quest.illustration}}">
             </div>
             <article class="detail-illustration-container detail-description-container">
                 <h2 class="home-card-title d-flex justify-content-center mt-3 mb-4">Quest Description</h2>
@@ -26,14 +30,122 @@ Quest detail
         </div>
         <div class="col-4">
             <article class="detail-info-container">
-                <h2 class="home-card-title d-flex justify-content-center mt-3 mb-4 pb-3 detail-border-bottom-red">QuestInfo</h2>
-                <div>
-                    ciao
+                <h2 class="home-card-title d-flex justify-content-center mt-3 pb-3 mb-0 detail-border-bottom-red">Quest
+                    Info</h2>
+                <div class="text-center detail-border-bottom-green pt-1 pb-2">
+                    <span class="detail-info base-color-red">Duration: {{ quest.duration }} min</span>
                 </div>
-                <div>
-                    ciao
+                <div class="text-center detail-border-bottom-blue pt-1 pb-2">
+                    <span class="detail-info base-color-green">Location: {{ quest.location }}</span>
+                </div>
+                <div class="text-center detail-border-bottom-yellow pt-1 pb-2">
+                    <span class="detail-info base-color-blue">Type: {{ quest.type }}</span>
+                </div>
+                <div class="text-center pt-1 mb-4">
+                    <span class="detail-info base-color-yellow">Difficulty: {{ quest.difficulty }}</span>
                 </div>
             </article>
+
+            <section class="detail-session-container">
+                <h2 class="home-card-title d-flex justify-content-center mt-3 pb-3 mb-0">Join</h2>
+                {% for session in sessions %}
+                <div class="base-border-multicolor detail-border-multicolor">
+                    <div class="base-background-red col-3 h-100"></div>
+                    <div class="base-background-yellow col-3 h-100"></div>
+                    <div class="base-background-green col-3 h-100"></div>
+                    <div class="base-background-blue col-3 h-100"></div>
+                </div>
+                <div class="row">
+                    <div class="col-9 ms-2 me-2">
+                        <div class="text-center detail-session-title base-color-green mb-1 mt-3">
+                            {{ session.day }} at {{ session.hour }}:{{ session.minute }}
+                        </div>
+                        <div class="row">
+                            <div class="col-4 detail-session-info base-color-blue">
+                                <div class="d-flex justify-content-center">3</div>
+                                <p class="d-flex justify-content-center">Warriors</p>
+                            </div>
+                            <div class="col-4 detail-session-info base-color-yellow">
+                                <div class="d-flex justify-content-center">2</div>
+                                <p class="d-flex justify-content-center">Mages</p>
+                            </div>
+                            <div class="col-4 detail-session-info base-color-red">
+                                <div class="d-flex justify-content-center">1</div>
+                                <p class="d-flex justify-content-center">Healers</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-2 d-flex justify-content-center align-items-center">
+                        <button type="button" class="detail-book-button" data-bs-toggle="modal"
+                            data-bs-target="#bookDate-{{ session.id }}">BOOK</button>
+                    </div>
+                </div>
+
+                <div class="modal fade" id="bookDate-{{ session.id }}" tabindex="-1" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <form action="" method="POST">
+                            <div class="modal-content detail-modal-content">
+                                <div>
+                                    <h1 class="detail-title text-center detail-modal-title d-block">
+                                        <span class="base-color-red">{{ titolo[0] }}</span><span
+                                            class="base-color-yellow">{{ titolo[1] }}</span><span
+                                            class="base-color-green">{{ titolo[2] }}</span><span
+                                            class="base-color-blue">{{ titolo[3] }}</span>
+                                    </h1>
+                                    <div class="d-block">
+                                        <div class="text-center detail-session-title base-color-green mb-1 mt-3">
+                                            {{ session.day }} at {{ session.hour }}:{{ session.minute }}
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-4 detail-session-info base-color-blue">
+                                                <div class="d-flex justify-content-center">3</div>
+                                                <p class="d-flex justify-content-center">Warriors</p>
+                                            </div>
+                                            <div class="col-4 detail-session-info base-color-yellow">
+                                                <div class="d-flex justify-content-center">2</div>
+                                                <p class="d-flex justify-content-center">Mages</p>
+                                            </div>
+                                            <div class="col-4 detail-session-info base-color-red">
+                                                <div class="d-flex justify-content-center">1</div>
+                                                <p class="d-flex justify-content-center">Healers</p>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                        aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <input type="hidden" name="day" value="{{ session.day }}">
+                                    <input type="hidden" name="hour" value="{{ session.hour }}">
+                                    <input type="hidden" name="minute" value="{{ session.minute }}">
+
+                                    <label for="role" id="role">Role</label>
+                                    <select name="role" id="role" class="form-control" required>
+                                        <!-- {% for role in roles %}
+                                            {% if role.quantity>0 %}
+                                            <option value="{{ role.name }}">{{ role.name }}</option>
+                                            {% endif %}
+                                        {% endfor %} -->
+                                    </select>
+
+                                    <div id="companion-container"></div>
+
+                                    <div class="d-flex justify-content-center mt-2">
+                                        <button type="button" id="add-companion" class="create-add-session">Add a
+                                            companion</button>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center mb-4 mt-4">
+                                    <button class="base-button base-cancel m-1 detail-modal-button" type="reset">Cancel</button>
+                                    <button class="base-button base-approve m-1 detail-modal-button" type="submit">Create</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </section>
         </div>
     </div>
 </section>

@@ -13,6 +13,9 @@ LOCATIONS=["Axel", "Kingdom of Elroad", "Arcanletia"]
 DIFFICULTY=["Easy", "Medium", "Hard", "Legendary"]
 TYPES=["Combact", "Exploration", "Stealth", "Magic", "Survival"]
 ROLES=["Warrior", "Mage", "Healer"]
+MAX_WARRIORS=4
+MAX_MAGE=3
+MAX_HEALER=2
 
 app=Flask(__name__)
 app.config["SECRET_KEY"] = "secret-key-konosuba"
@@ -299,8 +302,11 @@ def split_title(title):
 @app.route("/quest/<int:quest_id>")
 def quest_detail(quest_id):
     quest_db=quests_dao.get_quest_by_id(quest_id)
+    sessions_db=[dict(row) for row in quests_dao.get_session_of_quest(quest_id)]
+    for row in sessions_db:
+        row["day"]=DAYS_OF_WEEK[row["day"]]
     if not quest_db:
         flash("Quest non trovata", "danger")
         return redirect(url_for('home'))
     title=split_title(quest_db["title"])
-    return render_template('quest_detail.html', quest=quest_db, titolo=title)
+    return render_template('quest_detail.html', quest=quest_db, titolo=title, sessions=sessions_db)
