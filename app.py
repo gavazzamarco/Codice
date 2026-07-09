@@ -7,7 +7,8 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 
 SIMULATE_DAY=2 # Wednesday
-SIMULATE_HOUR="18.34"
+SIMULATE_HOUR=18
+SIMULATE_MIN=35
 DAYS_OF_WEEK=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 LOCATIONS=["Axel", "Kingdom of Elroad", "Arcanletia"]
 DIFFICULTY=["Easy", "Medium", "Hard", "Legendary"]
@@ -334,9 +335,9 @@ def book_session():
         flash("The selected session does not exist", "danger")
         return redirect(url_for('home'))
     role=request.form.get("role")
-    if role!="" and role not in ROLES:
+    if role not in ROLES:
         flash("The role must be selected from the available options", "danger")
-        return redirect(url_for('quest_detail', session["quest_id"]))
+        return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
     companions=request.form.getlist("companion")
     reservations_session=reservation_dao.get_reservations_for_session(session_id)
     count=0
@@ -345,17 +346,17 @@ def book_session():
             count+=reservation["total_people"]
     if (LIMITS[role]-(count+len(companions)))<0:
         flash("You have booked more seats than are available for the category "+role, "danger")
-        return redirect(url_for('quest_detail', session["quest_id"]))
+        return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
     
     reservations_user = reservation_dao.get_reservations_of_user(current_user.id)
     sessions_booked=[session_dao.get_session_by_id(row["session_id"]) for row in reservations_user]
     if len(reservations_user)>=3:
         flash("It is not possible to book more than 3 sessions per week", "danger")
-        return redirect(url_for('quest_detail', session["quest_id"]))
+        return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
     quest=quests_dao.get_quest_by_id(session["quest_id"])
     
     if check_overlap([DAYS_OF_WEEK[session["day"]]], [session["hour"]], [session["minute"]], quest["duration"], "all", sessions_booked)==True:
-        return redirect(url_for('quest_detail', session["quest_id"]))
+        return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
     
     reservation_id=reservation_dao.create_reservation(current_user.id, session_id, role, int(len(companions))+1)
     for companion in companions:
@@ -373,14 +374,39 @@ def profile():
         return redirect(url_for('home'))
     return redirect(url_for('home'))
 
+def can_cancel(day, hour, minute):
+    THRESHOLD=8*60
+    simulate=conversione_minuti_assoluti(SIMULATE_DAY, SIMULATE_HOUR, SIMULATE_MIN)
+    current=conversione_minuti_assoluti(day, hour, minute)
+    return (simulate-current)>THRESHOLD
+
 @app.route("/profile_adventurer")
 @login_required
 def profile_adventurer():
     if current_user.role!="adventurer":
         flash("You do not have permission to access this page", "danger")
-        return redirect(url_for('home'))
+        return redirect(url_for("home"))
     user_quests_dict=reservation_dao.get_detailed_adventurer_quests(current_user.id)
     for quest in user_quests_dict:
-        for session in quest['sessions']:
-            session['day']=DAYS_OF_WEEK[session['day']]
-    return render_template('profile_adventurer.html', quests=user_quests_dict)
+        for session in quest["sessions"]:
+            session["can_cancel"]=can_cancel(session["day"], session["hour"], session["minute"])
+            session["day"]=DAYS_OF_WEEK[session["day"]]
+    return render_template("profile_adventurer.html", quests=user_quests_dict)
+
+@app.route("/cancel_session/<int:session_id>")
+@login_required
+def cancel_session(session_id):
+    if current_user.role!="adventurer":
+        flash("You do not have permission to access this page", "danger")
+        return redirect(url_for("home"))
+    session=session_dao.get_session_by_id(session_id)
+    reservation=reservation_dao.get_reservation_by_session_for_user(current_user.id, session_id)
+    if not reservation:
+        flash("The selected reservation does not exist", "danger")
+        return redirect(url_for('profile'))
+    if can_cancel(session["day"], session["hour"], session["minute"])==False:
+        flash("You cannot modify or cancel this participation less than 8 hours before the session starts", "danger")
+        return redirect(url_for('profile'))
+    reservation_dao.delete_reservation(reservation["id"])
+    flash("The booking was cancelled successfully", "success")
+    return redirect(url_for('profile'))

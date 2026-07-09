@@ -56,13 +56,13 @@ active
         <span class="base-color-red">JO</span><span class="base-color-yellow">IN</span>
         <span class="base-color-green">QUE</span><span class="base-color-blue">STS</span>
     </h1>
-    <div class="container-fluid">
+    {% if quests %}
+    <div class="container-fluid profile-quests-container">
         <div class="row justify-content-center">
-            {% if quests %}
             {% for quest in quests %}
             <div class="col-5">
-                <div class="home-card-container">
-                    <div class="card position-relative">
+                <div class="card home-card-container">
+                    <div class="position-relative border-bottom">
                         <img src="{{ url_for('static', filename=quest.illustration) }}"
                             class="card-img object-fit-cover home-quest-img"
                             alt="Illustration of quest {{quest.title }}">
@@ -90,24 +90,84 @@ active
                             </div>
                         </div>
                     </div>
-                    <div class="card-body">
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                            the card's content.</p>
+                    <div class="card-body profile-card-body">
+                        <h2 class="text-center">
+                            <span class="base-color-red">Boo</span><span class="base-color-yellow">ked</span>
+                            <span class="base-color-green">Sess</span><span class="base-color-blue">ions</span>
+                        </h2>
+                        {% if quest.sessions %}
+                        {% for session in quest.sessions %}
+                        <div class="base-border-multicolor">
+                            <div class="base-background-red col-3 h-100"></div>
+                            <div class="base-background-yellow col-3 h-100"></div>
+                            <div class="base-background-green col-3 h-100"></div>
+                            <div class="base-background-blue col-3 h-100"></div>
+                        </div>
+                        <div class="profile-session-container pt-2">
+                            <div class="row align-items-center">
+                                <div class="col-9">
+                                    <div class="d-flex align-items-center justify-content-around">
+                                        <div class="profile-session-date">
+                                            <span class="base-color-green">{{ session.day }}</span> <span
+                                                class="base-color-blue">{{ session.hour }}:</span><span
+                                                class="base-color-yellow">{{ session.minute }}</span>
+                                        </div>
+                                        <div class="profile-role-badge">
+                                            <span>{{ session.role }}</span>
+                                        </div>
+                                    </div>
+                                    {% if session.companions %}
+                                    <div class="profile-companion">
+                                        <h3 class="profile-companion-title text-center mb-1">Your companions</h3>
+                                        {% for companion in session.companions %}
+                                        <div class="d-flex flex-column align-items-center justify-content-center mb-1">
+                                            <span class="profile-companion-text">-{{ companion }}</span>
+                                        </div>
+                                        {% endfor %}
+                                    </div>
+                                    {% endif %}
+                                </div>
+                                <div class="col-3">
+                                    <div class="d-flex justify-content-center mb-1">
+                                        {% if session.can_cancel %}
+                                        <a href="{{ url_for('cancel_session', session_id=session.session_id) }}"
+                                            class="home-detail-button profile-cancel-button">Cancel</a>
+                                        {% else %}
+                                        <span class="profile-locked">Locked</span>
+                                        {% endif %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                        {% endif %}
                     </div>
                 </div>
-
-                <!-- <div class="card">
-                    <img src="..." class="card-img-top" alt="...">
-                    <div class="card-body">
-                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
-                            the card's content.</p>
-                    </div>
-                </div> -->
             </div>
             {% endfor %}
-            {% else %}
-            {% endif %}
         </div>
     </div>
+    {% else %}
+    <div class="d-flex justify-content-center profile-quests-container">
+        <div class="col-8">
+            <div class="card position-relative home-card-container">
+                <img src="{{ url_for('static', filename='images/sessions.png') }}" class="card-img object-fit-cover"
+                    alt="Image no quest found">
+                <div class="card-img-overlay">
+                    <div class="home-noquest-title-container w-100">
+                        <div class="d-flex align-items-center justify-content-center text-center">
+                            <h3 class="card-title home-noquest-title">
+                                You haven't booked any sessions yet. Discover all available quests
+                            </h3>
+                        </div>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <a href="{{ url_for('home') }}" class="home-detail-button home-noquest-button">Go to Quests</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </section>
 {% endblock %}

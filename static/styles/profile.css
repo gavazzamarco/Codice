@@ -46,3 +46,83 @@ section {
     font-family: fantasy;
     font-size: 5rem;
 }
+
+.profile-card-body {
+    background: var(--dark);
+    border-radius: 6px;
+}
+
+.profile-card-body h2 {
+    font-family: fantasy;
+    font-size: 2.5rem;
+    margin-bottom: 30px;
+    padding-top: 10px;
+}
+
+.profile-session-container {
+    margin: 15px;
+}
+
+.profile-session-date {
+    font-family: fantasy;
+    letter-spacing: 2px;
+    font-size: 2.1rem;
+}
+
+.profile-role-badge {
+    padding: 4px 10px;
+    font-size: 1.4rem;
+    font-weight: 800;
+    color: var(--megumin);
+    background: rgb(99, 4, 4);
+    border: 3px solid var(--megumin);
+    border-radius: 15px;
+}
+
+.profile-cancel-button {
+    font-size: 1.5rem;
+    color: var(--aqua);
+    border-color: var(--aqua);
+    box-shadow: 3px 3px 0px rgb(39, 210, 204);
+}
+
+.profile-cancel-button:hover {
+    color: var(--kazuma);
+    border-color: var(--kazuma);
+    box-shadow: 3px 3px 0px rgb(3, 134, 27);
+}
+
+.profile-companion {
+    margin: 10px 15px;
+    padding: 10px;
+    background: white;
+    border: 3px solid grey;
+    border-radius: 10px;
+}
+
+.profile-companion-title {
+    font-size: 1.9rem;
+    font-family: fantasy;
+    color: blueviolet;
+}
+
+.profile-companion-text {
+    font-size: 1.5rem;
+    font-style: oblique;
+    font-weight: 600;
+}
+
+.profile-locked {
+    padding: 20px;
+    color: var(--darkness);
+    background: rgb(198, 86, 0);
+    border: 4px solid var(--darkness);
+    border-radius: 5px;
+    text-transform: uppercase;
+    font-size: 1.35rem;
+    font-weight: 800;
+}
+
+.profile-quests-container {
+    padding-bottom: 80px;
+}

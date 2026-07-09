@@ -94,3 +94,26 @@ def get_detailed_adventurer_quests(user_id):
     cursor.close()
     conn.close()
     return list(quests_dict.values())
+
+def get_reservation_by_session_for_user(user_id, session_id):
+    conn=sqlite3.connect(DB_PATH)
+    conn.row_factory=sqlite3.Row
+    cursor=conn.cursor()
+    query="SELECT * FROM reservations WHERE user_id=? and session_id=?"
+    cursor.execute(query, (user_id, session_id))
+    reservation=cursor.fetchone()
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return reservation
+
+def delete_reservation(reservation_id):
+    conn=sqlite3.connect(DB_PATH)
+    cursor=conn.cursor()
+    query="DELETE FROM companions WHERE reservation_id=?"
+    cursor.execute(query, (reservation_id,))
+    query="DELETE FROM reservations WHERE id=?"
+    cursor.execute(query, (reservation_id,))
+    conn.commit()
+    cursor.close()
+    conn.close()
