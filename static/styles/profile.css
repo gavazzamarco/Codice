@@ -1,0 +1,48 @@
+section {
+    background: var(--grey);
+}
+
+.profile-info-container {
+    margin: 30px;
+    padding: 20px 30px;
+    border-radius: 15px;
+}
+
+.profile-img {
+    width: 120px;
+    border-radius: 50%;
+    margin-right: 13px;
+}
+
+.profile-name-surname {
+    font-family: fantasy;
+    font-size: 2.1rem;
+}
+
+.profile-email {
+    font-family: fantasy;
+    font-size: 1.8rem;
+}
+
+.profile-info-badge {
+    margin-left: 30px;
+    text-transform: uppercase;
+    font-size: 1.35rem;
+}
+
+.profile-description {
+    margin: 20px 20px;
+    margin-left: 0px;
+    background: var(--dark);
+    border: 2px solid white;
+    border-radius: 8px;
+    padding: 10px 20px;
+    font-size: 1.15rem;
+    color: white;
+}
+
+.profile-quest-title {
+    padding: 30px 0px;
+    font-family: fantasy;
+    font-size: 5rem;
+}

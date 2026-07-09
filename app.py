@@ -347,7 +347,7 @@ def book_session():
         flash("You have booked more seats than are available for the category "+role, "danger")
         return redirect(url_for('quest_detail', session["quest_id"]))
     
-    reservations_user = reservation_dao.get_reservation_of_user(current_user.id)
+    reservations_user = reservation_dao.get_reservations_of_user(current_user.id)
     sessions_booked=[session_dao.get_session_by_id(row["session_id"]) for row in reservations_user]
     if len(reservations_user)>=3:
         flash("It is not possible to book more than 3 sessions per week", "danger")
@@ -357,10 +357,11 @@ def book_session():
     if check_overlap([DAYS_OF_WEEK[session["day"]]], [session["hour"]], [session["minute"]], quest["duration"], "all", sessions_booked)==True:
         return redirect(url_for('quest_detail', session["quest_id"]))
     
-    reservation_id=reservation_dao.create_reservation(current_user.id, session_id, role, int(len(companions)))
+    reservation_id=reservation_dao.create_reservation(current_user.id, session_id, role, int(len(companions))+1)
     for companion in companions:
         reservation_dao.add_companions(reservation_id, companion)
-    return redirect(url_for('home')) # poi devo mette profilo
+    flash("The booking was made successfully", "success")
+    return redirect(url_for('profile'))
 
 
 @app.route("/profile")
@@ -368,10 +369,18 @@ def book_session():
 def profile():
     if current_user.role=="adventurer":
         return redirect(url_for('profile_adventurer'))
-    else:
+    elif current_user.role=="master":
         return redirect(url_for('home'))
+    return redirect(url_for('home'))
 
 @app.route("/profile_adventurer")
 @login_required
 def profile_adventurer():
-    return render_template('profile_adventurer.html')
+    if current_user.role!="adventurer":
+        flash("You do not have permission to access this page", "danger")
+        return redirect(url_for('home'))
+    user_quests_dict=reservation_dao.get_detailed_adventurer_quests(current_user.id)
+    for quest in user_quests_dict:
+        for session in quest['sessions']:
+            session['day']=DAYS_OF_WEEK[session['day']]
+    return render_template('profile_adventurer.html', quests=user_quests_dict)

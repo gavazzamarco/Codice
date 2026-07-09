@@ -48,3 +48,49 @@ def add_companions(reservation_id, username):
     conn.commit()
     cursor.close()
     conn.close()
+
+def get_detailed_adventurer_quests(user_id):
+    conn=sqlite3.connect(DB_PATH)
+    conn.row_factory=sqlite3.Row
+    cursor=conn.cursor()
+    query="""
+        SELECT 
+            q.id AS quest_id, q.title, q.location, q.type, q.difficulty, q.duration, q.description, q.illustration,
+            s.id AS session_id, s.day, s.hour, s.minute,
+            r.id AS reservation_id, r.role, r.total_people
+        FROM reservations r
+        JOIN sessions s ON r.session_id = s.id
+        JOIN quests q ON s.quest_id = q.id
+        WHERE r.user_id = ?"""
+    cursor.execute(query, (user_id,))
+    rows=cursor.fetchall()
+    quests_dict={}
+    for row in rows:
+        query="SELECT username FROM companions WHERE reservation_id = ?"
+        cursor.execute(query, (row['reservation_id'],))
+        companions=[c_row['username'] for c_row in cursor.fetchall()]
+        quest_id=row['quest_id']
+        if quest_id not in quests_dict:
+            quests_dict[quest_id]={
+                'id':row['quest_id'],
+                'title':row['title'],
+                'location': row['location'],
+                'type':row['type'],
+                'difficulty': row['difficulty'],
+                'duration':row['duration'],
+                'description':row['description'],
+                'illustration':row['illustration'],
+                'sessions':[]
+            } 
+        quests_dict[quest_id]['sessions'].append({
+            'session_id': row['session_id'],
+            'day':row['day'],
+            'hour':row['hour'],
+            'minute': row['minute'],
+            'role':row['role'],
+            'total_people':row['total_people'],
+            'companions':companions
+        })
+    cursor.close()
+    conn.close()
+    return list(quests_dict.values())

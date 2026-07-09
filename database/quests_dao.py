@@ -69,11 +69,11 @@ def get_filtered_quest(day, type, difficulty, role):
         if role:
             has_available_session=False
             for session in sessions_to_check:
-                query="SELECT SUM(total_people) FROM reservations WHERE session_id=? AND role=?"
+                query="SELECT SUM(total_people) AS totale FROM reservations WHERE session_id=? AND role=?"
                 cursor.execute(query, (session["id"], role))
                 result=cursor.fetchone()
-                count=result[0] if result[0] is not None else 0
-                if count < LIMITS[role]:
+                count=result['totale'] if (result and result['totale'] is not None) else 0
+                if count<LIMITS[role]:
                     has_available_session = True
                     break
             if not has_available_session:

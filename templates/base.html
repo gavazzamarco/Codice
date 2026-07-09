@@ -43,7 +43,7 @@
                         <a href="{{ url_for('quest_create') }}" class="nav-link base-nav-link">New Quest</a>
                     </li>
                     {% endif %}
-                    <li class="nav-item base-nav-item">
+                    <li class="nav-item base-nav-item {% block profile_active %}{% endblock %}">
                         <a href="{{ url_for('profile') }}" class="nav-link base-nav-link">Profile</a>
                     </li>
                     <li class="nav-item base-nav-item">

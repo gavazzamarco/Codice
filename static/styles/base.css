@@ -1,10 +1,10 @@
 :root {
-    --aqua: #00a3ff;
-    --kazuma: #2ecc71;
-    --megumin: #e74c3c;
-    --darkness: #f1c40f;
-    --dark: #1a1a24;
-    --grey: #2c2c38; 
+    --aqua: rgb(0, 162, 255);
+    --kazuma: rgb(46, 204, 112);
+    --megumin: rgb(231, 76, 60);
+    --darkness: rgb(241, 196, 15);
+    --dark: rgb(26, 26, 36);
+    --grey: rgb(44, 44, 56); 
 }
 
 .base-container {

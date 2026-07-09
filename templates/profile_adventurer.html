@@ -9,5 +9,105 @@ active
 {% endblock %}
 
 {% block css %}
+<link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='styles/profile.css') }}">
+{% endblock %}
+
+{% block content %}
+<section class="container-fluid">
+    <div class="row d-flex justify-content-center">
+        <div class="col-9 d-flex profile-info-container base-bordi-multicolor">
+            <div>
+                {% if current_user.profile_img %}
+                <img src="{{ url_for('static', filename=current_user.profile_img) }}" class="profile-img"
+                    alt="Profile photo of {{ current_user.username }}">
+                {% else %}
+                <img src="{{ url_for('static', filename='images/no_profile_img.png') }}" class="profile-img"
+                    alt="Default profile image">
+                {% endif %}
+            </div>
+            <div>
+                <div class="d-flex align-items-center mt-2">
+                    <div>
+                        <div class="profile-name-surname">
+                            <span class="base-color-green">{{ current_user.name }}</span> <span
+                                class="base-color-blue">{{
+                                current_user.surname }}</span>
+                        </div>
+                        <div class="profile-email">
+                            <span class="base-color-red">{{ current_user.username }}</span>
+                        </div>
+                    </div>
+                    <div class="home-card-badge home-type profile-info-badge">
+                        <span>{{ current_user.role }}</span>
+                    </div>
+                </div>
+                {% if current_user.description %}
+                <div class="profile-description">
+                    <span>{{ current_user.description }}</span>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</section>
+<section>
+    <h1 class="text-center profile-quest-title">
+        <span class="base-color-red">JO</span><span class="base-color-yellow">IN</span>
+        <span class="base-color-green">QUE</span><span class="base-color-blue">STS</span>
+    </h1>
+    <div class="container-fluid">
+        <div class="row justify-content-center">
+            {% if quests %}
+            {% for quest in quests %}
+            <div class="col-5">
+                <div class="home-card-container">
+                    <div class="card position-relative">
+                        <img src="{{ url_for('static', filename=quest.illustration) }}"
+                            class="card-img object-fit-cover home-quest-img"
+                            alt="Illustration of quest {{quest.title }}">
+                        <div class="card-img-overlay">
+                            <div class="home-card-text w-100 d-flex justify-content-between">
+                                <div class="flex-grow-1 me-2">
+                                    <h3 class="card-title home-card-title">{{ quest.title }}</h3>
+                                    <div class="home-card-subtitle">
+                                        <div class="home-card-badge home-location"><span>Location:</span> <span>{{
+                                                quest.location }}</span>
+                                        </div>
+                                        <div class="home-card-badge home-type"><span>Type:</span> <span>{{ quest.type
+                                                }}</span></div>
+                                        <div class="home-card-badge home-difficulty"><span>Difficulty:</span> <span>{{
+                                                quest.difficulty }}</span></div>
+                                        <div class="home-card-badge home-duration"><span>Duration:</span> <span>{{
+                                                quest.duration }}</span>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="d-flex justify-content-center align-items-end mb-4 me-4">
+                                    <a href="{{ url_for('quest_detail', quest_id=quest.id) }}"
+                                        class="home-detail-button">View</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
+                            the card's content.</p>
+                    </div>
+                </div>
+
+                <!-- <div class="card">
+                    <img src="..." class="card-img-top" alt="...">
+                    <div class="card-body">
+                        <p class="card-text">Some quick example text to build on the card title and make up the bulk of
+                            the card's content.</p>
+                    </div>
+                </div> -->
+            </div>
+            {% endfor %}
+            {% else %}
+            {% endif %}
+        </div>
+    </div>
+</section>
 {% endblock %}
