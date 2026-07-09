@@ -20,6 +20,8 @@ def delete_all():
         "users",
         "quests",
         "sessions",
+        "reservations",
+        "companions",
         "sqlite_sequence"     # Per azzerare gli ID incrementali
     ]
     

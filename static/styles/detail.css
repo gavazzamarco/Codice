@@ -94,6 +94,17 @@ section { background: var(--grey); }
     font-size: 4rem;
 }
 
+.detail-add-companion {
+    font-size: 1.8rem !important;
+}
+
 .detail-modal-button {
     width: 300px;
+    font-weight: 200;
+}
+
+.detail-modal-role {
+    color: white;
+    font-size: 1.3rem;
+    font-weight:lighter;
 }

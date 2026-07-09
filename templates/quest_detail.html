@@ -83,62 +83,63 @@ Quest detail
 
                 <div class="modal fade" id="bookDate-{{ session.id }}" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
-                        <form action="" method="POST">
+                        <form action="{{ url_for('book_session') }}" method="POST">
                             <div class="modal-content detail-modal-content">
-                                <div>
-                                    <h1 class="detail-title text-center detail-modal-title d-block">
-                                        <span class="base-color-red">{{ titolo[0] }}</span><span
-                                            class="base-color-yellow">{{ titolo[1] }}</span><span
-                                            class="base-color-green">{{ titolo[2] }}</span><span
-                                            class="base-color-blue">{{ titolo[3] }}</span>
-                                    </h1>
-                                    <div class="d-block">
-                                        <div class="text-center detail-session-title base-color-green mb-1 mt-3">
-                                            {{ session.day }} at {{ session.hour }}:{{ session.minute }}
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-4 detail-session-info base-color-blue">
-                                                <div class="d-flex justify-content-center">3</div>
-                                                <p class="d-flex justify-content-center">Warriors</p>
-                                            </div>
-                                            <div class="col-4 detail-session-info base-color-yellow">
-                                                <div class="d-flex justify-content-center">2</div>
-                                                <p class="d-flex justify-content-center">Mages</p>
-                                            </div>
-                                            <div class="col-4 detail-session-info base-color-red">
-                                                <div class="d-flex justify-content-center">1</div>
-                                                <p class="d-flex justify-content-center">Healers</p>
-                                            </div>
-                                        </div>
-                                    </div>
-
+                                <div class="d-flex justify-content-end mt-3 me-3 mb-0">
                                     <button type="button" class="btn-close" data-bs-dismiss="modal"
                                         aria-label="Close"></button>
                                 </div>
+                                <h1 class="detail-title text-center detail-modal-title mb-2 mt-0">
+                                    <span class="base-color-red">{{ titolo[0] }}</span><span
+                                        class="base-color-yellow">{{ titolo[1] }}</span><span
+                                        class="base-color-green">{{ titolo[2] }}</span><span class="base-color-blue">{{
+                                        titolo[3] }}</span>
+                                </h1>
+                                <div class="m-3 mt-0">
+                                    <div class="text-center detail-session-title base-color-green mb-1 mt-3">
+                                        <h2>{{ session.day }} at {{ session.hour }}:{{ session.minute }}</h2>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-4 detail-session-info base-color-blue">
+                                            <div class="d-flex justify-content-center">3</div>
+                                            <p class="d-flex justify-content-center">Warriors</p>
+                                        </div>
+                                        <div class="col-4 detail-session-info base-color-yellow">
+                                            <div class="d-flex justify-content-center">2</div>
+                                            <p class="d-flex justify-content-center">Mages</p>
+                                        </div>
+                                        <div class="col-4 detail-session-info base-color-red">
+                                            <div class="d-flex justify-content-center">1</div>
+                                            <p class="d-flex justify-content-center">Healers</p>
+                                        </div>
+                                    </div>
+                                </div>
                                 <div class="modal-body">
-                                    <input type="hidden" name="day" value="{{ session.day }}">
-                                    <input type="hidden" name="hour" value="{{ session.hour }}">
-                                    <input type="hidden" name="minute" value="{{ session.minute }}">
+                                    <input type="hidden" name="session_id" value="{{ session.id }}">
 
-                                    <label for="role" id="role">Role</label>
+                                    <label for="role" id="role" class="detail-modal-role">Role* (yours and that of any
+                                        companions)</label>
                                     <select name="role" id="role" class="form-control" required>
-                                        <!-- {% for role in roles %}
-                                            {% if role.quantity>0 %}
-                                            <option value="{{ role.name }}">{{ role.name }}</option>
-                                            {% endif %}
-                                        {% endfor %} -->
+                                        <option value="">Select a Role</option>
+                                        {% for role in roles %}
+                                        {% if role %}
+                                        <option value="{{ role }}">{{ role }}</option>
+                                        {% endif %}
+                                        {% endfor %}
                                     </select>
 
-                                    <div id="companion-container"></div>
-
-                                    <div class="d-flex justify-content-center mt-2">
-                                        <button type="button" id="add-companion" class="create-add-session">Add a
-                                            companion</button>
+                                    <div id="companion-container-{{ session.id }}"></div>
+                                    <div class="d-flex justify-content-center mt-4 pt-4">
+                                        <button type="button"
+                                            class="create-add-session detail-add-companion"
+                                            data-session-id="{{ session.id }}">Add a companion</button>
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-center mb-4 mt-4">
-                                    <button class="base-button base-cancel m-1 detail-modal-button" type="reset">Cancel</button>
-                                    <button class="base-button base-approve m-1 detail-modal-button" type="submit">Create</button>
+                                    <button class="base-button base-cancel m-1 detail-modal-button"
+                                        type="reset">Cancel</button>
+                                    <button class="base-button base-approve m-1 detail-modal-button"
+                                        type="submit">Create</button>
                                 </div>
                             </div>
                         </form>
@@ -149,4 +150,5 @@ Quest detail
         </div>
     </div>
 </section>
+<script src="{{ url_for('static', filename='js/booking.js') }}"></script>
 {% endblock %}

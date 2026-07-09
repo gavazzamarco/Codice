@@ -1,6 +1,6 @@
 from flask import Flask, render_template, request, redirect, url_for, flash
 from flask_login import LoginManager, current_user, login_user, logout_user, login_required
-from database import quests_dao, users_dao
+from database import quests_dao, reservation_dao, session_dao, users_dao
 from models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
@@ -13,9 +13,7 @@ LOCATIONS=["Axel", "Kingdom of Elroad", "Arcanletia"]
 DIFFICULTY=["Easy", "Medium", "Hard", "Legendary"]
 TYPES=["Combact", "Exploration", "Stealth", "Magic", "Survival"]
 ROLES=["Warrior", "Mage", "Healer"]
-MAX_WARRIORS=4
-MAX_MAGE=3
-MAX_HEALER=2
+LIMITS={"Warrior": 4,  "Mage":3, "Healer":2}
 
 app=Flask(__name__)
 app.config["SECRET_KEY"] = "secret-key-konosuba"
@@ -193,9 +191,9 @@ def conversione_minuti_assoluti(day, hour, minute):
     MINUTES_IN_DAY=60*24
     return int(MINUTES_IN_DAY*int(day) + int(hour)*60 + int(minute))
 
-def check_overlap(days, starts_hours, starts_minutes, duration, location):
+def check_overlap(days, starts_hours, starts_minutes, duration, location, sessions):
     valid_session=[]
-    sessions=quests_dao.get_all_session()
+    overlap=False
     for index in range(min(len(days), len(starts_hours), len(starts_minutes))):
         day=DAYS_OF_WEEK.index(days[index])
         hour=int(starts_hours[index])
@@ -205,15 +203,19 @@ def check_overlap(days, starts_hours, starts_minutes, duration, location):
         current["end"]=current["start"]+int(duration)
         for session in sessions:
             quest=quests_dao.get_quest_by_id(session["quest_id"])
-            if location==quest["location"]:
+            if location==quest["location"] or location=="all":
                 saved={}
                 saved["start"]=conversione_minuti_assoluti(session["day"], session["hour"], session["minute"])
                 saved["end"]=saved["start"]+int(quest["duration"])
-                if (max(saved["start"], current["start"])) < min(saved["end"], current["end"]):
+                if (max(saved["start"], current["start"]))<min(saved["end"], current["end"]):
                     flash("The session of ["+DAYS_OF_WEEK[day]+" h"+str(hour)+":"+str(minute)+"] conflicts with the quest ["+quest["title"] +"]", 'danger')
+                    overlap=True
                     continue
         valid_session.append((day, hour, minute))
-    return valid_session
+    if location=="all":
+        return overlap
+    else:
+        return valid_session
 
 def stampa_errori(errors):
     for error in errors:
@@ -283,12 +285,13 @@ def quest_check_and_save():
         flash("The illustration is mandatory. Only jpg, jpeg, png, and webp are allowed", 'danger')
         return redirect(url_for('quest_create'))
 
-    valid_sessions=check_overlap(days, starts_hours, starts_minutes, duration, location)
+    sessions=session_dao.get_all_session()
+    valid_sessions=check_overlap(days, starts_hours, starts_minutes, duration, location, sessions)
     if len(valid_sessions)>0:
         quest_id=quests_dao.create_quest(title, duration, location, type, difficulty, description, path_photo)
         flash("The quest has at least one valid session, so it was created correctly", 'success')
         for session in valid_sessions:
-            quests_dao.create_session(quest_id, session[0], session[1], session[2])
+            session_dao.create_session(quest_id, session[0], session[1], session[2])
             flash("The session of ["+DAYS_OF_WEEK[session[0]]+" h"+str(session[1])+":"+str(session[2])+"] is created correctly", 'success')
     else:
         return redirect(url_for('quest_create'))
@@ -302,11 +305,52 @@ def split_title(title):
 @app.route("/quest/<int:quest_id>")
 def quest_detail(quest_id):
     quest_db=quests_dao.get_quest_by_id(quest_id)
-    sessions_db=[dict(row) for row in quests_dao.get_session_of_quest(quest_id)]
+    sessions_db=[dict(row) for row in session_dao.get_session_of_quest(quest_id)]
     for row in sessions_db:
         row["day"]=DAYS_OF_WEEK[row["day"]]
     if not quest_db:
         flash("Quest non trovata", "danger")
         return redirect(url_for('home'))
     title=split_title(quest_db["title"])
-    return render_template('quest_detail.html', quest=quest_db, titolo=title, sessions=sessions_db)
+    return render_template('quest_detail.html', quest=quest_db, titolo=title, sessions=sessions_db, roles=ROLES)
+
+
+@app.route("/book_session", methods=["POST"])
+@login_required
+def book_session():
+    if current_user.role!="adventurer":
+        flash("To book a spot, you must be logged in as an adventurer", "danger")
+        return redirect(url_for('home'))
+    session_id=request.form.get("session_id")
+    session=session_dao.get_session_by_id(session_id)
+    if not session:
+        flash("The selected session does not exist", "danger")
+        return redirect(url_for('home'))
+    role=request.form.get("role")
+    if role!="" and role not in ROLES:
+        flash("The role must be selected from the available options", "danger")
+        return redirect(url_for('quest_detail', session["quest_id"]))
+    companions=request.form.getlist("companion")
+    reservations_session=reservation_dao.get_reservations_for_session(session_id)
+    count=0
+    for reservation in reservations_session:
+        if reservation["role"]==role:
+            count+=reservation["total_people"]
+    if (LIMITS[role]-(count+len(companions)))<0:
+        flash("You have booked more seats than are available for the category "+role, "danger")
+        return redirect(url_for('quest_detail', session["quest_id"]))
+    
+    reservations_user = reservation_dao.get_reservation_of_user(current_user.id)
+    sessions_booked=[session_dao.get_session_by_id(row["session_id"]) for row in reservations_user]
+    if len(reservations_user)>=3:
+        flash("It is not possible to book more than 3 sessions per week", "danger")
+        return redirect(url_for('quest_detail', session["quest_id"]))
+    quest=quests_dao.get_quest_by_id(session["quest_id"])
+    
+    if check_overlap([DAYS_OF_WEEK[session["day"]]], [session["hour"]], [session["minute"]], quest["duration"], "all", sessions_booked)==True:
+        return redirect(url_for('quest_detail', session["quest_id"]))
+    
+    reservation_id=reservation_dao.create_reservation(current_user.id, session_id, role, int(len(companions)))
+    for companion in companions:
+        reservation_dao.add_companions(reservation_id, companion)
+    return redirect(url_for('home')) # poi devo mette profilo

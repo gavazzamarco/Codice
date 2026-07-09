@@ -40,6 +40,25 @@ def inizializza_database():
         PRIMARY KEY("id" AUTOINCREMENT),
         FOREIGN KEY (quest_id) REFERENCES quests(id)
     );
+
+        CREATE TABLE "reservations" (
+        "id" INTEGER NOT NULL UNIQUE,
+        "user_id" INTEGER NOT NULL,
+        "session_id" INTEGER NOT NULL,
+        "role" TEXT NOT NULL,
+        "total_people" INTEGER NOT NULL,
+        PRIMARY KEY("id" AUTOINCREMENT),
+        FOREIGN KEY (user_id) REFERENCES users(id)
+        FOREIGN KEY (session_id) REFERENCES sessions(id)
+    );
+
+        CREATE TABLE "companions" (
+        "id" INTEGER NOT NULL UNIQUE,
+        "reservation_id" INTEGER NOT NULL,
+        "username" TEXT NOT NULL,
+        PRIMARY KEY("id" AUTOINCREMENT),
+        FOREIGN KEY (reservation_id) REFERENCES reservations(id)
+    );
     """
 
     try:
