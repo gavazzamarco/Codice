@@ -1,5 +1,8 @@
 import os
 import sqlite3
+from database import reservation_dao, session_dao
+
+LIMITS={"Warrior": 4,  "Mage":3, "Healer":2}
 
 # Per pythonanywhere
 BASE_DIR=os.path.dirname(os.path.abspath(__file__))
@@ -16,6 +19,7 @@ def create_quest(title, duration, location, type, difficulty, description, illus
     conn.close()
     return id
 
+# DEVO ORDINARE LE LE QUEST IN ORDINE TEMPORALE
 def get_quest_by_id(id):
     conn=sqlite3.connect(DB_PATH)
     conn.row_factory=sqlite3.Row
@@ -32,7 +36,11 @@ def get_all_quest():
     conn=sqlite3.connect(DB_PATH)
     conn.row_factory=sqlite3.Row
     cursor=conn.cursor()
-    query="SELECT * FROM quests"
+    query="""
+        SELECT q.* FROM quests q
+        LEFT JOIN sessions s ON q.id = s.quest_id
+        GROUP BY q.id
+        ORDER BY MIN(s.day*1440 + s.hour*60 + s.minute) ASC"""
     cursor.execute(query)
     all_quest=cursor.fetchall()
     conn.commit()
@@ -41,27 +49,35 @@ def get_all_quest():
     return all_quest
 
 def get_filtered_quest(day, type, difficulty, role):
-    # Da modificare per tenere traccia di role
     conn=sqlite3.connect(DB_PATH)
     conn.row_factory=sqlite3.Row
     cursor=conn.cursor()
-    if day is not None:
-        query="SELECT DISTINCT quest_id FROM sessions WHERE day=?"
-        cursor.execute(query, (day,))
-        quests_id=cursor.fetchall()
-        filtered_day_quests=[]
-        for row in quests_id:
-            filtered_day_quests.append(get_quest_by_id(row["quest_id"]))
-    else:
-        query="SELECT * FROM quests"
-        cursor.execute(query)
-        filtered_day_quests=cursor.fetchall()
     filtered_quests=[]
-    for quest in filtered_day_quests:
+    for quest in get_all_quest():
         if type and quest['type']!=type:
             continue
         if difficulty and quest['difficulty']!=difficulty:
-            continue    
+            continue
+        if day is not None:
+            query="SELECT * FROM sessions WHERE quest_id=? AND day=?"
+            cursor.execute(query, (quest["id"], day))
+            sessions_to_check=cursor.fetchall()
+        else:
+            query="SELECT * FROM sessions WHERE quest_id=?"
+            cursor.execute(query, (quest["id"],))
+            sessions_to_check=cursor.fetchall()
+        if role:
+            has_available_session=False
+            for session in sessions_to_check:
+                query="SELECT SUM(total_people) FROM reservations WHERE session_id=? AND role=?"
+                cursor.execute(query, (session["id"], role))
+                result=cursor.fetchone()
+                count=result[0] if result[0] is not None else 0
+                if count < LIMITS[role]:
+                    has_available_session = True
+                    break
+            if not has_available_session:
+                continue
         filtered_quests.append(quest)
     conn.commit()
     cursor.close()

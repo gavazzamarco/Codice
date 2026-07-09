@@ -26,7 +26,7 @@ def get_all_session():
     conn.close()
     return all_session
 
-def get_session_of_quest(quest_id):
+def get_sessions_of_quest(quest_id):
     conn=sqlite3.connect(DB_PATH)
     conn.row_factory=sqlite3.Row
     cursor=conn.cursor()

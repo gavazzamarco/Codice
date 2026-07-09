@@ -47,7 +47,7 @@ Quest detail
             </article>
 
             <section class="detail-session-container">
-                <h2 class="home-card-title d-flex justify-content-center mt-3 pb-3 mb-0">Join</h2>
+                <h2 class="home-card-title d-flex justify-content-center mt-3 pb-3 mb-0">Sessions</h2>
                 {% for session in sessions %}
                 <div class="base-border-multicolor detail-border-multicolor">
                     <div class="base-background-red col-3 h-100"></div>
@@ -62,22 +62,22 @@ Quest detail
                         </div>
                         <div class="row">
                             <div class="col-4 detail-session-info base-color-blue">
-                                <div class="d-flex justify-content-center">3</div>
+                                <div class="d-flex justify-content-center">{{ session.Warrior }}</div>
                                 <p class="d-flex justify-content-center">Warriors</p>
                             </div>
                             <div class="col-4 detail-session-info base-color-yellow">
-                                <div class="d-flex justify-content-center">2</div>
+                                <div class="d-flex justify-content-center">{{ session.Mage }}</div>
                                 <p class="d-flex justify-content-center">Mages</p>
                             </div>
                             <div class="col-4 detail-session-info base-color-red">
-                                <div class="d-flex justify-content-center">1</div>
+                                <div class="d-flex justify-content-center">{{ session.Healer }}</div>
                                 <p class="d-flex justify-content-center">Healers</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-2 d-flex justify-content-center align-items-center">
                         <button type="button" class="detail-book-button" data-bs-toggle="modal"
-                            data-bs-target="#bookDate-{{ session.id }}">BOOK</button>
+                            data-bs-target="#bookDate-{{ session.id }}">JOIN</button>
                     </div>
                 </div>
 
@@ -101,15 +101,15 @@ Quest detail
                                     </div>
                                     <div class="row">
                                         <div class="col-4 detail-session-info base-color-blue">
-                                            <div class="d-flex justify-content-center">3</div>
+                                            <div class="d-flex justify-content-center">{{ session.Warrior }}</div>
                                             <p class="d-flex justify-content-center">Warriors</p>
                                         </div>
                                         <div class="col-4 detail-session-info base-color-yellow">
-                                            <div class="d-flex justify-content-center">2</div>
+                                            <div class="d-flex justify-content-center">{{ session.Mage }}</div>
                                             <p class="d-flex justify-content-center">Mages</p>
                                         </div>
                                         <div class="col-4 detail-session-info base-color-red">
-                                            <div class="d-flex justify-content-center">1</div>
+                                            <div class="d-flex justify-content-center">{{ session.Healer }}</div>
                                             <p class="d-flex justify-content-center">Healers</p>
                                         </div>
                                     </div>

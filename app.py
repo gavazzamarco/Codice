@@ -305,9 +305,16 @@ def split_title(title):
 @app.route("/quest/<int:quest_id>")
 def quest_detail(quest_id):
     quest_db=quests_dao.get_quest_by_id(quest_id)
-    sessions_db=[dict(row) for row in session_dao.get_session_of_quest(quest_id)]
+    sessions_db=[dict(row) for row in session_dao.get_sessions_of_quest(quest_id)]
     for row in sessions_db:
         row["day"]=DAYS_OF_WEEK[row["day"]]
+        reservations_session=reservation_dao.get_reservations_for_session(row["id"])
+        for role in ROLES:
+            count=0
+            for reservation in reservations_session:
+                if reservation["role"]==role:
+                    count+=reservation["total_people"]
+            row[role]=LIMITS[role]-count
     if not quest_db:
         flash("Quest non trovata", "danger")
         return redirect(url_for('home'))
@@ -354,3 +361,17 @@ def book_session():
     for companion in companions:
         reservation_dao.add_companions(reservation_id, companion)
     return redirect(url_for('home')) # poi devo mette profilo
+
+
+@app.route("/profile")
+@login_required
+def profile():
+    if current_user.role=="adventurer":
+        return redirect(url_for('profile_adventurer'))
+    else:
+        return redirect(url_for('home'))
+
+@app.route("/profile_adventurer")
+@login_required
+def profile_adventurer():
+    return render_template('profile_adventurer.html')
