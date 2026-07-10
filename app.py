@@ -371,7 +371,7 @@ def profile():
     if current_user.role=="adventurer":
         return redirect(url_for('profile_adventurer'))
     elif current_user.role=="master":
-        return redirect(url_for('home'))
+        return redirect(url_for('profile_master'))
     return redirect(url_for('home'))
 
 def can_cancel(day, hour, minute):
@@ -410,3 +410,9 @@ def cancel_session(session_id):
     reservation_dao.delete_reservation(reservation["id"])
     flash("The booking was cancelled successfully", "success")
     return redirect(url_for('profile'))
+
+@app.route("/profile_master")
+@login_required
+def profile_master():
+    all_detailed_quests=quests_dao.get_all_info_of_all_quests()
+    return render_template("profile_master.html", quests=all_detailed_quests)
