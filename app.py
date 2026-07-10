@@ -472,3 +472,9 @@ def modify_session(session_id):
     session_dao.update_session(day_index, hour, minute, session_id)
     flash("The session has been successfully updated", "success")
     return redirect(url_for('profile'))
+
+@app.route("/admin")
+def admin():
+    users_db=users_dao.get_all_users_for_role("adventurer")
+    all_detailed_quests=quests_dao.get_all_info_of_all_quests()
+    return render_template("admin.html", users=users_db, quests=all_detailed_quests)

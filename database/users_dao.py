@@ -49,3 +49,15 @@ def get_master():
     cursor.close()
     conn.close()
     return db_user
+
+def get_all_users_for_role(role):
+    conn=sqlite3.connect(DB_PATH)
+    conn.row_factory=sqlite3.Row
+    cursor=conn.cursor()
+    query="SELECT * FROM users WHERE role=?"
+    cursor.execute(query, (role,))
+    db_users=cursor.fetchall()
+    conn.commit()
+    cursor.close()
+    conn.close()
+    return db_users
