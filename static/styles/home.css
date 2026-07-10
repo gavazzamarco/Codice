@@ -202,3 +202,7 @@
     border-color: var(--kazuma);
     box-shadow: 4px 4px 0px rgb(0, 97, 21);
 }
+
+.home-lateral-img {
+    height: 420px;
+}

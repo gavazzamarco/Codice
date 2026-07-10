@@ -435,6 +435,7 @@ def cancel_session(session_id):
 @app.route("/modify_session/<int:session_id>", methods=["POST"])
 @login_required
 def modify_session(session_id):
+    # Forse si dovrebbe aggiungere la possibilità di creare anche una nuova sessione
     if current_user.role!="master":
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for("home"))

@@ -96,9 +96,14 @@
 }
 
 .base-logo-footer {
-    width: 140px;
-    height: 90px;
+    width: 250px;
     border-radius: 8px;
+}
+
+.base-testo-footer {
+    font-family: fantasy;
+    font-size: 1.2rem;
+    margin: 15px 30px;
 }
 
 .base-button {
@@ -132,3 +137,5 @@
     background-color: var(--megumin);
     border-color: #ffeb51;
 }
+
+footer { background: var(--dark); }

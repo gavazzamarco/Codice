@@ -20,7 +20,7 @@
                     <img src="{{ url_for('static', filename='images/logo-header.jpg') }}" class="base-logo-header"
                         alt="Logo Konosuba">
                     <span class="base-title ms-2">
-                        <span class="base-color-red">Ko</span> <span class="base-color-yellow">no</span> 
+                        <span class="base-color-red">Ko</span> <span class="base-color-yellow">no</span>
                         <span class="base-color-green">su</span> <span class="base-color-blue">ba</span>
                     </span>
                 </a>
@@ -86,10 +86,21 @@
             <div class="base-background-green col-3 h-100"></div>
             <div class="base-background-blue col-3 h-100"></div>
         </div>
-        <a href="{{ url_for('home') }}" class="d-flex align-items-center text-decoration-none">
-            <img src="{{ url_for('static', filename='images/logo-footer.jpg') }}" class="base-logo-footer"
-                alt="Logo Konosuba">
-        </a>
+        <div class="container-fluid">
+            <div class="row align-items-stretch">
+                <div class="col-6 d-flex justify-content-center align-items-center mt-3 mb-3">
+                    <a href="{{ url_for('home') }}" class="d-flex align-items-center text-decoration-none">
+                        <img src="{{ url_for('static', filename='images/logo-footer.png') }}" class="base-logo-footer"
+                            alt="Logo Konosuba">
+                    </a>
+                </div>
+                <div class="col-5 text-center mt-3 mb-3 base-testo-footer">
+                    <span>Termini e condizioni della Gilda:</span><br>
+                    <span class="base-color-red">Gli avventurieri che navigano su questo</span><span class="base-color-yellow"> sito accettano il rischio di esplosioni</span><span 
+                    class="base-color-green">spontanee, attacchi di rane giganti e</span><span class="base-color-blue">la totale assenza di ricompense in Eris</span>
+                </div>
+            </div>
+        </div>
     </footer>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
