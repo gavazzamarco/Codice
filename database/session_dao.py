@@ -58,3 +58,12 @@ def delete_session(session_id):
     conn.commit()
     cursor.close()
     conn.close()
+
+def update_session(day, hour, minute, session_id):
+    conn=sqlite3.connect(DB_PATH)
+    cursor=conn.cursor()
+    query="UPDATE sessions SET day=?, hour=?, minute=? WHERE id=?"
+    cursor.execute(query, (day, hour, minute, session_id))
+    conn.commit()
+    cursor.close()
+    conn.close()

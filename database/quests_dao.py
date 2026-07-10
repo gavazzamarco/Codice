@@ -117,3 +117,12 @@ def get_all_info_of_all_quests():
     cursor.close()
     conn.close()
     return quests
+
+def modify_location(location, quest_id):
+    conn=sqlite3.connect(DB_PATH)
+    cursor=conn.cursor()
+    query="UPDATE quests SET location=? WHERE id=?"
+    cursor.execute(query, (location, quest_id))
+    conn.commit()
+    cursor.close()
+    conn.close()

@@ -78,8 +78,7 @@ def load_user(user_id):
             password=db_user["password"],
             role=db_user["role"],
             profile_img=db_user["profile_img"],
-            bio=db_user["bio"],
-        )
+            bio=db_user["bio"],)
     else:
         user=None
     return user
@@ -430,17 +429,42 @@ def cancel_session(session_id):
         flash("You cannot cancel this session; there are already people booked", "danger")
         return redirect(url_for('profile'))
     session_dao.delete_session(session_id)
-    flash("The booking was cancelled successfully", "success")
+    flash("The session was cancelled successfully", "success")
     return redirect(url_for('profile'))
 
-@app.route("/modify_session/<int:session_id>")
+@app.route("/modify_session/<int:session_id>", methods=["POST"])
 @login_required
 def modify_session(session_id):
     if current_user.role!="master":
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for("home"))
+    session=session_dao.get_session_by_id(session_id)
     if reservation_dao.get_reservations_for_session(session_id):
         flash("You cannot modify this session; there are already people booked", "danger")
         return redirect(url_for('profile'))
-    
-    return
+    location=request.form.get("location")
+    day=request.form.get("day")
+    hour=request.form.get("hour")
+    minute=request.form.get("minute")
+    errors=[]
+    if location!="" and location not in LOCATIONS:
+        errors.append("The location must be chosen from the available options")
+    if day not in DAYS_OF_WEEK:
+        errors.append("The day must be selected from the available options")
+    hour=int(hour)
+    if hour<0 or hour>23:
+        errors.append("The hour can only take value between 0 and 23")
+    minute=int(minute)
+    if minute<0 or minute>59:
+        errors.append("The minutes can only take values between 0 and 59")
+    quest=quests_dao.get_quest_by_id(session["quest_id"])
+    sessions=[s for s in session_dao.get_all_session() if s["id"]!=session_id]
+    if len(errors) or check_overlap([day], [hour], [minute], int(quest["duration"]), "all", sessions)==True:
+        stampa_errori(errors)
+        return redirect(url_for('profile'))
+    if location!="":
+        day_index=DAYS_OF_WEEK.index(day)
+        quests_dao.modify_location(location, session["quest_id"])
+    session_dao.update_session(day_index, hour, minute, session_id)
+    flash("The session has been successfully updated", "success")
+    return redirect(url_for('profile'))

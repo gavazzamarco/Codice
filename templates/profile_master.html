@@ -100,7 +100,7 @@ active
                         <div class="row align-items-center justify-content-center">
                             {% for session in quest.sessions %}
                             <div class="col-4">
-                                <div class="profile-master-session base-bordi-multicolor">
+                                <div class="profile-master-session base-bordi-multicolor mb-4">
                                     <div class="d-flex align-items-center justify-content-around">
                                         <div class="profile-session-date">
                                             <span class="base-color-green">{{ session.day }}</span> <span
@@ -140,7 +140,7 @@ active
                                                     adventurer.role }}</span>
                                             </div>
                                             {% for companion in adventurer.companions %}
-                                            <span class="profile-master-companion">{{ companion }}</span>
+                                            <span class="profile-master-companion">-{{ companion }}</span>
                                             {% endfor %}
                                         </div>
                                         {% endfor %}
@@ -162,7 +162,7 @@ active
                             </div>
                             <div class="modal fade" id="modify-{{ session.id }}" tabindex="-1" aria-hidden="true">
                                 <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <form action="{{ url_for('book_session') }}" method="POST">
+                                    <form action="{{ url_for('modify_session', session_id=session.id) }}" method="POST">
                                         <div class="modal-content detail-modal-content">
                                             <div class="d-flex justify-content-end mt-3 me-3 mb-0">
                                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
@@ -180,9 +180,8 @@ active
                                             <div class="modal-body container-fluid">
                                                 <div class="row">
                                                     <div class="mb-3 px-3">
-                                                        <label for="location" class="profile-label">Location*</label>
-                                                        <select id="location" name="location" class="form-control"
-                                                            required>
+                                                        <label for="location" class="profile-label">Location</label>
+                                                        <select id="location" name="location" class="form-control">
                                                             <option value="">Select a location</option>
                                                             {% for location in locations %}
                                                             <option value="{{ location }}">{{ location }}</option>
