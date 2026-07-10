@@ -49,3 +49,12 @@ def get_session_by_id(session_id):
     cursor.close()
     conn.close()
     return session
+
+def delete_session(session_id):
+    conn=sqlite3.connect(DB_PATH)
+    cursor=conn.cursor()
+    query="DELETE FROM sessions WHERE id=?"
+    cursor.execute(query, (session_id,))
+    conn.commit()
+    cursor.close()
+    conn.close()

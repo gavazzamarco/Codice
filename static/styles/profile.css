@@ -149,4 +149,17 @@ section {
 .profile-master-session {
     padding: 10px;
     border-radius: 15px;
+    background: black;
+}
+
+.profile-master-button {
+    text-decoration: none;
+    font-weight: 500;
+}
+
+.profile-label {
+    color: white;
+    font-size: 1.6rem;
+    margin-bottom: 4px;
+    margin-top: 15px;
 }

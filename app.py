@@ -393,9 +393,9 @@ def profile_adventurer():
             session["day"]=DAYS_OF_WEEK[session["day"]]
     return render_template("profile_adventurer.html", quests=user_quests_dict)
 
-@app.route("/cancel_session/<int:session_id>")
+@app.route("/cancel_reservation/<int:session_id>")
 @login_required
-def cancel_session(session_id):
+def cancel_reservation(session_id):
     if current_user.role!="adventurer":
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for("home"))
@@ -414,5 +414,33 @@ def cancel_session(session_id):
 @app.route("/profile_master")
 @login_required
 def profile_master():
+    if current_user.role!="master":
+        flash("You do not have permission to access this page", "danger")
+        return redirect(url_for("home"))
     all_detailed_quests=quests_dao.get_all_info_of_all_quests()
-    return render_template("profile_master.html", quests=all_detailed_quests)
+    return render_template("profile_master.html", quests=all_detailed_quests, days=DAYS_OF_WEEK, locations=LOCATIONS)
+
+@app.route("/cancel_session/<int:session_id>")
+@login_required
+def cancel_session(session_id):
+    if current_user.role!="master":
+        flash("You do not have permission to access this page", "danger")
+        return redirect(url_for("home"))
+    if reservation_dao.get_reservations_for_session(session_id):
+        flash("You cannot cancel this session; there are already people booked", "danger")
+        return redirect(url_for('profile'))
+    session_dao.delete_session(session_id)
+    flash("The booking was cancelled successfully", "success")
+    return redirect(url_for('profile'))
+
+@app.route("/modify_session/<int:session_id>")
+@login_required
+def modify_session(session_id):
+    if current_user.role!="master":
+        flash("You do not have permission to access this page", "danger")
+        return redirect(url_for("home"))
+    if reservation_dao.get_reservations_for_session(session_id):
+        flash("You cannot modify this session; there are already people booked", "danger")
+        return redirect(url_for('profile'))
+    
+    return
