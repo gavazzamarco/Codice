@@ -100,9 +100,19 @@
     border-radius: 8px;
 }
 
+.base-footer-title {
+    font-size: 2rem;
+    font-weight: 500;
+    letter-spacing: 2px;
+    color: rgb(255, 0, 255);
+    text-shadow: 2px 2px 0px rgb(0, 0, 0);
+    margin-top: 10px;
+}
+
 .base-testo-footer {
     font-family: fantasy;
-    font-size: 1.2rem;
+    font-size: 1.3rem;
+    font-weight: 100;
     margin: 15px 30px;
 }
 

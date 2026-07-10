@@ -59,7 +59,8 @@ active
                     <select id="difficulty" name="difficulty" class="form-control">
                         <option value="">Select a difficulty</option>
                         {% for difficulty in difficulties %}
-                        <option value="{{ difficulty }}" {% if difficulty==difficolta %} selected {% endif %}>{{ difficulty }}</option>
+                        <option value="{{ difficulty }}" {% if difficulty==difficolta %} selected {% endif %}>{{
+                            difficulty }}</option>
                         {% endfor %}
                     </select>
                 </div>
@@ -75,7 +76,8 @@ active
                 <div class="col-auto d-flex flex-column align-items-center justify-content-center">
                     <button type="submit" class="base-nav-item base-nav-link home-button-search">Search</button>
                     {% if giorno or tipo or difficolta or ruolo %}
-                    <a href="{{ url_for('home') }}" class="base-nav-item base-nav-link home-button-search mt-3 home-button-reset">Reset</a>
+                    <a href="{{ url_for('home') }}"
+                        class="base-nav-item base-nav-link home-button-search mt-3 home-button-reset">Reset</a>
                     {% endif %}
                 </div>
             </div>
@@ -107,17 +109,26 @@ active
                         <div class="home-card-text w-100 d-flex justify-content-between">
                             <div class="flex-grow-1 me-2">
                                 <h3 class="card-title home-card-title">{{ quest.title }}</h3>
-                                <div class="home-card-subtitle">
-                                    <div class="home-card-badge home-location"><span>Location:</span> <span>{{ quest.location }}</span>
+                                <div class="home-card-subtitle d-flex flex-wrap">
+                                    <div class="d-flex align-items-start">
+                                        <div class="home-card-badge home-location"><span>Location:</span> <span>{{
+                                                quest.location }}</span>
+                                        </div>
+                                        <div class="home-card-badge home-type"><span>Type:</span> <span>{{ quest.type
+                                                }}</span></div>
                                     </div>
-                                    <div class="home-card-badge home-type"><span>Type:</span> <span>{{ quest.type }}</span></div>
-                                    <div class="home-card-badge home-difficulty"><span>Difficulty:</span> <span>{{ quest.difficulty }}</span></div>
-                                    <div class="home-card-badge home-duration"><span>Duration:</span> <span>{{ quest.duration }}</span>
+                                    <div class="d-flex align-items-start">
+                                        <div class="home-card-badge home-difficulty"><span>Difficulty:</span> <span>{{
+                                                quest.difficulty }}</span></div>
+                                        <div class="home-card-badge home-duration"><span>Duration:</span> <span>{{
+                                                quest.duration }}</span>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center align-items-end mb-3 me-4">
-                                <a href="{{ url_for('quest_detail', quest_id=quest.id) }}" class="home-detail-button">View</a>
+                                <a href="{{ url_for('quest_detail', quest_id=quest.id) }}"
+                                    class="home-detail-button">View</a>
                             </div>
                         </div>
                     </div>

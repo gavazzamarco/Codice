@@ -8,7 +8,7 @@ from datetime import datetime
 
 SIMULATE_DAY=2 # Wednesday
 SIMULATE_HOUR=18
-SIMULATE_MIN=35
+SIMULATE_MIN=25
 DAYS_OF_WEEK=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 LOCATIONS=["Axel", "Kingdom of Elroad", "Arcanletia"]
 DIFFICULTY=["Easy", "Medium", "Hard", "Legendary"]
@@ -189,7 +189,7 @@ def quest_create():
 
 def conversione_minuti_assoluti(day, hour, minute):
     MINUTES_IN_DAY=60*24
-    return int(MINUTES_IN_DAY*int(day) + int(hour)*60 + int(minute))
+    return int(MINUTES_IN_DAY*int(day)+int(hour)*60+int(minute))
 
 def check_overlap(days, starts_hours, starts_minutes, duration, location, sessions):
     valid_session=[]
@@ -338,16 +338,19 @@ def book_session():
         flash("The role must be selected from the available options", "danger")
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
     companions=request.form.getlist("companion")
+    if len(companions)>2:
+        flash("You are allowed to bring a maximum of two additional companions", "danger")
+        return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
     reservations_session=reservation_dao.get_reservations_for_session(session_id)
     count=0
     for reservation in reservations_session:
         if reservation["role"]==role:
             count+=reservation["total_people"]
-    if (LIMITS[role]-(count+len(companions)))<0:
+    if (LIMITS[role]-(count+len(companions)+1))<0:
         flash("You have booked more seats than are available for the category "+role, "danger")
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
     
-    reservations_user = reservation_dao.get_reservations_of_user(current_user.id)
+    reservations_user=reservation_dao.get_reservations_of_user(current_user.id)
     sessions_booked=[session_dao.get_session_by_id(row["session_id"]) for row in reservations_user]
     if len(reservations_user)>=3:
         flash("It is not possible to book more than 3 sessions per week", "danger")
@@ -374,10 +377,10 @@ def profile():
     return redirect(url_for('home'))
 
 def can_cancel(day, hour, minute):
-    THRESHOLD=8*60
-    simulate=conversione_minuti_assoluti(SIMULATE_DAY, SIMULATE_HOUR, SIMULATE_MIN)
-    current=conversione_minuti_assoluti(day, hour, minute)
-    return (simulate-current)>THRESHOLD
+    SOGLIA=8*60
+    current_simulated=conversione_minuti_assoluti(SIMULATE_DAY, SIMULATE_HOUR, SIMULATE_MIN)
+    session=conversione_minuti_assoluti(day, hour, minute)
+    return (session-current_simulated)>SOGLIA
 
 @app.route("/profile_adventurer")
 @login_required

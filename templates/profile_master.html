@@ -71,16 +71,22 @@ active
                             <div class="home-card-text w-100 d-flex justify-content-between">
                                 <div class="flex-grow-1 me-2">
                                     <h3 class="card-title home-card-title">{{ quest.title }}</h3>
-                                    <div class="home-card-subtitle">
-                                        <div class="home-card-badge home-location"><span>Location:</span> <span>{{
-                                                quest.location }}</span>
+                                    <div class="home-card-subtitle d-flex flex-wrap">
+                                        <div class="d-flex align-items-start">
+                                            <div class="home-card-badge home-location"><span>Location:</span> <span>{{
+                                                    quest.location }}</span>
+                                            </div>
+                                            <div class="home-card-badge home-type"><span>Type:</span> <span>{{
+                                                    quest.type
+                                                    }}</span></div>
                                         </div>
-                                        <div class="home-card-badge home-type"><span>Type:</span> <span>{{ quest.type
-                                                }}</span></div>
-                                        <div class="home-card-badge home-difficulty"><span>Difficulty:</span> <span>{{
-                                                quest.difficulty }}</span></div>
-                                        <div class="home-card-badge home-duration"><span>Duration:</span> <span>{{
-                                                quest.duration }}</span>
+                                        <div class="d-flex align-items-start">
+                                            <div class="home-card-badge home-difficulty"><span>Difficulty:</span>
+                                                <span>{{
+                                                    quest.difficulty }}</span></div>
+                                            <div class="home-card-badge home-duration"><span>Duration:</span> <span>{{
+                                                    quest.duration }}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -172,7 +178,8 @@ active
                                                 <span class="card-title home-card-title">{{ quest.title }}</span>
                                             </h1>
                                             <div class="m-3 mt-0 mb-0">
-                                                <div class="text-center detail-session-title base-color-green mb-1 mt-3">
+                                                <div
+                                                    class="text-center detail-session-title base-color-green mb-1 mt-3">
                                                     <h2>{{ session.day }} at {{ session.hour }}:{{ session.minute }}
                                                     </h2>
                                                 </div>

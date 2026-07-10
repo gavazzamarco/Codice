@@ -61,7 +61,12 @@ active
         <div class="row justify-content-center">
             {% for quest in quests %}
             <div class="col-5 profile-quests-container">
-                <div class="card home-card-container">
+                <!-- Ho dovuto aggiungere:
+                 h-100 per forzare la card a prendere tutta l'altezza della colonna
+                 d-flex flex-column per trasformare la card in un contenitore flex verticale.  
+                 -flex-grow-1 sul corpo della card (cioè in card-body profile-card-body flex-grow-1) 
+                 per dirgli di assorbire tutto lo spazio vuoto rimanente.   -->
+                <div class="card home-card-container h-100 d-flex flex-column">
                     <div class="position-relative border-bottom">
                         <img src="{{ url_for('static', filename=quest.illustration) }}"
                             class="card-img object-fit-cover home-quest-img"
@@ -70,16 +75,22 @@ active
                             <div class="home-card-text w-100 d-flex justify-content-between">
                                 <div class="flex-grow-1 me-2">
                                     <h3 class="card-title home-card-title">{{ quest.title }}</h3>
-                                    <div class="home-card-subtitle">
-                                        <div class="home-card-badge home-location"><span>Location:</span> <span>{{
-                                                quest.location }}</span>
+                                    <div class="home-card-subtitle d-flex flex-wrap">
+                                        <div class="d-flex align-items-start">
+                                            <div class="home-card-badge home-location"><span>Location:</span> <span>{{
+                                                    quest.location }}</span>
+                                            </div>
+                                            <div class="home-card-badge home-type"><span>Type:</span> <span>{{
+                                                    quest.type
+                                                    }}</span></div>
                                         </div>
-                                        <div class="home-card-badge home-type"><span>Type:</span> <span>{{ quest.type
-                                                }}</span></div>
-                                        <div class="home-card-badge home-difficulty"><span>Difficulty:</span> <span>{{
-                                                quest.difficulty }}</span></div>
-                                        <div class="home-card-badge home-duration"><span>Duration:</span> <span>{{
-                                                quest.duration }}</span>
+                                        <div class="d-flex align-items-start">
+                                            <div class="home-card-badge home-difficulty"><span>Difficulty:</span>
+                                                <span>{{
+                                                    quest.difficulty }}</span></div>
+                                            <div class="home-card-badge home-duration"><span>Duration:</span> <span>{{
+                                                    quest.duration }}</span>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -90,7 +101,7 @@ active
                             </div>
                         </div>
                     </div>
-                    <div class="card-body profile-card-body">
+                    <div class="card-body profile-card-body flex-grow-1">
                         <h2 class="text-center">
                             <span class="base-color-red">Boo</span><span class="base-color-yellow">ked</span>
                             <span class="base-color-green">Sess</span><span class="base-color-blue">ions</span>
@@ -130,7 +141,7 @@ active
                                 <div class="col-3">
                                     <div class="d-flex justify-content-center mb-1">
                                         {% if session.can_cancel %}
-                                        <a href="{{ url_for('cancel_session', session_id=session.session_id) }}"
+                                        <a href="{{ url_for('cancel_reservation', session_id=session.session_id) }}"
                                             class="home-detail-button profile-cancel-button">Cancel</a>
                                         {% else %}
                                         <span class="profile-locked">Locked</span>
@@ -161,7 +172,8 @@ active
                             </h3>
                         </div>
                         <div class="d-flex justify-content-center align-items-center">
-                            <a href="{{ url_for('home') }}" class="home-detail-button home-noquest-button">Go to Quests</a>
+                            <a href="{{ url_for('home') }}" class="home-detail-button home-noquest-button">Go to
+                                Quests</a>
                         </div>
                     </div>
                 </div>
