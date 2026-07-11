@@ -76,67 +76,64 @@ active
         </form>
     </div>
 </section>
-
-<section class="home-quest-container">
-    <h2 class="home-quest-title text-center">
+<!-- Ho dovuto aggiungere container-flui per evitare lo strabordamento -->
+<section class="home-quest-container container-fluid">
+    <h2 class="page-title text-center">
         <span class="color-red">AVAIL</span><span class="color-yellow">ABLE</span> <span class="color-green">QUE</span><span class="color-blue">STS</span>
     </h2>
-    <!-- Ho dovuto aggiungere container-flui per evitare lo strabordamento -->
-    <div class="container-fluid">
-        {% if quests %}
-        {% for quest in quests %}
-        <div class="row quests-distance">
-            <div class="col-2 d-flex align-items-center justify-content-center">
-                {% if quest.foto_sinistra %}
-                <img src="{{ url_for('static', filename=quest.foto_sinistra) }}" class="img-fluid object-fit-cover lateral-figure" alt="Decoration photo">
-                {% endif %}
-            </div>
-            <article class="col-8 card position-relative quest-container p-0 m-0">
-                <img src="{{ url_for('static', filename=quest.illustration) }}"
-                    class="card-img object-fit-cover quest-card-image" alt="Illustration of quest {{quest.title }}">
-                <div class="card-img-overlay">
-                    <div class="quest-card-text w-100 d-flex justify-content-between">
-                        <div class="flex-grow-1 me-2">
-                            <h3 class="card-title quest-card-title">{{ quest.title }}</h3>
-                            <div class="d-flex flex-wrap">
-                                <div class="quest-card-badge quest-type"><span>Type:</span> <span>{{ quest.type }}</span></div>
-                                <div class="quest-card-badge quest-difficulty"><span>Difficulty:</span> <span>{{ quest.difficulty }}</span></div>
-                                <div class="quest-card-badge quest-duration"><span>Duration:</span> <span>{{ quest.duration }}</span></div>
-                            </div>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-end mb-3 me-4">
-                            <a href="{{ url_for('quest_detail', quest_id=quest.id) }}"
-                                class="common-button button-yellow">View</a>
+    {% if quests %}
+    {% for quest in quests %}
+    <div class="row quests-distance">
+        <div class="col-2 d-flex align-items-center justify-content-center">
+            {% if quest.foto_sinistra %}
+            <img src="{{ url_for('static', filename=quest.foto_sinistra) }}" class="img-fluid object-fit-cover lateral-figure" alt="Decoration photo">
+            {% endif %}
+        </div>
+        <article class="col-8 card position-relative quest-container p-0 m-0">
+            <img src="{{ url_for('static', filename=quest.illustration) }}"
+                class="card-img object-fit-cover quest-card-image" alt="Illustration of quest {{quest.title }}">
+            <div class="card-img-overlay">
+                <div class="quest-card-text w-100 d-flex justify-content-between">
+                    <div class="flex-grow-1 me-2">
+                        <h3 class="card-title quest-card-title">{{ quest.title }}</h3>
+                        <div class="d-flex flex-wrap">
+                            <div class="quest-card-badge quest-type"><span>Type:</span> <span>{{ quest.type }}</span></div>
+                            <div class="quest-card-badge quest-difficulty"><span>Difficulty:</span> <span>{{ quest.difficulty }}</span></div>
+                            <div class="quest-card-badge quest-duration"><span>Duration:</span> <span>{{ quest.duration }}</span></div>
                         </div>
                     </div>
-                </div>
-            </article>
-            <div class="col-2 d-flex align-items-center justify-content-center">
-                {% if quest.foto_destra %}
-                <img src="{{ url_for('static', filename=quest.foto_destra) }}" class="img-fluid object-fit-cover lateral-figure" alt="Decoration photo">
-                {% endif %}
-            </div>
-        </div>
-        {% endfor %}
-        {% else %}
-        <div class="d-flex justify-content-center">
-            <div class="col-8 card position-relative quest-container p-0 m-0">
-                <img src="{{ url_for('static', filename='images/filtraggio.png') }}" class="card-img object-fit-cover" alt="Image no quest found">
-                <div class="card-img-overlay">
-                    <div class="home-noquest-container w-100">
-                        <div class="d-flex align-items-center justify-content-center text-center">
-                            <h3 class="card-title quest-card-title home-noquest-title">
-                                There are no quests currently available or that match the filters you set
-                            </h3>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center">
-                            <a href="{{ url_for('home') }}" class="common-button button-blue">Cancel filter</a>
-                        </div>
+                    <div class="d-flex justify-content-center align-items-end mb-3 me-4">
+                        <a href="{{ url_for('quest_detail', quest_id=quest.id) }}"
+                            class="common-button button-yellow">View</a>
                     </div>
                 </div>
             </div>
+        </article>
+        <div class="col-2 d-flex align-items-center justify-content-center">
+            {% if quest.foto_destra %}
+            <img src="{{ url_for('static', filename=quest.foto_destra) }}" class="img-fluid object-fit-cover lateral-figure" alt="Decoration photo">
+            {% endif %}
         </div>
-        {% endif %}
     </div>
+    {% endfor %}
+    {% else %}
+    <div class="d-flex justify-content-center">
+        <div class="col-8 card position-relative quest-container p-0 m-0">
+            <img src="{{ url_for('static', filename='images/filtraggio.png') }}" class="card-img object-fit-cover" alt="Image no quest found">
+            <div class="card-img-overlay">
+                <div class="home-noquest-container w-100">
+                    <div class="d-flex align-items-center justify-content-center text-center">
+                        <h3 class="card-title quest-card-title home-noquest-title">
+                            There are no quests currently available or that match the filters you set
+                        </h3>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <a href="{{ url_for('home') }}" class="common-button button-blue">Cancel filter</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
 </section>
 {% endblock %}

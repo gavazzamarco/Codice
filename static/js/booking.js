@@ -10,7 +10,7 @@ document.addEventListener("click", function(event) {
             newCompanion.innerHTML = `
                 <div class="p-1 mb-0">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <label class="detail-modal-role mb-0">Companion (username):*</label>
+                        <label class="detail-modal-role mb-0">Companion (username):</label>
                         <button type="button" class="create-button-delete">X</button>
                     </div>
                     <input type="text" name="companion" class="form-control" required>

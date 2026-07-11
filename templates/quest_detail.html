@@ -13,137 +13,117 @@ Quest detail
 
 {% block content %}
 <section class="container-fluid">
-    <h1 class="detail-title text-center">
-        <span class="base-color-red">{{ titolo[0] }}</span><span class="base-color-yellow">{{ titolo[1] }}</span><span
-            class="base-color-green">{{ titolo[2] }}</span><span class="base-color-blue">{{ titolo[3] }}</span>
+    <h1 class="page-title text-center mt-4 pt-4">
+        <span class="color-red">{{ titolo[0] }}</span><span class="color-yellow">{{ titolo[1] }}</span><span class="color-green">{{ titolo[2] }}</span><span class="color-blue">{{ titolo[3] }}</span>
     </h1>
     <div class="row">
         <div class="col-8">
-            <div class="detail-illustration-container">
-                <img src="{{ url_for('static', filename=quest.illustration) }}" class="img-fluid w-100 rounded"
-                    alt="Quest's image: {{quest.illustration}}">
+            <div class="detail-container">
+                <img src="{{ url_for('static', filename=quest.illustration) }}" class="img-fluid" alt="Image of {{quest.title}}">
             </div>
-            <article class="detail-illustration-container detail-description-container">
-                <h2 class="home-card-title d-flex justify-content-center mt-3 mb-4">Quest Description</h2>
-                <p class="detail-description text-center">{{ quest.description }}</p>
+            <article class="detail-container detail-description-container">
+                <h2 class="quest-card-title d-flex justify-content-center mt-4 pt-2">Quest Description</h2>
+                <p class="detail-description text-center px-4">{{ quest.description }}</p>
             </article>
         </div>
         <div class="col-4">
-            <article class="detail-info-container">
-                <h2 class="home-card-title d-flex justify-content-center mt-3 pb-3 mb-0 detail-border-bottom-red">Quest
-                    Info</h2>
-                <div class="text-center detail-border-bottom-green pt-1 pb-2">
-                    <span class="detail-info base-color-red">Duration: {{ quest.duration }} min</span>
+            <article class="detail-container detail-info-container px-4 pb-4">
+                <h2 class="quest-card-title d-flex justify-content-center mt-3 pb-3 mb-0 border-bottom-red">Quest Info</h2>
+                <div class="text-center border-bottom-green pt-1 pb-2">
+                    <span class="detail-info color-red">Duration: {{ quest.duration }} min</span>
                 </div>
-                <div class="text-center detail-border-bottom-blue pt-1 pb-2">
-                    <span class="detail-info base-color-green">Location: {{ quest.location }}</span>
+                <div class="text-center border-bottom-blue pt-1 pb-2">
+                    <span class="detail-info color-green">Type: {{ quest.type }}</span>
                 </div>
-                <div class="text-center detail-border-bottom-yellow pt-1 pb-2">
-                    <span class="detail-info base-color-blue">Type: {{ quest.type }}</span>
-                </div>
-                <div class="text-center pt-1 mb-4">
-                    <span class="detail-info base-color-yellow">Difficulty: {{ quest.difficulty }}</span>
+                <div class="text-center pt-1 pb-1">
+                    <span class="detail-info color-blue">Difficulty: {{ quest.difficulty }}</span>
                 </div>
             </article>
-
-            <section class="detail-session-container">
-                <h2 class="home-card-title d-flex justify-content-center mt-3 pb-3 mb-0">Sessions</h2>
+            <section class="detail-container detail-session-container container-fluid">
+                <h2 class="quest-card-title d-flex justify-content-center mt-4 pb-1 mb-0">Sessions</h2>
                 {% if current_user.is_authenticated %}
                 {% if current_user.role=="master" %}
                 <p class="detail-description text-center mt-0 mb-0 p-4 pt-2">The Guild Master cannot book any sessions</p>
                 {% else %}
                 {% for session in sessions %}
-                <div class="base-border-multicolor detail-border-multicolor">
-                    <div class="base-background-red col-3 h-100"></div>
-                    <div class="base-background-yellow col-3 h-100"></div>
-                    <div class="base-background-green col-3 h-100"></div>
-                    <div class="base-background-blue col-3 h-100"></div>
+                <div class="line-multicolor w-100 d-flex mt-3 px-2">
+                    <div class="background-red w-25 h-100"></div>
+                    <div class="background-yellow w-25 h-100"></div>
+                    <div class="background-green w-25 h-100"></div>
+                    <div class="background-blue w-25 h-100"></div>
                 </div>
                 <div class="row">
                     <div class="col-9 ms-2 me-2">
-                        <div class="text-center detail-session-title base-color-green mb-1 mt-3">
+                        <div class="text-center detail-session-title color-green mb-1 mt-3">
                             {{ session.day }} at {{ session.hour }}:{{ session.minute }}
                         </div>
                         <div class="row">
-                            <div class="col-4 detail-session-info base-color-blue">
+                            <div class="col-4 detail-session-info color-blue">
                                 <div class="d-flex justify-content-center">{{ session.Warrior }}</div>
                                 <p class="d-flex justify-content-center">Warriors</p>
                             </div>
-                            <div class="col-4 detail-session-info base-color-yellow">
+                            <div class="col-4 detail-session-info color-yellow">
                                 <div class="d-flex justify-content-center">{{ session.Mage }}</div>
                                 <p class="d-flex justify-content-center">Mages</p>
                             </div>
-                            <div class="col-4 detail-session-info base-color-red">
+                            <div class="col-4 detail-session-info color-red">
                                 <div class="d-flex justify-content-center">{{ session.Healer }}</div>
                                 <p class="d-flex justify-content-center">Healers</p>
                             </div>
                         </div>
                     </div>
                     <div class="col-2 d-flex justify-content-center align-items-center">
-                        <button type="button" class="detail-book-button" data-bs-toggle="modal"
-                            data-bs-target="#bookDate-{{ session.id }}">JOIN</button>
+                        <button type="button" class="common-button button-blue detail-book-button" data-bs-toggle="modal" data-bs-target="#bookDate-{{ session.id }}">JOIN</button>
                     </div>
                 </div>
 
                 <div class="modal fade" id="bookDate-{{ session.id }}" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
-                        <form action="{{ url_for('book_session') }}" method="POST">
-                            <div class="modal-content detail-modal-content">
-                                <div class="d-flex justify-content-end mt-3 me-3 mb-0">
-                                    <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                        aria-label="Close"></button>
+                        <form action="{{ url_for('book_session') }}" method="POST" class="modal-content detail-modal-content">
+                            <div class="d-flex justify-content-end mt-3 me-3 mb-0">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <h1 class="text-center detail-modal-title mb-2 mt-0">
+                                <span class="color-red">{{ titolo[0] }}</span><span class="color-yellow">{{ titolo[1] }}</span><span class="color-green">{{ titolo[2] }}</span><span class="color-blue">{{ titolo[3] }}</span>
+                            </h1>
+                            <div class="m-3 mt-0 container-fluid">
+                                <div class="text-center color-green mb-1 mt-3">
+                                    <h2 class="detail-modal-date">{{ session.day }} at {{ session.hour }}:{{ session.minute }}</h2>
                                 </div>
-                                <h1 class="detail-title text-center detail-modal-title mb-2 mt-0">
-                                    <span class="base-color-red">{{ titolo[0] }}</span><span
-                                        class="base-color-yellow">{{ titolo[1] }}</span><span
-                                        class="base-color-green">{{ titolo[2] }}</span><span class="base-color-blue">{{
-                                        titolo[3] }}</span>
-                                </h1>
-                                <div class="m-3 mt-0">
-                                    <div class="text-center detail-session-title base-color-green mb-1 mt-3">
-                                        <h2>{{ session.day }} at {{ session.hour }}:{{ session.minute }}</h2>
+                                <div class="row">
+                                    <div class="col-4 detail-modal-info color-blue">
+                                        <div class="d-flex justify-content-center">{{ session.Warrior }}</div>
+                                        <p class="d-flex justify-content-center">Warriors</p>
                                     </div>
-                                    <div class="row">
-                                        <div class="col-4 detail-session-info base-color-blue">
-                                            <div class="d-flex justify-content-center">{{ session.Warrior }}</div>
-                                            <p class="d-flex justify-content-center">Warriors</p>
-                                        </div>
-                                        <div class="col-4 detail-session-info base-color-yellow">
-                                            <div class="d-flex justify-content-center">{{ session.Mage }}</div>
-                                            <p class="d-flex justify-content-center">Mages</p>
-                                        </div>
-                                        <div class="col-4 detail-session-info base-color-red">
-                                            <div class="d-flex justify-content-center">{{ session.Healer }}</div>
-                                            <p class="d-flex justify-content-center">Healers</p>
-                                        </div>
+                                    <div class="col-4 detail-modal-info color-yellow">
+                                        <div class="d-flex justify-content-center">{{ session.Mage }}</div>
+                                        <p class="d-flex justify-content-center">Mages</p>
+                                    </div>
+                                    <div class="col-4 detail-modal-info color-red">
+                                        <div class="d-flex justify-content-center">{{ session.Healer }}</div>
+                                        <p class="d-flex justify-content-center">Healers</p>
                                     </div>
                                 </div>
-                                <div class="modal-body">
-                                    <input type="hidden" name="session_id" value="{{ session.id }}">
-
-                                    <label for="role" id="role" class="detail-modal-role">Role* (yours and that of any
-                                        companions)</label>
-                                    <select name="role" id="role" class="form-control" required>
-                                        <option value="">Select a Role</option>
-                                        {% for role in roles %}
-                                        {% if role %}
-                                        <option value="{{ role }}">{{ role }}</option>
-                                        {% endif %}
-                                        {% endfor %}
-                                    </select>
-
-                                    <div id="companion-container-{{ session.id }}"></div>
-                                    <div class="d-flex justify-content-center mt-4 pt-4">
-                                        <button type="button" class="create-add-session detail-add-companion"
-                                            data-session-id="{{ session.id }}">Add a companion</button>
-                                    </div>
+                            </div>
+                            <div class="modal-body px-4 mx-4">
+                                <input type="hidden" name="session_id" value="{{ session.id }}">
+                                <label for="role" id="role" class="detail-modal-role">Role* (yours and that of any companions)</label>
+                                <select name="role" id="role" class="form-control" required>
+                                    <option value="">Select a Role</option>
+                                    {% for role in roles %}
+                                    {% if role %}
+                                    <option value="{{ role }}">{{ role }}</option>
+                                    {% endif %}
+                                    {% endfor %}
+                                </select>
+                                <div id="companion-container-{{ session.id }}"></div>
+                                <div class="d-flex justify-content-center mt-4 pt-4">
+                                    <button type="button" class="common-button button-blue detail-modal-info detail-add-companion" data-session-id="{{ session.id }}">Add a companion</button>
                                 </div>
-                                <div class="d-flex justify-content-center mb-4 mt-4">
-                                    <button class="base-button base-cancel m-1 detail-modal-button"
-                                        type="reset">Cancel</button>
-                                    <button class="base-button base-approve m-1 detail-modal-button"
-                                        type="submit">Create</button>
-                                </div>
+                            </div>
+                            <div class="d-flex justify-content-center mb-4 mt-4">
+                                <button class="button-flat cancel m-1 detail-modal-button text-center" type="reset">Cancel</button>
+                                <button class="button-flat approve m-1 detail-modal-button text-center" type="submit">Create</button>
                             </div>
                         </form>
                     </div>
@@ -153,8 +133,8 @@ Quest detail
                 {% else %}
                 <p class="detail-description text-center mt-0 mb-0 p-4">Only registered adventurers can book sessions</p>
                 <div class="d-flex justify-content-center m-4 mt-2">
-                    <a href="{{ url_for('register') }}" class="base-button base-cancel m-1 detail-modal-button text-center text-decoration-none" type="reset">Register</a>
-                    <a href="{{ url_for('login') }}" class="base-button base-approve m-1 detail-modal-button text-center text-decoration-none" type="submit">Login</a>
+                    <a href="{{ url_for('register') }}" class="button-flat cancel m-1 detail-modal-button text-center text-decoration-none" type="reset">Register</a>
+                    <a href="{{ url_for('login') }}" class="button-flat approve m-1 detail-modal-button text-center text-decoration-none" type="submit">Login</a>
                 </div>
                 {% endif %}
             </section>

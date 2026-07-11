@@ -23,6 +23,11 @@ body {
 .background-green { background-color: var(--kazuma); }
 .background-blue { background-color: var(--aqua); }
 
+.border-bottom-red { border-bottom: 2px solid var(--megumin); }
+.border-bottom-yellow { border-bottom: 2px solid var(--darkness); }
+.border-bottom-green { border-bottom: 2px solid var(--kazuma); }
+.border-bottom-blue { border-bottom: 2px solid var(--aqua); }
+
 .line-multicolor { height: 5px; }
 
 .border-multicolor {
@@ -125,6 +130,38 @@ body {
     letter-spacing: 2px;
 }
 
+.button-flat {
+    font-size: 1.5rem;
+    font-weight: 700;
+    border-radius: 15px;
+    padding: 10px 0px;
+    border: 3px solid;
+}
+
+.approve {
+    color: var(--kazuma);
+    background-color: #025123;
+    border-color: var(--kazuma);
+}
+
+.approve:hover {
+    color: #025123;
+    background-color: var(--kazuma);
+    border-color: #025123;
+}
+
+.cancel {
+    color: var(--megumin);
+    background-color: #ffeb51;
+    border-color: var(--megumin);
+}
+
+.cancel:hover {
+    color: #ffeb51;
+    background-color: var(--megumin);
+    border-color: #ffeb51;
+}
+
 .common-button {
     font-size: 2.3rem;
     padding: 5px 20px;
@@ -180,7 +217,7 @@ body {
 
 .home-quest-container { padding-bottom: 80px; }
 
-.home-quest-title {
+.page-title {
     font-size: 7rem;
     margin-bottom: 40px;
 }
@@ -253,3 +290,65 @@ body {
     font-size: 3rem;
     width: 850px;
 }
+
+.detail-container {
+    margin: 10px;
+    border: 4px solid var(--kazuma);
+    border-radius: 40px;
+}
+.detail-container img { border-radius: 36px; }
+
+.detail-description-container {
+    background: var(--dark);
+    border-color: var(--aqua);
+    margin-top: 40px;
+    margin-bottom: 60px;
+}
+
+.detail-description {
+    font-family: serif;
+    font-size: 1.5rem;
+    color: white;
+    margin: 30px 45px;
+}
+
+.detail-info-container {
+    background: var(--dark);
+    border: 4px solid var(--darkness);
+    margin-bottom: 40px;
+}
+
+.detail-info {
+    font-size: 1.6rem;
+    font-family: fantasy;
+    letter-spacing: 3px;
+}
+
+.detail-session-container {
+    background: var(--dark);
+    border: 4px solid var(--megumin);
+}
+
+.detail-session-title { font-size: 1.7rem; }
+.detail-session-info { font-size: 1.5rem; }
+
+.detail-book-button { font-size: 1.7rem; }
+
+.detail-modal-content { background: var(--grey); }
+
+.detail-modal-title { font-size: 4.3rem; }
+.detail-modal-date { font-size: 2.8rem; }
+.detail-modal-info { font-size: 1.9rem !important; }
+
+.detail-modal-role {
+    font-family: monospace;
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.detail-modal-button {
+    width: 40%;
+    font-weight: 200;
+}
+
