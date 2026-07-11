@@ -19,11 +19,19 @@ active
     <span class="base-color-red">Guild </span><span class="base-color-yellow">Council </span><span
         class="base-color-green">Admini</span><span class="base-color-blue">strator</span>
 </h1>
+<section>
+    <h1 class="text-center profile-quest-title">
+        <span class="base-color-red">PLAT</span><span class="base-color-yellow">FORM </span>
+        <span class="base-color-green">STA</span><span class="base-color-blue">TS</span>
+    </h1>
+    
+</section>
 <section class="container-fluid">
     <h1 class="text-center profile-quest-title">
         <span class="base-color-red">REGIS</span><span class="base-color-yellow">TERED</span>
         <span class="base-color-green">ADVEN</span><span class="base-color-blue">TURERS</span>
     </h1>
+    {% if users %}
     {% for user in users %}
     <div class="row d-flex justify-content-center">
         <div class="col-9 d-flex profile-info-container base-bordi-multicolor profile-user-container">
@@ -61,6 +69,9 @@ active
         </div>
     </div>
     {% endfor %}
+    {% else %}
+    non ci sono avventurieri registrati
+    {% endif %}
 </section>
 <section>
     <h1 class="text-center profile-quest-title">
@@ -176,66 +187,6 @@ active
                                     {% endif %}
                                 </div>
                             </div>
-                            <div class="modal fade" id="modify-{{ session.id }}" tabindex="-1" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered modal-lg">
-                                    <form action="{{ url_for('modify_session', session_id=session.id) }}" method="POST">
-                                        <div class="modal-content detail-modal-content">
-                                            <div class="d-flex justify-content-end mt-3 me-3 mb-0">
-                                                <button type="button" class="btn-close" data-bs-dismiss="modal"
-                                                    aria-label="Close"></button>
-                                            </div>
-                                            <h1 class="text-center detail-modal-title mb-2 mt-0">
-                                                <span class="card-title home-card-title">{{ quest.title }}</span>
-                                            </h1>
-                                            <div class="m-3 mt-0 mb-0">
-                                                <div
-                                                    class="text-center detail-session-title base-color-green mb-1 mt-3">
-                                                    <h2>{{ session.day }} at {{ session.hour }}:{{ session.minute }}
-                                                    </h2>
-                                                </div>
-                                            </div>
-                                            <div class="modal-body container-fluid">
-                                                <div class="row">
-                                                    <div class="mb-3 px-3">
-                                                        <label for="location" class="profile-label">Location</label>
-                                                        <select id="location" name="location" class="form-control">
-                                                            <option value="">Select a location</option>
-                                                            {% for location in locations %}
-                                                            <option value="{{ location }}">{{ location }}</option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-6">
-                                                        <label for="day" class="profile-label">Day*</label>
-                                                        <select id="day" name="day" class="form-control" required>
-                                                            <option value="">Select a day</option>
-                                                            {% for day in days %}
-                                                            <option value="{{ day }}">{{ day }}</option>
-                                                            {% endfor %}
-                                                        </select>
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <label for="hour" class="profile-label">Hour*</label>
-                                                        <input type="number" id="hour" name="hour" class="form-control"
-                                                            placeholder="0-23" required>
-                                                    </div>
-                                                    <div class="col-3">
-                                                        <label for="minute" class="profile-label">Minute*</label>
-                                                        <input type="number" id="minute" name="minute"
-                                                            class="form-control" placeholder="0-59" required>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            <div class="d-flex justify-content-center mb-4 mt-4">
-                                                <button class="base-button base-cancel m-1 detail-modal-button"
-                                                    type="reset">Cancel</button>
-                                                <button class="base-button base-approve m-1 detail-modal-button"
-                                                    type="submit">Modify</button>
-                                            </div>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
                             {% endfor %}
                         </div>
                         {% endif %}
@@ -246,27 +197,7 @@ active
         </div>
     </div>
     {% else %}
-    <div class="d-flex justify-content-center profile-quests-container">
-        <div class="col-9">
-            <div class="card position-relative home-card-container">
-                <img src="{{ url_for('static', filename='images/sessions.png') }}" class="card-img object-fit-cover"
-                    alt="Image no quest found">
-                <div class="card-img-overlay">
-                    <div class="home-noquest-title-container w-100">
-                        <div class="d-flex align-items-center justify-content-center text-center">
-                            <h3 class="card-title home-noquest-title">
-                                You haven't booked any sessions yet. Discover all available quests
-                            </h3>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center">
-                            <a href="{{ url_for('home') }}" class="home-detail-button home-noquest-button">Go to
-                                Quests</a>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    Non ci sono quest create al momento
     {% endif %}
 </section>
 {% endblock %}

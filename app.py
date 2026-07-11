@@ -26,7 +26,7 @@ def assegna_foto(filtered_quests):
     for index, quest in enumerate(filtered_quests):
         quest["foto_destra"]=quest["foto_sinistra"]=""
         if (index%4==0):
-            quest["foto_sinistra"]='images/home/aqua.png'
+            quest["foto_sinistra"]='images/home/aqua1.png'
         elif (index%4==1):
             quest["foto_destra"]='images/home/megumin.png'
         elif (index%4==2):
@@ -475,6 +475,27 @@ def modify_session(session_id):
 
 @app.route("/admin")
 def admin():
-    users_db=users_dao.get_all_users_for_role("adventurer")
+    adventurers_db=[dict(row) for row in users_dao.get_all_users_for_role("adventurer")]
+    user_participation_counter={user["username"]: 0 for user in adventurers_db}
     all_detailed_quests=quests_dao.get_all_info_of_all_quests()
-    return render_template("admin.html", users=users_db, quests=all_detailed_quests)
+    all_info={"total_adventurers":len(adventurers_db), "total_quests":len(all_detailed_quests), "total_sessions":0, "total_participations":0, "popular_session":None}
+    total_roles={"Warrior":0, "Mage":0, "Healer":0}
+    total_types={"Combact":0, "Exploration":0, "Stealth":0, "Magic":0, "Survival":0}
+    popular_session={"id": -1, "total":0, "title":"", "day":-1, "hour":-1, "minute":-1}
+    for quest in all_detailed_quests:
+        for session in quest["sessions"]:
+            all_info["total_sessions"]+=1
+            all_info["total_participations"]+=session["total_booked"]
+            total_types[quest["type"]]+=session["total_booked"]
+            if session["total_booked"]>popular_session["total"]:
+                popular_session={"id": session["id"], "total":session["total_booked"], "title":quest["title"], "day":session["day"], "hour":session["hour"], "minute":session["minute"]}
+            for adventurer in session["adventurers"]:
+                total_roles[adventurer["role"]]+=(len(adventurer["companions"])+1)
+                user_participation_counter[adventurer["username"]]+=1
+    all_info["total_roles"]=total_roles
+    all_info["popular_type"]=max(total_types, key=total_types.get)
+    if popular_session["id"]>=0:
+        all_info["popular_session"]=session_dao.get_session_by_id(popular_session["id"])
+    for user in adventurers_db:
+        user["participations_count"]=user_participation_counter.get(user["username"], 0)
+    return render_template("admin.html", users=adventurers_db, quests=all_detailed_quests, infos=all_info)
