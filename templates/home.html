@@ -5,11 +5,6 @@ Home
 {% block home_active %}
 active
 {% endblock %}
-
-{% block css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
-{% endblock %}
-
 {% block content %}
 <section class="position-relative w-100">
     <!-- Classe boostrap "img-fluid" che implementa la responsività -->
@@ -90,8 +85,7 @@ active
             {% endif %}
         </div>
         <article class="col-8 card position-relative quest-container p-0 m-0">
-            <img src="{{ url_for('static', filename=quest.illustration) }}"
-                class="card-img object-fit-cover quest-card-image" alt="Illustration of quest {{quest.title }}">
+            <img src="{{ url_for('static', filename=quest.illustration) }}" class="card-img object-fit-cover quest-card-image" alt="Illustration of quest {{quest.title }}">
             <div class="card-img-overlay">
                 <div class="quest-card-text w-100 d-flex justify-content-between">
                     <div class="flex-grow-1 me-2">
@@ -103,8 +97,7 @@ active
                         </div>
                     </div>
                     <div class="d-flex justify-content-center align-items-end mb-3 me-4">
-                        <a href="{{ url_for('quest_detail', quest_id=quest.id) }}"
-                            class="common-button button-yellow">View</a>
+                        <a href="{{ url_for('quest_detail', quest_id=quest.id) }}" class="common-button button-yellow">View</a>
                     </div>
                 </div>
             </div>

@@ -1,18 +1,10 @@
 {% extends 'base.html' %}
-
 {% block title %}
 Create Quest
 {% endblock %}
-
 {% block create_active %}
 active
 {% endblock %}
-
-{% block css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/auth.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/create.css') }}">
-{% endblock %}
-
 {% block content %}
 <!-- Classe boostrap: "container-fluid": di fatto mette width: 100% a tutte le dimensioni -->
 <section class="container-fluid create-container">
@@ -30,7 +22,6 @@ active
                 <input type="text" id="title" name="title" class="form-control logreg-input mb-4" placeholder="Winter Shogun Incident" required>
                 <label class="logreg-label" for="description">Description*</label>
                 <textarea id="description" name="description" class="form-control logreg-input mb-4" rows="4" placeholder="What heroic deeds are the adventurers called upon to perform?" required></textarea>
-
                 <div class="row">
                     <div class="col-6">
                         <label class="logreg-label" for="duration">Duration*</label>
@@ -68,7 +59,6 @@ active
                 <input type="file" id="illustration" name="illustration" class="form-control logreg-input mb-4" accept="jpg,jpeg,webp,png" required>
             </div>
         </div>
-
         <div class="col-5 logreg-card mb-4 border-multicolor ms-2">
             <h1 class="create-section-title">
                 <span class="color-red">Ses</span><span class="color-yellow">sion</span> <span class="color-green">Crea</span><span class="color-blue">tion</span>

@@ -17,11 +17,14 @@ document.addEventListener("click", function(event) {
                 </div>
             `;
             container.appendChild(newCompanion);
+            if (container.children.length>=2) {
+                event.target.parentElement.classList.add("d-none");
+            }
         }
     }
 
     if (event.target.classList.contains("create-button-delete")) {
-        const companionCard = event.target.closest(".detail-companion-container");
+        const companionCard=event.target.closest(".detail-companion-container");
         if (companionCard) {
             companionCard.remove();
         }

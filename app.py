@@ -420,6 +420,8 @@ def profile_master():
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for("home"))
     all_detailed_quests=quests_dao.get_all_info_of_all_quests()
+    for row in all_detailed_quests:
+        row["title_split"] = split_title(row["title"])
     return render_template("profile_master.html", quests=all_detailed_quests, days=DAYS_OF_WEEK, locations=LOCATIONS)
 
 @app.route("/cancel_session/<int:session_id>")

@@ -1,50 +1,43 @@
 {% extends 'base.html' %}
-
 {% block title %}
 Profile
 {% endblock %}
-
 {% block profile_active %}
 active
 {% endblock %}
 
 {% block css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
 <link rel="stylesheet" href="{{ url_for('static', filename='styles/profile.css') }}">
 {% endblock %}
 
 {% block content %}
 <section class="container-fluid">
     <div class="row d-flex justify-content-center">
-        <div class="col-9 d-flex profile-info-container base-bordi-multicolor profile-user-container">
-            <div>
+        <div class="col-9 d-flex profile-user-container border-multicolor">
+            <div class="h-100">
                 {% if current_user.profile_img %}
-                <img src="{{ url_for('static', filename=current_user.profile_img) }}" class="profile-img"
-                    alt="Profile photo of {{ current_user.username }}">
+                <img src="{{ url_for('static', filename=current_user.profile_img) }}" class="profile-user-img object-fit-cover" alt="Profile photo of {{ current_user.username }}">
                 {% else %}
-                <img src="{{ url_for('static', filename='images/no_profile_img.png') }}" class="profile-img"
-                    alt="Default profile image">
+                <img src="{{ url_for('static', filename='images/no_profile_img.png') }}" class="profile-user-img object-fit-cover" alt="Default profile image">
                 {% endif %}
             </div>
-            <div>
+            <div class="h-100">
                 <div class="d-flex align-items-center mt-2">
-                    <div>
+                    <div class="me-4 p3-4">
                         <div class="profile-name-surname">
-                            <span class="base-color-green">{{ current_user.name }}</span> <span
-                                class="base-color-blue">{{
-                                current_user.surname }}</span>
+                            <span class="color-green">{{ current_user.name }}</span> <span class="color-blue">{{ current_user.surname }}</span>
                         </div>
-                        <div class="profile-email">
-                            <span class="base-color-red">{{ current_user.username }}</span>
+                        <div class="profile-username">
+                            <span class="color-red">{{ current_user.username }}</span>
                         </div>
                     </div>
-                    <div class="home-card-badge home-type profile-info-badge">
+                    <div class="quest-card-badge profile-badge ms-4">
                         <span>{{ current_user.role }}</span>
                     </div>
                 </div>
                 {% if current_user.description %}
-                <div class="profile-description">
-                    <span>{{ current_user.description }}</span>
+                <div class="detail-description profile-description py-3 px-4 mt-3 ms-3">
+                    <span>{{ current_user.description }} se ni mondo vi fosse un pò di bene ed ognuno si considerasse suo fratello si sarebbero meno pensieri e meno pene ed il mondo</span>
                 </div>
                 {% endif %}
             </div>
@@ -52,9 +45,8 @@ active
     </div>
 </section>
 <section>
-    <h1 class="text-center profile-quest-title">
-        <span class="base-color-red">JO</span><span class="base-color-yellow">IN</span>
-        <span class="base-color-green">QUE</span><span class="base-color-blue">STS</span>
+    <h1 class="text-center page-title">
+        <span class="color-red">JO</span><span class="color-yellow">IN</span> <span class="color-green">QUE</span><span class="color-blue">STS</span>
     </h1>
     {% if quests %}
     <div class="container-fluid profile-quests-container">
@@ -68,53 +60,36 @@ active
                  per dirgli di assorbire tutto lo spazio vuoto rimanente.   -->
                 <div class="card home-card-container h-100 d-flex flex-column">
                     <div class="position-relative border-bottom">
-                        <img src="{{ url_for('static', filename=quest.illustration) }}"
-                            class="card-img object-fit-cover home-quest-img"
-                            alt="Illustration of quest {{quest.title }}">
+                        <img src="{{ url_for('static', filename=quest.illustration) }}" class="card-img object-fit-cover quest-card-image" alt="Illustration of quest {{quest.title }}">
                         <div class="card-img-overlay">
-                            <div class="home-card-text w-100 d-flex justify-content-between">
+                            <div class="quest-card-text w-100 d-flex justify-content-between">
                                 <div class="flex-grow-1 me-2">
-                                    <h3 class="card-title home-card-title">{{ quest.title }}</h3>
-                                    <div class="home-card-subtitle d-flex flex-wrap">
-                                        <div class="d-flex align-items-start">
-                                            <div class="home-card-badge home-location"><span>Location:</span> <span>{{
-                                                    quest.location }}</span>
-                                            </div>
-                                            <div class="home-card-badge home-type"><span>Type:</span> <span>{{
-                                                    quest.type
-                                                    }}</span></div>
-                                        </div>
-                                        <div class="d-flex align-items-start">
-                                            <div class="home-card-badge home-difficulty"><span>Difficulty:</span>
-                                                <span>{{
-                                                    quest.difficulty }}</span></div>
-                                            <div class="home-card-badge home-duration"><span>Duration:</span> <span>{{
-                                                    quest.duration }}</span>
-                                            </div>
-                                        </div>
+                                    <h2 class="card-title quest-card-title">{{ quest.title }}</h2>
+                                    <div class="d-flex flex-wrap">
+                                        <div class="quest-card-badge quest-type"><span>Type:</span> <span>{{ quest.type }}</span></div>
+                                        <div class="quest-card-badge quest-difficulty"><span>Difficulty:</span> <span>{{ quest.difficulty }}</span></div>
+                                        <div class="quest-card-badge quest-duration"><span>Duration:</span> <span>{{ quest.duration }}</span></div>
                                     </div>
                                 </div>
-                                <div class="d-flex justify-content-center align-items-end mb-4 me-4">
-                                    <a href="{{ url_for('quest_detail', quest_id=quest.id) }}"
-                                        class="home-detail-button">View</a>
+                                <div class="d-flex justify-content-center align-items-end mb-3 me-4">
+                                    <a href="{{ url_for('quest_detail', quest_id=quest.id) }}" class="common-button button-yellow">View</a>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="card-body profile-card-body flex-grow-1">
-                        <h2 class="text-center">
-                            <span class="base-color-red">Boo</span><span class="base-color-yellow">ked</span>
-                            <span class="base-color-green">Sess</span><span class="base-color-blue">ions</span>
+                        <h2 class="text-center profile-card-body-title mt-3 mb-4 pb-3">
+                            <span class="color-red">Boo</span><span class="color-yellow">ked</span> <span class="color-green">Sess</span><span class="color-blue">ions</span>
                         </h2>
                         {% if quest.sessions %}
                         {% for session in quest.sessions %}
-                        <div class="base-border-multicolor">
-                            <div class="base-background-red col-3 h-100"></div>
-                            <div class="base-background-yellow col-3 h-100"></div>
-                            <div class="base-background-green col-3 h-100"></div>
-                            <div class="base-background-blue col-3 h-100"></div>
+                        <div class="line-multicolor w-100 d-flex">
+                            <div class="background-red w-25 h-100"></div>
+                            <div class="background-yellow w-25 h-100"></div>
+                            <div class="background-green w-25 h-100"></div>
+                            <div class="background-blue w-25 h-100"></div>
                         </div>
-                        <div class="profile-session-container pt-2">
+                        <div class="profile-session-container container-fluid pt-2">
                             <div class="row align-items-center">
                                 <div class="col-9">
                                     <div class="d-flex align-items-center justify-content-around">
@@ -159,22 +134,18 @@ active
         </div>
     </div>
     {% else %}
-    <div class="d-flex justify-content-center profile-quests-container">
-        <div class="col-8">
-            <div class="card position-relative home-card-container">
-                <img src="{{ url_for('static', filename='images/sessions.png') }}" class="card-img object-fit-cover"
-                    alt="Image no quest found">
-                <div class="card-img-overlay">
-                    <div class="home-noquest-title-container w-100">
-                        <div class="d-flex align-items-center justify-content-center text-center">
-                            <h3 class="card-title home-noquest-title">
-                                You haven't booked any sessions yet. Discover all available quests
-                            </h3>
-                        </div>
-                        <div class="d-flex justify-content-center align-items-center">
-                            <a href="{{ url_for('home') }}" class="home-detail-button home-noquest-button">Go to
-                                Quests</a>
-                        </div>
+    <div class="d-flex justify-content-center">
+        <div class="col-9 card position-relative quest-container p-0 m-0">
+            <img src="{{ url_for('static', filename='images/images/sessions.png') }}" class="card-img object-fit-cover" alt="No quest created">
+            <div class="card-img-overlay">
+                <div class="home-noquest-container w-100">
+                    <div class="d-flex align-items-center justify-content-center text-center">
+                        <h3 class="card-title quest-card-title home-noquest-title">
+                            You haven't booked any sessions yet. Discover all available quests
+                        </h3>
+                    </div>
+                    <div class="d-flex justify-content-center align-items-center">
+                        <a href="{{ url_for('home') }}" class="common-button button-blue">Go to Quests</a>
                     </div>
                 </div>
             </div>

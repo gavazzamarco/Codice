@@ -1,17 +1,10 @@
 {% extends 'base.html' %}
-
 {% block title %}
 Login
 {% endblock %}
-
 {% block login_active %}
 active
 {% endblock %}
-
-{% block css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/auth.css') }}">
-{% endblock %}
-
 {% block content %}
 <section class="d-flex justify-content-center">
     <div class="col-5 logreg-card border-multicolor">
@@ -19,13 +12,10 @@ active
             <h1 class="text-center logreg-title">
                 <span class="color-red">Wel</span><span class="color-yellow">come</span> <span class="color-green">ba</span><span class="color-blue">ck</span>
             </h1>
-
             <label class="logreg-label" for="username">Username*</label>
             <input type="text" id="username" name="username" class="form-control logreg-input mb-4" placeholder="luigirossi2026" required>
-
             <label class="logreg-label" for="password">Password*</label>
             <input type="password" id="password" name="password" class="form-control logreg-input mb-4" required>
-
             <div class="d-flex my-4 pt-3">
                 <button class="w-50 button-flat cancel m-1" type="reset">Cancel</button>
                 <button class="w-50 button-flat approve m-1" type="submit">Login</button>

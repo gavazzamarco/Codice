@@ -29,6 +29,7 @@ body {
 .border-bottom-blue { border-bottom: 2px solid var(--aqua); }
 
 .line-multicolor { height: 5px; }
+.line-tiny { height: 3px; }
 
 .border-multicolor {
     border-bottom: 4px solid var(--kazuma);
@@ -403,3 +404,54 @@ body {
     box-shadow: 3px 3px 0px rgb(122, 10, 10);;
 }
 
+.profile-user-container {
+    background: var(--dark);
+    margin: 30px;
+    padding: 20px 30px;
+    border-radius: 15px;
+}
+
+.profile-user-img {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    margin-right: 13px;
+}
+
+.profile-name-surname { font-size: 2.1rem; }
+.profile-username { font-size: 1.8rem; }
+
+.profile-badge {
+    text-transform: uppercase;
+    font-size: 1.35rem;
+    border: 3px solid var(--darkness);
+    color: var(--darkness);
+    background: rgb(158, 71, 9);
+}
+
+.profile-description {
+    background: black;
+    border: 2px solid rgb(138, 138, 138);
+    border-radius: 15px;
+}
+
+.profile-padding-bottom { padding-bottom: 80px; }
+
+.profile-card-body {
+    background: var(--dark);
+    border-radius: 6px;
+}
+
+.profile-card-body-title{
+    font-size: 4rem;
+}
+
+.profile-master-session {
+    border-radius: 15px;
+    background: black;
+}
+
+.profile-session-date {
+    letter-spacing: 2px;
+    font-size: 2.1rem;
+}
