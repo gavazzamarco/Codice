@@ -107,8 +107,8 @@ Quest detail
                             </div>
                             <div class="modal-body px-4 mx-4">
                                 <input type="hidden" name="session_id" value="{{ session.id }}">
-                                <label for="role" id="role" class="detail-modal-role">Role* (yours and that of any companions)</label>
-                                <select name="role" id="role" class="form-control" required>
+                                <label for="role" id="role" class="logreg-label detail-modal-label">Role* (yours and that of any companions)</label>
+                                <select name="role" id="role" class="form-control logreg-input mb-4" required>
                                     <option value="">Select a Role</option>
                                     {% for role in roles %}
                                     {% if role %}

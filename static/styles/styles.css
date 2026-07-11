@@ -132,7 +132,7 @@ body {
 
 .button-flat {
     font-size: 1.5rem;
-    font-weight: 700;
+    font-weight: 500;
     border-radius: 15px;
     padding: 10px 0px;
     border: 3px solid;
@@ -223,7 +223,6 @@ body {
 }
 
 .quests-distance { margin-bottom: 50px; }
-
 .lateral-figure { height: 420px; }
 
 .quest-container {
@@ -340,15 +339,67 @@ body {
 .detail-modal-date { font-size: 2.8rem; }
 .detail-modal-info { font-size: 1.9rem !important; }
 
-.detail-modal-role {
-    font-family: monospace;
-    color: white;
-    font-size: 1.5rem;
-    font-weight: 600;
+.detail-modal-label { 
+    font-size: 1.8rem !important;
+    letter-spacing: 1px; 
 }
+.detail-delete { font-size: 1.4rem !important; }
 
 .detail-modal-button {
     width: 40%;
     font-weight: 200;
+}
+
+.logreg-card {
+    background: var(--dark);
+    padding: 20px 30px;
+    border-radius: 30px;
+    margin: 90px;
+}
+
+.logreg-title { font-size: 3.3rem; }
+
+.logreg-label {
+    color: white;
+    font-weight: 100;
+    font-size: 1.4rem;
+    margin-bottom: 3px;
+}
+
+.logreg-input {
+    font-family: serif;
+    font-size: 1.3rem;
+    font-weight: 700;
+}
+
+.create-container .logreg-card { margin: 90px 0px; }
+
+.create-section-title {
+    font-size: 3.7rem;
+    margin-bottom: 25px;
+}
+
+.create-session-card {
+    margin: 2px;
+    border: 2px solid var(--grey);
+    border-radius: 10px;
+    margin-bottom: 20px;
+}
+
+.create-button-delete {
+    font-size: 1.7rem;
+    font-weight: 800;
+    color: black;
+    background-color: rgb(252, 223, 74);
+    padding: 3px 15px;
+    border: 3px solid red;
+    border-radius: 10px;
+    box-shadow: 3px 3px 0px rgb(252, 175, 74);
+}
+
+.create-button-delete:hover {
+    border-color: rgb(252, 223, 74);
+    background-color: red;
+    box-shadow: 3px 3px 0px rgb(122, 10, 10);;
 }
 

@@ -16,118 +16,96 @@ active
 {% block content %}
 <!-- Classe boostrap: "container-fluid": di fatto mette width: 100% a tutte le dimensioni -->
 <section class="container-fluid create-container">
-    <form action="{{ url_for('quest_check_and_save') }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ url_for('quest_check_and_save') }}" method="POST" enctype="multipart/form-data" class="row align-items-start justify-content-center">
         <!-- align-item-start serve siccome se no, di default, row viene gestita
          come una flexbox con proprietà align-element-stretch, ossia ogni elemento
          va ad occupare tutto lo spazio disponibile ed in tale modo avrei due
          card della stessa altezza -->
-        <div class="row align-items-start justify-content-center">
-            <div class="col-6">
-                <div class="auth-card">
-                    <h1 class="create-section-title">
-                        <span class="base-color-red">Que</span><span class="base-color-yellow">st</span> 
-                        <span class="base-color-green">Crea</span><span class="base-color-blue">tion</span>
-                    </h1>
-                    <label for="title">Title*</label>
-                    <input type="text" id="title" name="title" class="form-control" placeholder="Winter Shogun Incident"
-                        required>
+        <div class="col-6 me-2">
+            <div class="logreg-card border-multicolor container-fluid">
+                <h1 class="create-section-title text-center">
+                    <span class="color-red">Que</span><span class="color-yellow">st</span> <span class="color-green">Crea</span><span class="color-blue">tion</span>
+                </h1>
+                <label class="logreg-label" for="title">Title*</label>
+                <input type="text" id="title" name="title" class="form-control logreg-input mb-4" placeholder="Winter Shogun Incident" required>
+                <label class="logreg-label" for="description">Description*</label>
+                <textarea id="description" name="description" class="form-control logreg-input mb-4" rows="4" placeholder="What heroic deeds are the adventurers called upon to perform?" required></textarea>
 
-                    <label for="description">Description*</label>
-                    <textarea id="description" name="description" class="form-control" rows="4"
-                        placeholder="What heroic deeds are the adventurers called upon to perform?" required></textarea>
-
-                    <div class="row">
-                        <div class="col-6">
-                            <label for="duration">Duration*</label>
-                            <input type="number" id="duration" name="duration" class="form-control"
-                                placeholder="Expressed in minutes" required>
-                        </div>
-
-                        <div class="col-6">
-                            <label for="location">Location*</label>
-                            <select id="location" name="location" class="form-control" required>
-                                <option value="">Select a location</option>
-                                {% for location in locations %}
-                                <option value="{{ location }}">{{ location }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                <div class="row">
+                    <div class="col-6">
+                        <label class="logreg-label" for="duration">Duration*</label>
+                        <input class="form-control logreg-input mb-4" type="number" id="duration" name="duration" placeholder="Expressed in minutes" required>
                     </div>
-
-                    <div class="row">
-                        <div class="col-6">
-                            <label for="type">Type*</label>
-                            <select id="type" name="type" class="form-control" required>
-                                <option value="">Select a type</option>
-                                {% for type in types %}
-                                <option value="{{ type }}">{{ type }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
-
-                        <div class="col-6">
-                            <label for="difficulty">Difficulty*</label>
-                            <select id="difficulty" name="difficulty" class="form-control" required>
-                                <option value="">Select a difficulty</option>
-                                {% for difficulty in difficulties %}
-                                <option value="{{ difficulty }}">{{ difficulty }}</option>
-                                {% endfor %}
-                            </select>
-                        </div>
+                    <div class="col-6">
+                        <label class="logreg-label" for="location">Location*</label>
+                        <select id="location" name="location" class="form-control logreg-input mb-4" required>
+                            <option value="">Select a location</option>
+                            {% for location in locations %}
+                            <option value="{{ location }}">{{ location }}</option>
+                            {% endfor %}
+                        </select>
                     </div>
+                    <div class="col-6">
+                        <label class="logreg-label" for="type">Type*</label>
+                        <select id="type" name="type" class="form-control logreg-input mb-4" required>
+                            <option value="">Select a type</option>
+                            {% for type in types %}
+                            <option value="{{ type }}">{{ type }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-6">
+                        <label class="logreg-label" for="difficulty">Difficulty*</label>
+                        <select id="difficulty" name="difficulty" class="form-control logreg-input mb-4" required>
+                            <option value="">Select a difficulty</option>
+                            {% for difficulty in difficulties %}
+                            <option value="{{ difficulty }}">{{ difficulty }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+                <label class="logreg-label" for="illustration">Illustration*</label>
+                <input type="file" id="illustration" name="illustration" class="form-control logreg-input mb-4" accept="jpg,jpeg,webp,png" required>
+            </div>
+        </div>
 
-                    <label for="illustration">Illustration*</label>
-                    <input type="file" id="illustration" name="illustration" class="form-control"
-                        accept="jpg,jpeg,webp,png" required>
+        <div class="col-5 logreg-card mb-4 border-multicolor ms-2">
+            <h1 class="create-section-title">
+                <span class="color-red">Ses</span><span class="color-yellow">sion</span> <span class="color-green">Crea</span><span class="color-blue">tion</span>
+            </h1>
+            <div class="container-fluid" id="session-container">
+                <div class="create-session-card row">
+                    <div class="col-4">
+                        <label class="logreg-label" for="day">Day*</label>
+                        <select id="day" name="day" class="form-control logreg-input mb-4" required>
+                            <option value="">Select a day</option>
+                            {% for day in days %}
+                            <option value="{{ day }}">{{ day }}</option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                    <div class="col-3">
+                        <label class="logreg-label" for="hour">Hour*</label>
+                        <input type="number" id="hour" name="hour" class="form-control logreg-input mb-4" placeholder="0-23" required>
+                    </div>
+                    <div class="col-3">
+                        <label class="logreg-label" for="minute">Minute*</label>
+                        <input type="number" id="minute" name="minute" class="form-control logreg-input mb-4" placeholder="0-59" required>
+                    </div>
+                    <div class="col-2 d-flex justify-content-end align-items-center my-3">
+                        <button type="button" class="create-button-delete">X</button>
+                    </div>
                 </div>
             </div>
-
-            <div class="col-5">
-                <div class="auth-card">
-                    <h1 class="create-section-title">
-                        <span class="base-color-red">Ses</span><span class="base-color-yellow">sion</span> 
-                        <span class="base-color-green">Crea</span><span class="base-color-blue">tion</span>
-                    </h1>
-                    <div id="session-container">
-                        <div class="create-session-card row">
-                            <div class="col-4">
-                                <label for="day">Day*</label>
-                                <select id="day" name="day" class="form-control" required>
-                                    <option value="">Select a day</option>
-                                    {% for day in days %}
-                                    <option value="{{ day }}">{{ day }}</option>
-                                    {% endfor %}
-                                </select>
-                            </div>
-                            <div class="col-3">
-                                <label for="hour">Hour*</label>
-                                <input type="number" id="hour" name="hour" class="form-control" placeholder="0-23"
-                                    required>
-                            </div>
-                            <div class="col-3">
-                                <label for="minute">Minute*</label>
-                                <input type="number" id="minute" name="minute" class="form-control" placeholder="0-59"
-                                    required>
-                            </div>
-                            <div class="col-2 create-button-delete-container">
-                                <button type="button" class="create-button-delete">X</button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="d-flex justify-content-center mt-2">
-                        <button type="button" id="add-session" class="create-add-session">Add a new session</button>
-                    </div>
-                </div>
-
-                <div class="d-flex m-4">
-                    <button class="w-50 base-button base-cancel m-1" type="reset">Cancel</button>
-                    <button class="w-50 base-button base-approve m-1" type="submit">Create</button>
-                </div>
+            <div class="d-flex justify-content-center mt-2">
+                <button type="button" id="add-session" class="common-button button-blue detail-book-button">Add a new session</button>
+            </div>
+            <div class="d-flex m-4 pt-4">
+                <button class="w-50 button-flat cancel me-1" type="reset">Cancel</button>
+                <button class="w-50 button-flat approve ms-1" type="submit">Create</button>
             </div>
         </div>
     </form>
 </section>
-
 <script src="{{ url_for('static', filename='js/create.js') }}"></script>
 {% endblock %}
