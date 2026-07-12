@@ -17,7 +17,7 @@ document.addEventListener("click", function(event) {
                 </div>
             `;
             container.appendChild(newCompanion);
-            if (container.children.length>=2) {
+            if (container.children.length>=1) {
                 event.target.parentElement.classList.add("d-none");
             }
         }
@@ -26,7 +26,13 @@ document.addEventListener("click", function(event) {
     if (event.target.classList.contains("create-button-delete")) {
         const companionCard=event.target.closest(".detail-companion-container");
         if (companionCard) {
+            const container=companionCard.parentElement;
+            const sessionId=container.id.replace("companion-container-", "");
+            const addButton=document.querySelector(`.detail-add-companion[data-session-id="${sessionId}"]`);
             companionCard.remove();
+            if (container.children.length===0 && addButton) {
+                addButton.classList.remove("d-none");
+            }
         }
     }
 });

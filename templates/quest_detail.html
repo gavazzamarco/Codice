@@ -1,16 +1,5 @@
 {% extends 'base.html' %}
-
-{% block title %}
-Quest detail
-{% endblock %}
-
-{% block css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/home.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/detail.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/auth.css') }}">
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/create.css') }}">
-{% endblock %}
-
+{% block title %} Quest detail {% endblock %}
 {% block content %}
 <section class="container-fluid">
     <h1 class="page-title text-center mt-4 pt-4">
@@ -39,7 +28,7 @@ Quest detail
                     <span class="detail-info color-blue">Difficulty: {{ quest.difficulty }}</span>
                 </div>
             </article>
-            <section class="detail-container detail-session-container container-fluid">
+            <section class="detail-container detail-session-container container-fluid pb-4">
                 <h2 class="quest-card-title d-flex justify-content-center mt-4 pb-1 mb-0">Sessions</h2>
                 {% if current_user.is_authenticated %}
                 {% if current_user.role=="master" %}

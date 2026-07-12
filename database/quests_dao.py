@@ -20,7 +20,6 @@ def create_quest(title, duration, type, difficulty, description, illustration):
     conn.close()
     return id
 
-# DEVO ORDINARE LE LE QUEST IN ORDINE TEMPORALE
 def get_quest_by_id(id):
     conn=sqlite3.connect(DB_PATH)
     conn.row_factory=sqlite3.Row
@@ -77,7 +76,7 @@ def get_filtered_quest(day, type, difficulty, role):
                 result=cursor.fetchone()
                 count=result['totale'] if (result and result['totale'] is not None) else 0
                 if count<LIMITS[role]:
-                    has_available_session = True
+                    has_available_session=True
                     break
             if not has_available_session:
                 continue

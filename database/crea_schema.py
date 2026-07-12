@@ -48,7 +48,7 @@ def inizializza_database():
         "role" TEXT NOT NULL,
         "total_people" INTEGER NOT NULL,
         PRIMARY KEY("id" AUTOINCREMENT),
-        FOREIGN KEY (user_id) REFERENCES users(id)
+        FOREIGN KEY (user_id) REFERENCES users(id),
         FOREIGN KEY (session_id) REFERENCES sessions(id)
     );
 
