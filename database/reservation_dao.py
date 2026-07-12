@@ -75,6 +75,7 @@ def get_detailed_adventurer_quests(user_id):
                 companions=[comp["username"] for comp in get_companions_for_reservation(reservation["id"])]
                 quest_dict["sessions"].append({
                     "session_id":session["id"],
+                    "location":session["location"],
                     "day":session["day"],
                     "hour":session["hour"],
                     "minute":session["minute"],

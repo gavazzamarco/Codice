@@ -294,7 +294,7 @@ body {
 .quest-location {
     border: 3px solid var(--darkness);
     color: var(--darkness);
-    background: rgb(135, 71, 1);
+    background: rgb(149, 56, 3);
 }
 
 .home-noquest-container {
@@ -463,6 +463,11 @@ body {
 .profile-session-date {
     letter-spacing: 2px;
     font-size: 2.1rem;
+}
+
+.profile-location {
+    font-size: 1.3rem;
+    max-width: 200px;
 }
 
 .profile-locked {

@@ -201,7 +201,7 @@ def check_overlap(day, hour, minute, duration, location, sessions):
     current["end"]=current["start"]+int(duration)
     for session in sessions:
         quest=quests_dao.get_quest_by_id(session["quest_id"])
-        if location==quest["location"] or location=="all":
+        if location==session["location"] or location=="all":
             saved={}
             saved["start"]=conversione_minuti_assoluti(session["day"], session["hour"], session["minute"])
             saved["end"]=saved["start"]+int(quest["duration"])
@@ -243,7 +243,7 @@ def quest_check_and_save():
         errors.append("The type is mandatory and must be selected from the available options")
     if not difficulty or difficulty not in DIFFICULTY:
         errors.append("The difficulty is mandatory and must be selected from the available options")
-    if len(days)==0 or len(starts_hours)==0 or len(starts_minutes)==0 or len(location):
+    if len(days)==0 or len(starts_hours)==0 or len(starts_minutes)==0 or len(locations)==0:
         errors.append("The quests must include at least one session containing all the necessary fields")
     else:
         for day in days:
@@ -270,14 +270,14 @@ def quest_check_and_save():
         return redirect(url_for('quest_create'))
     sessions=session_dao.get_all_session()
     valid_sessions=[]
-    for index in range(min(len(days), len(starts_hours, len(starts_minutes), len(locations)))):
-        if check_overlap(days[index], starts_hours[index], starts_minutes[index], duration, location[index], sessions)==False:
-            valid_sessions.append(DAYS_OF_WEEK.index(days[index]), int(starts_hours[index]), int(starts_minutes[index]), locations[index])
+    for index in range(min(len(days), len(starts_hours), len(starts_minutes), len(locations))):
+        if check_overlap(days[index], starts_hours[index], starts_minutes[index], duration, locations[index], sessions)==False:
+            valid_sessions.append((DAYS_OF_WEEK.index(days[index]), int(starts_hours[index]), int(starts_minutes[index]), locations[index]))
     if len(valid_sessions)>0:
         quest_id=quests_dao.create_quest(title, duration, type, difficulty, description, path_photo)
         flash("The quest has at least one valid session, so it was created correctly", 'success')
         for session in valid_sessions:
-            session_dao.create_session(quest_id, session[0], session[1], session[2], session[3])
+            session_dao.create_session(quest_id, session[3], session[0], session[1], session[2])
             flash("The session of ["+session[3]+":"+DAYS_OF_WEEK[session[0]]+" h"+str(session[1])+":"+str(session[2])+"] is created correctly", 'success')
     else:
         return redirect(url_for('quest_create'))
@@ -453,6 +453,37 @@ def modify_session(session_id):
     day_index=DAYS_OF_WEEK.index(day)
     session_dao.update_session(location, day_index, hour, minute, session_id)
     flash("The session has been successfully updated", "success")
+    return redirect(url_for('profile'))
+
+@app.route("/create_session/<int:quest_id>", methods=["POST"])
+@login_required
+def create_session(quest_id):
+    if current_user.role!="master":
+        flash("You do not have permission to access this page", "danger")
+        return redirect(url_for("home"))
+    location=request.form.get("location")
+    day=request.form.get("day")
+    hour=request.form.get("hour")
+    minute=request.form.get("minute")
+    errors=[]
+    if not location or location not in LOCATIONS:
+        errors.append("The location must be chosen from the available options")
+    if day not in DAYS_OF_WEEK:
+        errors.append("The day must be selected from the available options")
+    hour=int(hour)
+    minute=int(minute)
+    if hour<0 or hour>23:
+        errors.append("The hour can only take value between 0 and 23")
+    if minute<0 or minute>59:
+        errors.append("The minutes can only take values between 0 and 59")
+    sessions=session_dao.get_all_session()
+    quest=quests_dao.get_quest_by_id(quest_id)
+    if len(errors)!=0 or check_overlap(day, hour, minute, int(quest["duration"]), location, sessions)==True:
+        stampa_errori(errors)
+        return redirect(url_for('profile'))
+    day_index=DAYS_OF_WEEK.index(day)
+    session_dao.create_session(quest_id, location, day_index, hour, minute)
+    flash("The session has been successfully created", "success")
     return redirect(url_for('profile'))
 
 @app.route("/admin")

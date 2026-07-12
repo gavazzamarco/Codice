@@ -12,7 +12,7 @@ DB_PATH=os.path.join(BASE_DIR, "Konosuba.db")
 def create_quest(title, duration, type, difficulty, description, illustration):
     conn=sqlite3.connect(DB_PATH)
     cursor=conn.cursor()
-    query="INSERT INTO quests (title, duration, type, difficulty, description, illustration) VALUES (?,?,?,?,?,?,?)"
+    query="INSERT INTO quests (title, duration, type, difficulty, description, illustration) VALUES (?,?,?,?,?,?)"
     cursor.execute(query, (title, duration, type, difficulty, description, illustration))
     id=cursor.lastrowid
     conn.commit()

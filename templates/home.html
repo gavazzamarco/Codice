@@ -27,7 +27,7 @@ active
         <form action="{{ url_for('home_filter') }}" method="POST" class="row">
             <div class="col">
                 <label for="day" class="home-filtri-label color-red ps-1 pb-1">Day</label>
-                <select id="day" name="day" class="form-control">
+                <select id="day" name="day" class="form-control logreg-input">
                     <option value="">Select a day</option>
                     {% for day in days %}
                     <option value="{{ day }}" {% if day==giorno %} selected {% endif %}>{{ day }}</option>
@@ -36,7 +36,7 @@ active
             </div>
             <div class="col">
                 <label for="type" class="home-filtri-label color-yellow ps-1 pb-1">Type</label>
-                <select id="type" name="type" class="form-control">
+                <select id="type" name="type" class="form-control logreg-input">
                     <option value="">Select a type</option>
                     {% for type in types %}
                     <option value="{{ type }}" {% if type==tipo %} selected {% endif %}>{{ type }}</option>
@@ -45,7 +45,7 @@ active
             </div>
             <div class="col">
                 <label for="difficulty" class="home-filtri-label color-green ps-1 pb-1">Difficulty</label>
-                <select id="difficulty" name="difficulty" class="form-control">
+                <select id="difficulty" name="difficulty" class="form-control logreg-input">
                     <option value="">Select a difficulty</option>
                     {% for difficulty in difficulties %}
                     <option value="{{ difficulty }}" {% if difficulty==difficolta %} selected {% endif %}>{{ difficulty
@@ -55,7 +55,7 @@ active
             </div>
             <div class="col">
                 <label for="role" class="home-filtri-label color-blue ps-1 pb-1">Role</label>
-                <select id="role" name="role" class="form-control">
+                <select id="role" name="role" class="form-control logreg-input">
                     <option value="">Select a role</option>
                     {% for role in roles %}
                     <option value="{{ role }}" {% if role==ruolo %} selected {% endif %}>{{ role }}</option>
