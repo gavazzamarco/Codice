@@ -5,46 +5,39 @@ Profile
 {% block profile_active %}
 active
 {% endblock %}
-
-{% block css %}
-<link rel="stylesheet" href="{{ url_for('static', filename='styles/profile.css') }}">
-{% endblock %}
-
 {% block content %}
-<section class="container-fluid">
-    <div class="row d-flex justify-content-center">
-        <div class="col-9 d-flex profile-user-container border-multicolor">
-            <div class="h-100">
-                {% if current_user.profile_img %}
-                <img src="{{ url_for('static', filename=current_user.profile_img) }}" class="profile-user-img object-fit-cover" alt="Profile photo of {{ current_user.username }}">
-                {% else %}
-                <img src="{{ url_for('static', filename='images/no_profile_img.png') }}" class="profile-user-img object-fit-cover" alt="Default profile image">
-                {% endif %}
-            </div>
-            <div class="h-100">
-                <div class="d-flex align-items-center mt-2">
-                    <div class="me-4 p3-4">
-                        <div class="profile-name-surname">
-                            <span class="color-green">{{ current_user.name }}</span> <span class="color-blue">{{ current_user.surname }}</span>
-                        </div>
-                        <div class="profile-username">
-                            <span class="color-red">{{ current_user.username }}</span>
-                        </div>
+<section class="d-flex justify-content-center">
+    <div class="col-9 d-flex profile-user-container border-multicolor">
+        <div class="h-100">
+            {% if current_user.profile_img %}
+            <img src="{{ url_for('static', filename=current_user.profile_img) }}" class="profile-user-img object-fit-cover" alt="Profile photo of {{ current_user.username }}">
+            {% else %}
+            <img src="{{ url_for('static', filename='images/no_profile_img.png') }}" class="profile-user-img object-fit-cover" alt="Default profile image">
+            {% endif %}
+        </div>
+        <div class="h-100">
+            <div class="d-flex align-items-center mt-2">
+                <div class="me-4 p3-4">
+                    <div class="profile-name-surname">
+                        <span class="color-green">{{ current_user.name }}</span> <span class="color-blue">{{ current_user.surname }}</span>
                     </div>
-                    <div class="quest-card-badge profile-badge ms-4">
-                        <span>{{ current_user.role }}</span>
+                    <div class="profile-username">
+                        <span class="color-red">{{ current_user.username }}</span>
                     </div>
                 </div>
-                {% if current_user.description %}
-                <div class="detail-description profile-description py-3 px-4 mt-3 ms-3">
-                    <span>{{ current_user.description }} se ni mondo vi fosse un pò di bene ed ognuno si considerasse suo fratello si sarebbero meno pensieri e meno pene ed il mondo</span>
+                <div class="quest-card-badge profile-badge ms-4">
+                    <span>{{ current_user.role }}</span>
                 </div>
-                {% endif %}
             </div>
+            {% if current_user.description %}
+            <div class="detail-description profile-description py-3 px-4 mt-3 ms-3">
+                <span>{{ current_user.description }}</span>
+            </div>
+            {% endif %}
         </div>
     </div>
 </section>
-<section>
+<section class="profile-padding-bottom">
     <h1 class="text-center page-title">
         <span class="color-red">JO</span><span class="color-yellow">IN</span> <span class="color-green">QUE</span><span class="color-blue">STS</span>
     </h1>
@@ -58,7 +51,7 @@ active
                  d-flex flex-column per trasformare la card in un contenitore flex verticale.  
                  -flex-grow-1 sul corpo della card (cioè in card-body profile-card-body flex-grow-1) 
                  per dirgli di assorbire tutto lo spazio vuoto rimanente.   -->
-                <div class="card home-card-container h-100 d-flex flex-column">
+                <div class="card quest-container h-100 d-flex flex-column">
                     <div class="position-relative border-bottom">
                         <img src="{{ url_for('static', filename=quest.illustration) }}" class="card-img object-fit-cover quest-card-image" alt="Illustration of quest {{quest.title }}">
                         <div class="card-img-overlay">
@@ -89,26 +82,28 @@ active
                             <div class="background-green w-25 h-100"></div>
                             <div class="background-blue w-25 h-100"></div>
                         </div>
-                        <div class="profile-session-container container-fluid pt-2">
+                        <div class="container-fluid pt-4">
                             <div class="row align-items-center">
                                 <div class="col-9">
                                     <div class="d-flex align-items-center justify-content-around">
                                         <div class="profile-session-date">
-                                            <span class="base-color-green">{{ session.day }}</span> <span
-                                                class="base-color-blue">{{ session.hour }}:</span><span
-                                                class="base-color-yellow">{{ session.minute }}</span>
+                                            <span class="color-green">{{ session.day }}</span> <span class="color-blue">{{ session.hour }}:</span><span class="color-yellow">{{ session.minute }}</span>
                                         </div>
-                                        <div class="profile-role-badge">
-                                            <span>{{ session.role }}</span>
-                                        </div>
+                                        {% if session.role=='Warrior' %}
+                                        <span class="quest-card-badge quest-duration ms-3 detail-delete">{{ session.role }}</span>
+                                        {% elif session.role=='Mage' %}
+                                        <span class="quest-card-badge quest-difficulty ms-3 detail-delete">{{ session.role }}</span>
+                                        {% else %}
+                                        <span class="quest-card-badge quest-type ms-3 detail-delete">{{ session.role }}</span>
+                                        {% endif %}
                                     </div>
                                     {% if session.companions %}
-                                    <div class="profile-companion">
+                                    <div class="profile-companion-container my-3 mx-4 p-3">
                                         <h3 class="profile-companion-title text-center mb-1">Your companions</h3>
                                         {% for companion in session.companions %}
-                                        <div class="d-flex flex-column align-items-center justify-content-center mb-1">
-                                            <span class="profile-companion-text">-{{ companion }}</span>
-                                        </div>
+                                        <ul class="d-flex flex-column align-items-center justify-content-center mb-1">
+                                            <li class="profile-companion-text">{{ companion }}</li>
+                                        </ul>
                                         {% endfor %}
                                     </div>
                                     {% endif %}
@@ -116,10 +111,9 @@ active
                                 <div class="col-3">
                                     <div class="d-flex justify-content-center mb-1">
                                         {% if session.can_cancel %}
-                                        <a href="{{ url_for('cancel_reservation', session_id=session.session_id) }}"
-                                            class="home-detail-button profile-cancel-button">Cancel</a>
+                                        <a href="{{ url_for('cancel_reservation', session_id=session.session_id) }}" class="common-button button-blue profile-name-surname">Cancel</a>
                                         {% else %}
-                                        <span class="profile-locked">Locked</span>
+                                        <span class="profile-locked">LOCKED</span>
                                         {% endif %}
                                     </div>
                                 </div>

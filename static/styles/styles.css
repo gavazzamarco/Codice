@@ -65,7 +65,7 @@ body {
     background-color: white;
 }
 .header-nav-link {
-    font-size: 1.5rem;
+    font-size: 1.7rem;
     font-weight: 400;
     color: rgb(255, 170, 0);
 }
@@ -454,4 +454,31 @@ body {
 .profile-session-date {
     letter-spacing: 2px;
     font-size: 2.1rem;
+}
+
+.profile-locked {
+    padding: 15px 20px;
+    color: var(--darkness);
+    background: var(--megumin);
+    border: 4px solid var(--darkness);
+    border-radius: 5px;
+    font-size: 1.35rem;
+    font-weight: 400;
+}
+
+.profile-companion-container {
+    background: white;
+    border: 4px solid grey;
+    border-radius: 10px;
+}
+
+.profile-companion-title {
+    font-size: 1.9rem;
+    color: blueviolet;
+}
+
+.profile-companion-text {
+    font-family: serif;
+    font-size: 1.5rem;
+    font-weight: 800;
 }
