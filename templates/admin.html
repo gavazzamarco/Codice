@@ -6,64 +6,82 @@ Profile
 active
 {% endblock %}
 {% block content %}
-<h1 class="page-title text-center">
+<h1 class="page-title text-center mt-4 pt-3">
     <span class="color-red">Guild </span><span class="color-yellow">Council </span><span class="color-green">Admini</span><span class="color-blue">strator</span>
 </h1>
-<section>
-    <div class="container-fluid quest-container col-10">
-        <h2 class="quest-card-title d-flex justify-content-center mt-3 pb-3 mb-0">General stats</h2>
+<section class="profile-padding-bottom">
+    <div class="container-fluid admin-container-stats col-9 border-multicolor">
+        <h2 class="quest-card-title admin-stats-title d-flex justify-content-center mt-3 pb-3 mb-1">General stats</h2>
         <div class="row d-flex justify-content-center align-items-center">
-            <div class="col-3 color-blue">
-                <div class="d-flex justify-content-center">{{ infos.total_adventurers }}</div>
-                <p class="d-flex justify-content-center">Total Adventurers</p>
+            <div class="col-3 color-blue text-center">
+                <div class="admin-stats-number">{{ infos.total_adventurers }}</div>
+                <p class="admin-stats-description">Total<br> Adventurers</p>
             </div>
-            <div class="col-3 color-green">
-                <div class="d-flex justify-content-center">{{ infos.total_quests }}</div>
-                <p class="d-flex justify-content-center">Total Quests</p>
+            <div class="col-3 color-green text-center">
+                <div class="admin-stats-number">{{ infos.total_quests }}</div>
+                <p class="admin-stats-description">Total<br> Quests</p>
             </div>
-            <div class="col-3 color-yellow">
-                <div class="d-flex justify-content-center">{{ infos.total_sessions }}</div>
-                <p class="d-flex justify-content-center">Total Sessions</p>
+            <div class="col-3 color-yellow text-center">
+                <div class="admin-stats-number">{{ infos.total_sessions }}</div>
+                <p class="admin-stats-description">Total<br> Sessions</p>
             </div>
-            <div class="col-3 color-red">
-                <div class="d-flex justify-content-center">{{ infos.total_participations }}</div>
-                <p class="d-flex justify-content-center">Total Participations</p>
+            <div class="col-3 color-red text-center">
+                <div class="admin-stats-number">{{ infos.total_participations }}</div>
+                <p class="admin-stats-description">Total<br> Participations</p>
             </div>
         </div>
     </div>
-    <div class="container-fluid quest-container col-10">
-        <h2 class="quest-card-title d-flex justify-content-center mt-3 pb-3 mb-0">Roles stats</h2>
-        <div class="row d-flex justify-content-center align-items-center">
-            <div class="col-4 color-blue">
-                <div class="d-flex justify-content-center">{{ infos.total_roles.Warrior }}</div>
-                <p class="d-flex justify-content-center">Warriors</p>
+    <div class="container-fluid admin-container-stats col-9 border-multicolor">
+        <h2 class="quest-card-title admin-stats-title d-flex justify-content-center mt-3 pb-3 mb-1">Roles stats</h2>
+        <div class="row d-flex align-items-center pb-4">
+            <div class="col-4 color-blue detail-modal-title text-center">
+                <div class="admin-stats-number">{{ infos.total_roles.Warrior }}</div>
+                <p class="quest-card-badge quest-duration admin-stats-description mx-4">Warriors</p>
             </div>
-            <div class="col-4 color-green">
-                <div class="d-flex justify-content-center">{{ infos.total_roles.Mage }}</div>
-                <p class="d-flex justify-content-center">Mages</p>
+            <div class="col-4 color-yellow detail-modal-title text-center">
+                <div class="admin-stats-number">{{ infos.total_roles.Mage }}</div>
+                <p class="quest-card-badge quest-location admin-stats-description mx-4">Mages</p>
             </div>
-            <div class="col-4 color-yellow">
-                <div class="d-flex justify-content-center">{{ infos.total_roles.Healer }}</div>
-                <p class="d-flex justify-content-center">Healers</p>
+            <div class="col-4 color-red detail-modal-title text-center">
+                <div class="admin-stats-number">{{ infos.total_roles.Healer }}</div>
+                <p class="quest-card-badge quest-type admin-stats-description mx-4">Healers</p>
             </div>
         </div>
     </div>
-    <div class="container-fluid quest-container col-10">
-        <h2 class="quest-card-title d-flex justify-content-center mt-3 pb-3 mb-0">Popular contents</h2>
-        <div class="row d-flex justify-content-center align-items-center">
-            <div class="col-6 color-blue">
-                <div class="d-flex justify-content-center"></div>
-                <p class="d-flex justify-content-center">Quest Type</p>
+    <div class="container-fluid admin-container-stats col-9 border-multicolor">
+        <h2 class="quest-card-title admin-stats-title d-flex justify-content-center mt-3 pb-3 mb-4">Popular contents</h2>
+        <div class="row d-flex align-items-center">
+            <div class="col-6 color-red text-center">
+                <div class="quest-card-badge quest-type admin-stats-description admin-type-badge">{{ infos.popular_type }}</div>
+                <p class="admin-stats-description mt-3">Popular<br>Quest Type</p>
             </div>
-            <div class="col-6 color-green">
-                <div class="d-flex justify-content-center"></div>
-                <p class="d-flex justify-content-center">Session</p>
+            <div class="col-6 color-green text-center">
+                <div class="d-flex justify-content-center">
+                    <div class="profile-master-session">
+                        <div class="color-red">
+                            {{ infos.popular_session.title }}
+                        </div>
+                        <div class="line-multicolor w-100 d-flex px-3">
+                            <div class="background-red w-25 h-100"></div>
+                            <div class="background-yellow w-25 h-100"></div>
+                            <div class="background-green w-25 h-100"></div>
+                            <div class="background-blue w-25 h-100"></div>
+                        </div>
+                        <div class="profile-session-date">
+                            <span class="color-green">{{ infos.popular_session.day_name }}</span> <span class="color-blue">{{ infos.popular_session.hour }}:</span><span class="color-yellow">{{ infos.popular_session.minute }}</span>
+                        </div>
+                        <div class="profile-session-location mt-1">
+                            <span class="color-blue">Location: {{ infos.popular_session.location }}</span>
+                        </div>
+                    </div>
+                </div>
+                <p class="admin-stats-description">Popular<br> Session</p>
             </div>
         </div>
     </div>
 </section>
-<section class="container-fluid">
-    <h1 class="text-center page-title">
+<section class="container-fluid profile-padding-bottom">
+    <h1 class="text-center page-title mb-3">
         <span class="color-red">REGIS</span><span class="color-yellow">TERED</span> <span class="color-green">ADVEN</span><span class="color-blue">TURERS</span>
     </h1>
     {% if users %}
@@ -87,11 +105,11 @@ active
                             <span class="color-red">{{ user.username }}</span>
                         </div>
                     </div>
-                    <div class="d-flex">
-                        <div class="quest-card-badge profile-badge ms-4 me-4">
+                    <div class="d-flex gap-4 ms-3">
+                        <div class="quest-card-badge quest-location text-uppercase">
                             {{ user.role }}
                         </div>
-                        <div class="d-flex align-items-center quest-card-badge quest-difficulty ms-4">
+                        <div class="d-flex align-items-center quest-card-badge quest-difficulty">
                             Quests participations: {{ user.participations_count }}
                         </div>
                     </div>
@@ -115,7 +133,7 @@ active
         <span class="color-red">CREA</span><span class="color-yellow">TED</span> <span class="color-green">QUE</span><span class="color-blue">STS</span>
     </h1>
     {% if quests %}
-    <div class="container-fluid ">
+    <div class="container-fluid">
         <div class="row justify-content-center profile-padding-bottom">
             {% for quest in quests %}
             <div class="col-9 profile-padding-bottom">

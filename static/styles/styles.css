@@ -281,6 +281,12 @@ body {
     background: rgb(0, 0, 132);
 }
 
+.quest-location {
+    border: 3px solid var(--darkness);
+    color: var(--darkness);
+    background: rgb(135, 71, 1);
+}
+
 .home-noquest-container {
     position: absolute;
     bottom: 30px;
@@ -421,14 +427,6 @@ body {
 .profile-name-surname { font-size: 2.1rem; }
 .profile-username { font-size: 1.8rem; }
 
-.profile-badge {
-    text-transform: uppercase;
-    font-size: 1.35rem;
-    border: 3px solid var(--darkness);
-    color: var(--darkness);
-    background: rgb(158, 71, 9);
-}
-
 .profile-description {
     background: black;
     border: 2px solid rgb(138, 138, 138);
@@ -482,3 +480,15 @@ body {
     font-size: 1.5rem;
     font-weight: 800;
 }
+
+.admin-container-stats {
+    background: var(--dark);
+    padding: 20px 35px;
+    border-radius: 25px;
+    margin-bottom: 65px; 
+}
+
+.admin-stats-title { font-size: 5rem; }
+.admin-stats-number { font-size: 4.3rem; }
+.admin-stats-description { font-size: 2.6rem; }
+.admin-type-badge { margin: 0px 160px; }

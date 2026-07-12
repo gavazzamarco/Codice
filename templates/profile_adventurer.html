@@ -6,7 +6,7 @@ Profile
 active
 {% endblock %}
 {% block content %}
-<section class="d-flex justify-content-center">
+<section class="d-flex justify-content-center pt-4 mb-3">
     <div class="col-9 d-flex profile-user-container border-multicolor">
         <div class="h-100">
             {% if current_user.profile_img %}
@@ -25,7 +25,7 @@ active
                         <span class="color-red">{{ current_user.username }}</span>
                     </div>
                 </div>
-                <div class="quest-card-badge profile-badge ms-4">
+                <div class="quest-card-badge quest-location text-uppercase ms-4">
                     <span>{{ current_user.role }}</span>
                 </div>
             </div>
@@ -99,10 +99,10 @@ active
                                     </div>
                                     {% if session.companions %}
                                     <div class="profile-companion-container my-3 mx-4 p-3">
-                                        <h3 class="profile-companion-title text-center mb-1">Your companions</h3>
+                                        <h3 class="profile-companion-title text-center mb-2">Your companions</h3>
                                         {% for companion in session.companions %}
-                                        <ul class="d-flex flex-column align-items-center justify-content-center mb-1">
-                                            <li class="profile-companion-text">{{ companion }}</li>
+                                        <ul class="m-0 ms-4 p-0">
+                                            <li class="profile-companion-text ms-4">{{ companion }}</li>
                                         </ul>
                                         {% endfor %}
                                     </div>

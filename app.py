@@ -483,21 +483,20 @@ def admin():
     all_info={"total_adventurers":len(adventurers_db), "total_quests":len(all_detailed_quests), "total_sessions":0, "total_participations":0, "popular_session":None}
     total_roles={"Warrior":0, "Mage":0, "Healer":0}
     total_types={"Combact":0, "Exploration":0, "Stealth":0, "Magic":0, "Survival":0}
-    popular_session={"id": -1, "total":0, "title":"", "day":-1, "hour":-1, "minute":-1}
+    popular_session={"id": -1, "total":0, "location":"", "title":"", "day":"", "hour":-1, "minute":-1}
     for quest in all_detailed_quests:
         for session in quest["sessions"]:
             all_info["total_sessions"]+=1
             all_info["total_participations"]+=session["total_booked"]
             total_types[quest["type"]]+=session["total_booked"]
             if session["total_booked"]>popular_session["total"]:
-                popular_session={"id": session["id"], "total":session["total_booked"], "title":quest["title"], "day":session["day"], "hour":session["hour"], "minute":session["minute"]}
+                popular_session={"id": session["id"], "total":session["total_booked"], "title":quest["title"], "location":quest["location"], "day_name":session["day"], "hour":session["hour"], "minute":session["minute"]}
             for adventurer in session["adventurers"]:
                 total_roles[adventurer["role"]]+=(len(adventurer["companions"])+1)
                 user_participation_counter[adventurer["username"]]+=1
     all_info["total_roles"]=total_roles
     all_info["popular_type"]=max(total_types, key=total_types.get)
-    if popular_session["id"]>=0:
-        all_info["popular_session"]=session_dao.get_session_by_id(popular_session["id"])
     for user in adventurers_db:
         user["participations_count"]=user_participation_counter.get(user["username"], 0)
+    all_info["popular_session"]=popular_session
     return render_template("admin.html", users=adventurers_db, quests=all_detailed_quests, infos=all_info)
