@@ -51,31 +51,25 @@ active
     <div class="container-fluid admin-container-stats col-9 border-multicolor">
         <h2 class="quest-card-title admin-stats-title d-flex justify-content-center mt-3 pb-3 mb-4">Popular contents</h2>
         <div class="row d-flex align-items-center">
-            <div class="col-6 color-red text-center">
-                <div class="quest-card-badge quest-type admin-stats-description admin-type-badge">{{ infos.popular_type }}</div>
+            <div class="col-6 color-yellow text-center">
+                <div class="d-flex justify-content-center">
+                    <div class="quest-card-badge quest-type admin-stats-description">{{ infos.popular_type }}</div>
+                </div>
                 <p class="admin-stats-description mt-3">Popular<br>Quest Type</p>
             </div>
-            <div class="col-6 color-green text-center">
-                <div class="d-flex justify-content-center">
-                    <div class="profile-master-session">
-                        <div class="color-red">
-                            {{ infos.popular_session.title }}
-                        </div>
-                        <div class="line-multicolor w-100 d-flex px-3">
-                            <div class="background-red w-25 h-100"></div>
-                            <div class="background-yellow w-25 h-100"></div>
-                            <div class="background-green w-25 h-100"></div>
-                            <div class="background-blue w-25 h-100"></div>
-                        </div>
-                        <div class="profile-session-date">
-                            <span class="color-green">{{ infos.popular_session.day_name }}</span> <span class="color-blue">{{ infos.popular_session.hour }}:</span><span class="color-yellow">{{ infos.popular_session.minute }}</span>
-                        </div>
-                        <div class="profile-session-location mt-1">
-                            <span class="color-blue">Location: {{ infos.popular_session.location }}</span>
+            <div class="col-6 text-center">
+                <div class="d-flex flex-column justify-content-center profile-master-session quest-container py-3 px-4 mb-3">
+                    <div class="mb-3">
+                        <h3 class="logreg-title mb-2 pb-2"><span class="color-red">{{ infos.popular_session.title[0] }}</span><span class="color-yellow">{{ infos.popular_session.title[1] }}</span><span class="color-green">{{ infos.popular_session.title[2] }}</span><span class="color-blue">{{ infos.popular_session.title[3] }}</span></h3>
+                        <div class="d-flex justify-content-center align-items-center">
+                            <p class="quest-card-badge quest-duration detail-delete">Location: {{ infos.popular_session.location }}</p>
                         </div>
                     </div>
+                    <div class="profile-session-date">
+                        <span class="color-green">{{ infos.popular_session.day_name }}</span> <span class="color-blue">{{ infos.popular_session.hour }}:</span><span class="color-yellow">{{ infos.popular_session.minute }}</span>
+                    </div>
                 </div>
-                <p class="admin-stats-description">Popular<br> Session</p>
+                <p class="admin-stats-description color-red">Popular<br> Session</p>
             </div>
         </div>
     </div>
@@ -105,10 +99,8 @@ active
                             <span class="color-red">{{ user.username }}</span>
                         </div>
                     </div>
-                    <div class="d-flex gap-4 ms-3">
-                        <div class="quest-card-badge quest-location text-uppercase">
-                            {{ user.role }}
-                        </div>
+                    <div class="d-flex gap-4 ms-3 detail-delete">
+                        <div class="quest-card-badge quest-location text-uppercase me-3"> {{ user.role }}</div>
                         <div class="d-flex align-items-center quest-card-badge quest-difficulty">
                             Quests participations: {{ user.participations_count }}
                         </div>
@@ -209,7 +201,7 @@ active
                                                     {% if adventurer.companions %}
                                                         <ul>
                                                         {% for companion in adventurer.companions %}
-                                                            <li class="ms-2">-{{ companion }}</li>
+                                                            <li class="ms-2">{{ companion }}</li>
                                                         {% endfor %}
                                                         </ul>
                                                     {% endif %}

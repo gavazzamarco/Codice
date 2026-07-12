@@ -118,7 +118,7 @@ active
                                                     {% if adventurer.companions %}
                                                         <ul>
                                                         {% for companion in adventurer.companions %}
-                                                            <li class="ms-2">-{{ companion }}</li>
+                                                            <li class="ms-2">{{ companion }}</li>
                                                         {% endfor %}
                                                         </ul>
                                                     {% endif %}
@@ -197,9 +197,9 @@ active
         </div>
     </div>
     {% else %}
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center profile-padding-bottom">
         <div class="col-9 card position-relative quest-container p-0 m-0">
-            <img src="{{ url_for('static', filename='images/images/no_quests.png') }}" class="card-img object-fit-cover" alt="No quest created">
+            <img src="{{ url_for('static', filename='images/no_quests.png') }}" class="card-img object-fit-cover" alt="No quest created">
             <div class="card-img-overlay">
                 <div class="home-noquest-container w-100">
                     <div class="d-flex align-items-center justify-content-center text-center">

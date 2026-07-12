@@ -5,11 +5,11 @@ import sqlite3
 BASE_DIR=os.path.dirname(os.path.abspath(__file__))
 DB_PATH=os.path.join(BASE_DIR, "Konosuba.db")
 
-def create_session(quest_id, day, hour, minute):
+def create_session(quest_id, day, hour, minute, location):
     conn=sqlite3.connect(DB_PATH)
     cursor=conn.cursor()
-    query="INSERT INTO sessions (quest_id, day, hour, minute) VALUES (?,?,?,?)"
-    cursor.execute(query, (quest_id, day, hour, minute))
+    query="INSERT INTO sessions (quest_id, location, day, hour, minute) VALUES (?,?,?,?)"
+    cursor.execute(query, (quest_id, location, day, hour, minute))
     conn.commit()
     cursor.close()
     conn.close()
@@ -59,11 +59,11 @@ def delete_session(session_id):
     cursor.close()
     conn.close()
 
-def update_session(day, hour, minute, session_id):
+def update_session(location, day, hour, minute, session_id):
     conn=sqlite3.connect(DB_PATH)
     cursor=conn.cursor()
-    query="UPDATE sessions SET day=?, hour=?, minute=? WHERE id=?"
-    cursor.execute(query, (day, hour, minute, session_id))
+    query="UPDATE sessions SET location=?, day=?, hour=?, minute=? WHERE id=?"
+    cursor.execute(query, (location, day, hour, minute, session_id))
     conn.commit()
     cursor.close()
     conn.close()

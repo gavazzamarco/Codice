@@ -9,11 +9,11 @@ DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturda
 BASE_DIR=os.path.dirname(os.path.abspath(__file__))
 DB_PATH=os.path.join(BASE_DIR, "Konosuba.db")
 
-def create_quest(title, duration, location, type, difficulty, description, illustration):
+def create_quest(title, duration, type, difficulty, description, illustration):
     conn=sqlite3.connect(DB_PATH)
     cursor=conn.cursor()
-    query="INSERT INTO quests (title, duration, location, type, difficulty, description, illustration) VALUES (?,?,?,?,?,?,?)"
-    cursor.execute(query, (title, duration, location, type, difficulty, description, illustration))
+    query="INSERT INTO quests (title, duration, type, difficulty, description, illustration) VALUES (?,?,?,?,?,?,?)"
+    cursor.execute(query, (title, duration, type, difficulty, description, illustration))
     id=cursor.lastrowid
     conn.commit()
     cursor.close()
@@ -117,12 +117,3 @@ def get_all_info_of_all_quests():
     cursor.close()
     conn.close()
     return quests
-
-def modify_location(location, quest_id):
-    conn=sqlite3.connect(DB_PATH)
-    cursor=conn.cursor()
-    query="UPDATE quests SET location=? WHERE id=?"
-    cursor.execute(query, (location, quest_id))
-    conn.commit()
-    cursor.close()
-    conn.close()

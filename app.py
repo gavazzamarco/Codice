@@ -191,31 +191,25 @@ def conversione_minuti_assoluti(day, hour, minute):
     MINUTES_IN_DAY=60*24
     return int(MINUTES_IN_DAY*int(day)+int(hour)*60+int(minute))
 
-def check_overlap(days, starts_hours, starts_minutes, duration, location, sessions):
-    valid_session=[]
+def check_overlap(day, hour, minute, duration, location, sessions):
     overlap=False
-    for index in range(min(len(days), len(starts_hours), len(starts_minutes))):
-        day=DAYS_OF_WEEK.index(days[index])
-        hour=int(starts_hours[index])
-        minute=int(starts_minutes[index])
-        current={}
-        current["start"]=conversione_minuti_assoluti(day, hour, minute)
-        current["end"]=current["start"]+int(duration)
-        for session in sessions:
-            quest=quests_dao.get_quest_by_id(session["quest_id"])
-            if location==quest["location"] or location=="all":
-                saved={}
-                saved["start"]=conversione_minuti_assoluti(session["day"], session["hour"], session["minute"])
-                saved["end"]=saved["start"]+int(quest["duration"])
-                if (max(saved["start"], current["start"]))<min(saved["end"], current["end"]):
-                    flash("The session of ["+DAYS_OF_WEEK[day]+" h"+str(hour)+":"+str(minute)+"] conflicts with the quest ["+quest["title"] +"]", 'danger')
-                    overlap=True
-                    continue
-        valid_session.append((day, hour, minute))
-    if location=="all":
-        return overlap
-    else:
-        return valid_session
+    day=DAYS_OF_WEEK.index(day)
+    hour=int(hour)
+    minute=int(minute)
+    current={}
+    current["start"]=conversione_minuti_assoluti(day, hour, minute)
+    current["end"]=current["start"]+int(duration)
+    for session in sessions:
+        quest=quests_dao.get_quest_by_id(session["quest_id"])
+        if location==quest["location"] or location=="all":
+            saved={}
+            saved["start"]=conversione_minuti_assoluti(session["day"], session["hour"], session["minute"])
+            saved["end"]=saved["start"]+int(quest["duration"])
+            if (max(saved["start"], current["start"]))<min(saved["end"], current["end"]):
+                flash("The session of ["+DAYS_OF_WEEK[day]+" h"+str(hour)+":"+str(minute)+"] conflicts with the quest ["+quest["title"] +"]", 'danger')
+                overlap=True
+                break
+    return overlap
 
 def stampa_errori(errors):
     for error in errors:
@@ -227,47 +221,34 @@ def quest_check_and_save():
     if (not current_user.is_authenticated) or current_user.role!="master":
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for('home'))
-
     title=request.form.get("title")
     description=request.form.get("description")
     duration=request.form.get("duration")
-    location=request.form.get("location")
     type=request.form.get("type")
     difficulty=request.form.get("difficulty")
     illustration=request.files["illustration"]
     days=request.form.getlist("day")
     starts_hours=request.form.getlist("hour")
     starts_minutes=request.form.getlist("minute")
-
+    locations=request.form.getlist("location")
     errors=[]
     if not title:
         errors.append("The title is mandatory")
     if not description:
         errors.append("The description is mandatory")
-    if not duration:
-        errors.append("The duration is mandatory")
-    if not location:
-        errors.append("The location is mandatory")
-    if not type:
-        errors.append("The type is mandatory")
-    if not difficulty:
-        errors.append("The difficulty is mandatory")
-    duration=int(duration)
-    if duration<=0:
-        errors.append("The quest duration must be positive")
-    if location not in LOCATIONS:
-        errors.append("The location must be chosen from the available options")
-    if type not in TYPES:
-        errors.append("The type must be selected from the available options")
-    if difficulty not in DIFFICULTY:
-        errors.append("The difficulty must be selected from the available options")
-    if len(days)==0 or len(starts_hours)==0 or len(starts_minutes)==0:
-        errors.append("The quest must have at least one session")
+    if not duration or int(duration)<=0:
+        errors.append("The duration is mandatory and must be positive")
+        duration=int(duration)
+    if not type or type not in TYPES:
+        errors.append("The type is mandatory and must be selected from the available options")
+    if not difficulty or difficulty not in DIFFICULTY:
+        errors.append("The difficulty is mandatory and must be selected from the available options")
+    if len(days)==0 or len(starts_hours)==0 or len(starts_minutes)==0 or len(location):
+        errors.append("The quests must include at least one session containing all the necessary fields")
     else:
         for day in days:
             if day not in DAYS_OF_WEEK:
                 errors.append("The day must be selected from the available options")
-                break
         for hour in starts_hours:
             hour=int(hour)
             if hour<0 or hour>23:
@@ -276,23 +257,28 @@ def quest_check_and_save():
             minutes=int(minutes)
             if minutes<0 or minutes>59:
                 errors.append("The minutes can only take values between 0 and 59")
+        for location in locations:
+            if not location or location not in LOCATIONS:
+                errors.append("The location is mandatory and must be chosen from the available options")
     if len(errors)>0:
         stampa_errori(errors)
         return redirect(url_for('quest_create'))
     # Da mettere alla fine solo se non si vuole salvare sempre ed inutilmente altre foto
-    path_photo = check_and_save_photo(illustration, "images/illustrations/")
+    path_photo=check_and_save_photo(illustration, "images/illustrations/")
     if path_photo=="":
         flash("The illustration is mandatory. Only jpg, jpeg, png, and webp are allowed", 'danger')
         return redirect(url_for('quest_create'))
-
     sessions=session_dao.get_all_session()
-    valid_sessions=check_overlap(days, starts_hours, starts_minutes, duration, location, sessions)
+    valid_sessions=[]
+    for index in range(min(len(days), len(starts_hours, len(starts_minutes), len(locations)))):
+        if check_overlap(days[index], starts_hours[index], starts_minutes[index], duration, location[index], sessions)==False:
+            valid_sessions.append(DAYS_OF_WEEK.index(days[index]), int(starts_hours[index]), int(starts_minutes[index]), locations[index])
     if len(valid_sessions)>0:
-        quest_id=quests_dao.create_quest(title, duration, location, type, difficulty, description, path_photo)
+        quest_id=quests_dao.create_quest(title, duration, type, difficulty, description, path_photo)
         flash("The quest has at least one valid session, so it was created correctly", 'success')
         for session in valid_sessions:
-            session_dao.create_session(quest_id, session[0], session[1], session[2])
-            flash("The session of ["+DAYS_OF_WEEK[session[0]]+" h"+str(session[1])+":"+str(session[2])+"] is created correctly", 'success')
+            session_dao.create_session(quest_id, session[0], session[1], session[2], session[3])
+            flash("The session of ["+session[3]+":"+DAYS_OF_WEEK[session[0]]+" h"+str(session[1])+":"+str(session[2])+"] is created correctly", 'success')
     else:
         return redirect(url_for('quest_create'))
     return redirect(url_for('home'))
@@ -321,7 +307,6 @@ def quest_detail(quest_id):
     title=split_title(quest_db["title"])
     return render_template('quest_detail.html', quest=quest_db, titolo=title, sessions=sessions_db, roles=ROLES)
 
-
 @app.route("/book_session", methods=["POST"])
 @login_required
 def book_session():
@@ -349,17 +334,14 @@ def book_session():
     if (LIMITS[role]-(count+len(companions)+1))<0:
         flash("You have booked more seats than are available for the category "+role, "danger")
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
-    
     reservations_user=reservation_dao.get_reservations_of_user(current_user.id)
     sessions_booked=[session_dao.get_session_by_id(row["session_id"]) for row in reservations_user]
     if len(reservations_user)>=3:
         flash("It is not possible to book more than 3 sessions per week", "danger")
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
     quest=quests_dao.get_quest_by_id(session["quest_id"])
-    
-    if check_overlap([DAYS_OF_WEEK[session["day"]]], [session["hour"]], [session["minute"]], quest["duration"], "all", sessions_booked)==True:
+    if check_overlap(DAYS_OF_WEEK[session["day"]], session["hour"], session["minute"], quest["duration"], "all", sessions_booked)==True:
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
-    
     reservation_id=reservation_dao.create_reservation(current_user.id, session_id, role, int(len(companions))+1)
     for companion in companions:
         reservation_dao.add_companions(reservation_id, companion)
@@ -421,7 +403,7 @@ def profile_master():
         return redirect(url_for("home"))
     all_detailed_quests=quests_dao.get_all_info_of_all_quests()
     for row in all_detailed_quests:
-        row["title_split"] = split_title(row["title"])
+        row["title_split"]=split_title(row["title"])
     return render_template("profile_master.html", quests=all_detailed_quests, days=DAYS_OF_WEEK, locations=LOCATIONS)
 
 @app.route("/cancel_session/<int:session_id>")
@@ -464,14 +446,12 @@ def modify_session(session_id):
     if minute<0 or minute>59:
         errors.append("The minutes can only take values between 0 and 59")
     quest=quests_dao.get_quest_by_id(session["quest_id"])
-    sessions=[s for s in session_dao.get_all_session() if s["id"]!=session_id]
-    if len(errors) or check_overlap([day], [hour], [minute], int(quest["duration"]), "all", sessions)==True:
+    sessions=[ses for ses in session_dao.get_all_session() if ses["id"]!=session_id]
+    if len(errors) or check_overlap(day, hour, minute, int(quest["duration"]), "all", sessions)==True:
         stampa_errori(errors)
         return redirect(url_for('profile'))
-    if location!="":
-        day_index=DAYS_OF_WEEK.index(day)
-        quests_dao.modify_location(location, session["quest_id"])
-    session_dao.update_session(day_index, hour, minute, session_id)
+    day_index=DAYS_OF_WEEK.index(day)
+    session_dao.update_session(location, day_index, hour, minute, session_id)
     flash("The session has been successfully updated", "success")
     return redirect(url_for('profile'))
 
@@ -490,7 +470,7 @@ def admin():
             all_info["total_participations"]+=session["total_booked"]
             total_types[quest["type"]]+=session["total_booked"]
             if session["total_booked"]>popular_session["total"]:
-                popular_session={"id": session["id"], "total":session["total_booked"], "title":quest["title"], "location":quest["location"], "day_name":session["day"], "hour":session["hour"], "minute":session["minute"]}
+                popular_session={"id": session["id"], "total":session["total_booked"], "title":split_title(quest["title"]), "location":session["location"], "day_name":session["day"], "hour":session["hour"], "minute":session["minute"]}
             for adventurer in session["adventurers"]:
                 total_roles[adventurer["role"]]+=(len(adventurer["companions"])+1)
                 user_participation_counter[adventurer["username"]]+=1

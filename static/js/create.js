@@ -1,18 +1,21 @@
 const addSession=document.querySelector("#add-session");
 const container=document.querySelector("#session-container");
-const DAYS_OF_WEEK=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 addSession.addEventListener("click", function() {
     const newSession=document.createElement("div");
-    newSession.classList.add("create-session-card", "row", "mt-3");
+    newSession.classList.add("create-session-card", "row", "mt-3", "d-flex", "p-2", "justify-content-center");
     newSession.innerHTML=`
         <div class="col-4">
             <label class="logreg-label" for="day">Day*</label>
             <select id="day" name="day" class="form-control logreg-input mb-4" required>
                 <option value="">Select a day</option>
-                {% for day in days %}
-                <option value="{{ day }}">{{ day }}</option>
-                {% endfor %}
+                <option value="Monday">Monday</option>
+                <option value="Tuesday">Tuesday</option>
+                <option value="Wednesday">Wednesday</option>
+                <option value="Thursday">Thursday</option>
+                <option value="Friday">Friday</option>
+                <option value="Saturday">Saturday</option>
+                <option value="Sunday">Sunday</option>
             </select>
         </div>
         <div class="col-3">
@@ -26,15 +29,16 @@ addSession.addEventListener("click", function() {
         <div class="col-2 d-flex justify-content-end align-items-center my-3">
             <button type="button" class="create-button-delete">X</button>
         </div>
+        <div class="col-9">
+            <label class="logreg-label" for="location">Location*</label>
+            <select id="location" name="location" class="form-control logreg-input mb-4" required>
+                <option value="">Select a location</option>
+                <option value="Axel">Axel</option>
+                <option value="Kingdom of Elroad">Kingdom of Elroad</option>
+                <option value="Arcanletia">Arcanletia</option>
+            </select>
+        </div>
         `;
-
-    const select=newSession.querySelector("select");
-    DAYS_OF_WEEK.forEach((day) => {
-        const option=document.createElement("option");
-        option.value=day;
-        option.textContent=day;
-        select.appendChild(option);
-    });
     container.appendChild(newSession);
 });
 

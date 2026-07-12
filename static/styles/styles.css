@@ -32,10 +32,10 @@ body {
 .line-tiny { height: 3px; }
 
 .border-multicolor {
-    border-bottom: 4px solid var(--kazuma);
-    border-top: 4px solid var(--megumin);
-    border-left: 4px solid var(--darkness);
-    border-right: 4px solid var(--aqua);
+    border-bottom: 4px solid var(--kazuma) !important;
+    border-top: 4px solid var(--megumin) !important;
+    border-left: 4px solid var(--darkness) !important;
+    border-right: 4px solid var(--aqua) !important;
 }
 
 .navbar-container { padding: 20px 40px; }
@@ -89,6 +89,15 @@ body {
     font-size: 1.3rem;
     z-index: 100;
 }
+
+.quest-create-button {
+    position: fixed;
+    bottom: 40px;
+    right: 20px;
+    background: black !important;
+}
+
+.quest-create-button:hover { font-size: 2.45rem !important; }
 
 .footer-logo { width: 250px; }
 
@@ -229,6 +238,7 @@ body {
 .quest-container {
     border: 4px solid white;
     border-radius: 10px;
+    min-height: 450px;
 }
 
 .quest-container:hover {
@@ -387,8 +397,9 @@ body {
 }
 
 .create-session-card {
+    background: black;
     margin: 2px;
-    border: 2px solid var(--grey);
+    border: 3px solid grey;
     border-radius: 10px;
     margin-bottom: 20px;
 }

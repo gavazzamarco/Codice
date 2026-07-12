@@ -6,7 +6,6 @@
     <title>Konosuba - {% block title %}{% endblock %}</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
-    {% block css %}{% endblock %}
 </head>
 <body class="min-vh-100">
     <header class="sticky-top">
@@ -30,11 +29,6 @@
                 </li>
                 {% endif %}
                 {% if current_user.is_authenticated %}
-                {% if current_user.role=="master" %}
-                <li class="nav-item header-nav-item {% block create_active %}{% endblock %}">
-                    <a href="{{ url_for('quest_create') }}" class="nav-link header-nav-link">New Quest</a>
-                </li>
-                {% endif %}
                 <li class="nav-item header-nav-item {% block profile_active %}{% endblock %}">
                     <a href="{{ url_for('profile') }}" class="nav-link header-nav-link">Profile</a>
                 </li>
@@ -67,6 +61,13 @@
         {% block content %}
         {% endblock %}
     </main>
+    <div>
+        {% if current_user.is_authenticated and current_user.role=='master' %}
+        <a href="{{ url_for('quest_create') }}" class="common-button button-yellow quest-create-button border-multicolor {% block visibilty %}{% endblock %}">
+            <span class="color-red">NE</span><span class="color-yellow">W Q</span><span class="color-green">UE</span><span class="color-blue">ST</span>
+        </a>
+        {% endif %}
+    </div>
     <footer>
         <div class="line-multicolor w-100 d-flex flex-row-reverse">
             <div class="background-red w-25 h-100"></div>
