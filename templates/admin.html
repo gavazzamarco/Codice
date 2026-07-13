@@ -58,6 +58,7 @@ active
                 <p class="admin-stats-description mt-3">Popular<br>Quest Type</p>
             </div>
             <div class="col-6 text-center">
+                {% if infos.popular_session.id > 0%}
                 <div class="d-flex flex-column justify-content-center profile-master-session quest-container py-3 px-4 mb-3">
                     <div class="mb-3">
                         <h3 class="logreg-title mb-2 pb-2"><span class="color-red">{{ infos.popular_session.title[0] }}</span><span class="color-yellow">{{ infos.popular_session.title[1] }}</span><span class="color-green">{{ infos.popular_session.title[2] }}</span><span class="color-blue">{{ infos.popular_session.title[3] }}</span></h3>
@@ -69,6 +70,11 @@ active
                         <span class="color-green">{{ infos.popular_session.day_name }}</span> <span class="color-blue">{{ infos.popular_session.hour }}:</span><span class="color-yellow">{{ infos.popular_session.minute }}</span>
                     </div>
                 </div>
+                {% else %}
+                <div class="d-flex justify-content-center text-center">
+                    <p class="create-session-card detail-description col-6 py-3 px-4 profile-username">No sessions have been created yet</p>
+                </div>
+                {% endif %}
                 <p class="admin-stats-description color-red">Popular<br> Session</p>
             </div>
         </div>
@@ -116,8 +122,9 @@ active
     </div>
     {% endfor %}
     {% else %}
-    <!-- DA MODIFICARE -->
-    non ci sono avventurieri registrati
+    <div class="d-flex justify-content-center text-center">
+        <p class="create-session-card detail-description col-6 py-3 px-4 profile-name-surname">There are currently no registered adventurers</p>
+    </div>
     {% endif %}
 </section>
 <section>
@@ -222,8 +229,9 @@ active
         </div>
     </div>
     {% else %}
-    <!-- DA MODIFICARE -->
-    Non ci sono quest create al momento
+    <div class="d-flex justify-content-center text-center mb-4 pb-4">
+        <p class="create-session-card detail-description col-6 py-3 px-4 profile-name-surname">No quests have been created at this time</p>
+    </div>
     {% endif %}
 </section>
 {% endblock %}

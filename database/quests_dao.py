@@ -3,7 +3,7 @@ import sqlite3
 from database import reservation_dao, session_dao, users_dao
 
 LIMITS={"Warrior": 4,  "Mage":3, "Healer":2}
-DAYS_OF_WEEK = ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
+DAYS_OF_WEEK=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 
 # Per pythonanywhere
 BASE_DIR=os.path.dirname(os.path.abspath(__file__))
@@ -36,11 +36,10 @@ def get_all_quest():
     conn=sqlite3.connect(DB_PATH)
     conn.row_factory=sqlite3.Row
     cursor=conn.cursor()
-    query="""
-        SELECT q.* FROM quests q
-        LEFT JOIN sessions s ON q.id = s.quest_id
+    query=""" SELECT q.* FROM quests q
+        JOIN sessions s ON q.id=s.quest_id
         GROUP BY q.id
-        ORDER BY MIN(s.day*1440 + s.hour*60 + s.minute) ASC"""
+        ORDER BY MIN(s.day*1440+s.hour*60+s.minute) ASC"""
     cursor.execute(query)
     all_quest=cursor.fetchall()
     conn.commit()
@@ -87,9 +86,6 @@ def get_filtered_quest(day, type, difficulty, role):
     return filtered_quests
 
 def get_all_info_of_all_quests():
-    conn=sqlite3.connect(DB_PATH)
-    conn.row_factory=sqlite3.Row
-    cursor=conn.cursor()
     quests=[dict(row) for row in get_all_quest()]
     for quest in quests:
         quest["sessions"]=[]
@@ -110,9 +106,25 @@ def get_all_info_of_all_quests():
             session["total_booked"]=total_booked
             for role in LIMITS:
                 session[role]=LIMITS[role]-role_counts[role]
-                # AGGIUNERE MOST REQUEST ROLe
             quest["sessions"].append(session)
-    conn.commit()
-    cursor.close()
-    conn.close()
     return quests
+
+def get_admin_stats():
+    all_detailed_quests=get_all_info_of_all_quests()
+    all_info={"total_adventurers":len(users_dao.get_adventures_with_number_of_participation()), "total_quests":len(all_detailed_quests), "total_sessions":0, "total_participations":0, "popular_session":None}
+    total_roles={"Warrior":0, "Mage":0, "Healer":0}
+    total_types={"Combact":0, "Exploration":0, "Stealth":0, "Magic":0, "Survival":0}
+    popular_session={"id": -1, "total":0, "location":"", "title":"", "day":"", "hour":-1, "minute":-1}
+    for quest in all_detailed_quests:
+        for session in quest["sessions"]:
+            all_info["total_sessions"]+=1
+            all_info["total_participations"]+=session["total_booked"]
+            total_types[quest["type"]]+=session["total_booked"]
+            if session["total_booked"]>popular_session["total"]:
+                popular_session={"id": session["id"], "total":session["total_booked"], "title":quest["title"], "location":session["location"], "day_name":session["day"], "hour":session["hour"], "minute":session["minute"]}
+            for adventurer in session["adventurers"]:
+                total_roles[adventurer["role"]]+=(len(adventurer["companions"])+1)
+    all_info["total_roles"]=total_roles
+    all_info["popular_type"]=max(total_types, key=total_types.get)
+    all_info["popular_session"]=popular_session
+    return all_info

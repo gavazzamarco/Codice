@@ -50,14 +50,18 @@ def get_master():
     conn.close()
     return db_user
 
-def get_all_users_for_role(role):
+def get_adventures_with_number_of_participation():
     conn=sqlite3.connect(DB_PATH)
     conn.row_factory=sqlite3.Row
     cursor=conn.cursor()
-    query="SELECT * FROM users WHERE role=?"
-    cursor.execute(query, (role,))
-    db_users=cursor.fetchall()
+    query="""SELECT u.*, COUNT(r.id) AS participations_count
+        FROM users u
+        LEFT JOIN reservations r ON u.id=r.user_id
+        WHERE u.role='adventurer'
+        GROUP BY u.id"""
+    cursor.execute(query)
+    adventurers=[dict(row) for row in cursor.fetchall()]
     conn.commit()
     cursor.close()
     conn.close()
-    return db_users
+    return adventurers

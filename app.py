@@ -17,7 +17,7 @@ ROLES=["Warrior", "Mage", "Healer"]
 LIMITS={"Warrior": 4,  "Mage":3, "Healer":2}
 
 app=Flask(__name__)
-app.config["SECRET_KEY"] = "secret-key-konosuba"
+app.config["SECRET_KEY"]="KoNoSuBa-secret-key"
 
 login_manager=LoginManager()
 login_manager.init_app(app)
@@ -46,7 +46,6 @@ def home_filter():
     type=request.form.get("type")
     difficulty=request.form.get("difficulty")
     role=request.form.get("role")
-
     errors=[]
     if day!="" and day not in DAYS_OF_WEEK:
         errors.append("The day is mandatory and must be selected from the available options")
@@ -150,10 +149,9 @@ def validation():
             password=db_user["password"],
             role=db_user["role"],
             profile_img=db_user["profile_img"],
-            bio=db_user["bio"],
-        )
+            bio=db_user["bio"],)
         login_user(new)
-        flash("Welcome back! " + db_user["name"] + " " + db_user["surname"] + "!", "success")
+        flash("Welcome back! "+db_user["name"]+" "+db_user["surname"]+"!", "success")
     return redirect(url_for("home"))
 
 @app.route("/logout")
@@ -175,24 +173,20 @@ def conversione_minuti_assoluti(day, hour, minute):
     return int((60*24)*int(day)+int(hour)*60+int(minute))
 
 def check_overlap(day, hour, minute, duration, location, sessions):
-    overlap=False
     day=DAYS_OF_WEEK.index(day)
     hour=int(hour)
     minute=int(minute)
-    current={}
-    current["start"]=conversione_minuti_assoluti(day, hour, minute)
+    current={"start":conversione_minuti_assoluti(day, hour, minute)}
     current["end"]=current["start"]+int(duration)
     for session in sessions:
         quest=quests_dao.get_quest_by_id(session["quest_id"])
         if location==session["location"] or location=="all":
-            saved={}
-            saved["start"]=conversione_minuti_assoluti(session["day"], session["hour"], session["minute"])
+            saved={"start": conversione_minuti_assoluti(session["day"], session["hour"], session["minute"])}
             saved["end"]=saved["start"]+int(quest["duration"])
             if (max(saved["start"], current["start"]))<min(saved["end"], current["end"]):
                 flash("The session of ["+DAYS_OF_WEEK[day]+" h"+str(hour)+":"+str(minute)+"] conflicts with the quest ["+quest["title"] +"]", 'danger')
-                overlap=True
-                break
-    return overlap
+                return True
+    return False
 
 def stampa_errori(errors):
     for error in errors:
@@ -264,6 +258,7 @@ def quest_check_and_save():
         flash("The session of ["+session[3]+":"+DAYS_OF_WEEK[session[0]]+" h"+str(session[1])+":"+str(session[2])+"] is created correctly", 'success')   
     return redirect(url_for('profile'))
 
+# DA MODIFICARE
 def split_title(title):
     b=len(title)//4
     r=len(title)%4
@@ -298,8 +293,8 @@ def book_session():
     session=session_dao.get_session_by_id(session_id)
     if not session:
         flash("The selected session does not exist", "danger")
-        return redirect(url_for('home')) # NON posso prenotarmi a sessioni del passato
-    if not can_cancel(session["day"], session["hour"], session["minute"], 0):
+        return redirect(url_for('home')) 
+    if not can_cancel(session["day"], session["hour"], session["minute"], 0): # NON posso prenotarmi a sessioni del passato
         flash("You cannot join a session that has already passed or is starting in less than 8 hours", "danger")
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
     if role not in ROLES:
@@ -466,36 +461,18 @@ def create_session(quest_id):
     if len(errors)!=0 or check_overlap(day, hour, minute, int(quest["duration"]), location, sessions)==True:
         stampa_errori(errors)
         return redirect(url_for('profile'))
-    day_index=DAYS_OF_WEEK.index(day)
-    session_dao.create_session(quest_id, location, day_index, hour, minute)
+    session_dao.create_session(quest_id, location, DAYS_OF_WEEK.index(day), hour, minute)
     flash("The session has been successfully created", "success")
     return redirect(url_for('profile'))
 
 @app.route("/admin")
 def admin():
-    if current_user.role!="admin":
-        flash("You do not have permission to access this page", "danger")
-        return redirect(url_for("home"))
-    adventurers_db=[dict(row) for row in users_dao.get_all_users_for_role("adventurer")]
-    user_participation_counter={user["username"]: 0 for user in adventurers_db}
+    # if current_user.role!="admin":
+    #     flash("You do not have permission to access this page", "danger")
+    #     return redirect(url_for("home"))
+    adventurers_db=users_dao.get_adventures_with_number_of_participation()
     all_detailed_quests=quests_dao.get_all_info_of_all_quests()
-    all_info={"total_adventurers":len(adventurers_db), "total_quests":len(all_detailed_quests), "total_sessions":0, "total_participations":0, "popular_session":None}
-    total_roles={"Warrior":0, "Mage":0, "Healer":0}
-    total_types={"Combact":0, "Exploration":0, "Stealth":0, "Magic":0, "Survival":0}
-    popular_session={"id": -1, "total":0, "location":"", "title":"", "day":"", "hour":-1, "minute":-1}
-    for quest in all_detailed_quests:
-        for session in quest["sessions"]:
-            all_info["total_sessions"]+=1
-            all_info["total_participations"]+=session["total_booked"]
-            total_types[quest["type"]]+=session["total_booked"]
-            if session["total_booked"]>popular_session["total"]:
-                popular_session={"id": session["id"], "total":session["total_booked"], "title":split_title(quest["title"]), "location":session["location"], "day_name":session["day"], "hour":session["hour"], "minute":session["minute"]}
-            for adventurer in session["adventurers"]:
-                total_roles[adventurer["role"]]+=(len(adventurer["companions"])+1)
-                user_participation_counter[adventurer["username"]]+=1
-    all_info["total_roles"]=total_roles
-    all_info["popular_type"]=max(total_types, key=total_types.get)
-    for user in adventurers_db:
-        user["participations_count"]=user_participation_counter.get(user["username"], 0)
-    all_info["popular_session"]=popular_session
-    return render_template("admin.html", users=adventurers_db, quests=all_detailed_quests, infos=all_info)
+    general_infos=quests_dao.get_admin_stats()
+    if general_infos["popular_session"] and general_infos["popular_session"]["id"]!=-1:
+        general_infos["popular_session"]["title"]=split_title(general_infos["popular_session"]["title"])
+    return render_template("admin.html", users=adventurers_db, quests=all_detailed_quests, infos=general_infos)

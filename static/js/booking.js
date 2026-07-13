@@ -5,9 +5,9 @@ document.addEventListener("click", function(event) {
         const container=document.querySelector(`#companion-container-${sessionId}`);
         
         if (container) {
-            const newCompanion = document.createElement("div");
+            const newCompanion=document.createElement("div");
             newCompanion.classList.add("detail-companion-container");
-            newCompanion.innerHTML = `
+            newCompanion.innerHTML=`
                 <div class="p-1 mb-0">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <label class="logreg-label detail-modal-label mb-0">Companion (username):</label>

@@ -63,30 +63,28 @@ def get_companions_for_reservation(reservation_id):
     return reservations
 
 def get_detailed_adventurer_quests(user_id):
+    conn=sqlite3.connect(DB_PATH)
+    conn.row_factory=sqlite3.Row
+    cursor=conn.cursor()
+    query="""SELECT DISTINCT q.id FROM quests q
+        JOIN sessions s ON q.id=s.quest_id JOIN reservations r ON s.id=r.session_id
+        WHERE r.user_id=?"""
+    cursor.execute(query, (user_id,))
     adventurer_quests=[]
-    all_quests=quests_dao.get_all_quest()
-    for quest in all_quests:
-        quest_dict=dict(quest)
-        quest_dict["sessions"]=[]
-        sessions=session_dao.get_sessions_of_quest(quest["id"])
+    for quest_id in [row["id"] for row in cursor.fetchall()]:
+        quest=dict(quests_dao.get_quest_by_id(quest_id))
+        quest["sessions"]=[]
+        sessions=session_dao.get_sessions_of_quest(quest_id)
         for session in sessions:
             reservation=get_reservation_by_session_for_user(user_id, session["id"])
             if reservation:
-                companions=[comp["username"] for comp in get_companions_for_reservation(reservation["id"])]
-                quest_dict["sessions"].append({
-                    "session_id":session["id"],
-                    "location":session["location"],
-                    "day":session["day"],
-                    "hour":session["hour"],
-                    "minute":session["minute"],
-                    "role":reservation["role"],
-                    "total_people":reservation["total_people"],
-                    "companions":companions
-                })
-                
-        # 4. Aggiunge la quest alla lista finale solo se l'utente ha almeno una sessione prenotata al suo interno
-        if quest_dict["sessions"]:
-            adventurer_quests.append(quest_dict)    
+                companions=[companion["username"] for companion in get_companions_for_reservation(reservation["id"])]
+                quest["sessions"].append({ "session_id":session["id"], "location":session["location"], "day":session["day"], "hour":session["hour"],
+                    "minute":session["minute"], "role":reservation["role"], "total_people":reservation["total_people"], "companions":companions })
+        adventurer_quests.append(quest)
+    conn.commit()
+    cursor.close()
+    conn.close()    
     return adventurer_quests
 
 def get_reservation_by_session_for_user(user_id, session_id):
@@ -104,9 +102,9 @@ def get_reservation_by_session_for_user(user_id, session_id):
 def delete_reservation(reservation_id):
     conn=sqlite3.connect(DB_PATH)
     cursor=conn.cursor()
-    query="DELETE FROM companions WHERE reservation_id=?"
-    cursor.execute(query, (reservation_id,))
     query="DELETE FROM reservations WHERE id=?"
+    cursor.execute(query, (reservation_id,))
+    query="DELETE FROM companions WHERE reservation_id=?"
     cursor.execute(query, (reservation_id,))
     conn.commit()
     cursor.close()
