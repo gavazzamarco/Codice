@@ -6,9 +6,9 @@
     <div class="col-9 d-flex profile-user-container border-multicolor">
         <div class="h-100">
             {% if current_user.profile_img %}
-            <img src="{{ url_for('static', filename=current_user.profile_img) }}" class="profile-user-img object-fit-cover" alt="Profile photo of {{ current_user.username }}">
+            <img src="{{ url_for('static', filename=current_user.profile_img) }}" class="profile-user-img border-multicolor object-fit-cover" alt="Profile photo of {{ current_user.username }}">
             {% else %}
-            <img src="{{ url_for('static', filename='images/no_profile_img.png') }}" class="profile-user-img object-fit-cover" alt="Default profile image">
+            <img src="{{ url_for('static', filename='images/no_profile_img.png') }}" class="profile-user-img border-multicolor object-fit-cover" alt="Default profile image">
             {% endif %}
         </div>
         <div class="h-100">
@@ -25,9 +25,9 @@
                     <span>{{ current_user.role }}</span>
                 </div>
             </div>
-            {% if current_user.description %}
+            {% if current_user.bio %}
             <div class="detail-description profile-description py-3 px-4 mt-3 ms-3">
-                <span>{{ current_user.description }}</span>
+                <span>{{ current_user.bio }}</span>
             </div>
             {% endif %}
         </div>
@@ -41,7 +41,7 @@
     <div class="container-fluid profile-quests-container">
         <div class="row justify-content-center">
             {% for quest in quests %}
-            <div class="col-5 profile-quests-container">
+            <div class="col-5 profile-quests-container quests-distance">
                 <!-- Ho dovuto aggiungere:
                  h-100 per forzare la card a prendere tutta l'altezza della colonna
                  d-flex flex-column per trasformare la card in un contenitore flex verticale.  
@@ -83,26 +83,26 @@
                                 <div class="col-9">
                                     <div class="d-flex align-items-center justify-content-around">
                                         <div class="profile-session-date">
-                                            <span class="color-green">{{ session.day }}</span> <span class="color-blue">{{ session.hour }}:</span><span class="color-yellow">{{ session.minute }}</span>
-                                            <div class="d-flex justify-content-center align-items-center text-center">
-                                                <p class="quest-card-badge quest-location profile-location mt-2">Location: {{ session.location }}</p>
-                                            </div>
+                                            <span class="color-green">{{ session.day }}</span> <span class="color-blue">{{ session.hour_formatted }}:</span><span class="color-yellow">{{ session.minute_formatted }}</span>  
                                         </div>
-                                        {% if session.role=='Warrior' %}
-                                        <span class="quest-card-badge quest-duration ms-3 detail-delete">{{ session.role }}</span>
-                                        {% elif session.role=='Mage' %}
-                                        <span class="quest-card-badge quest-difficulty ms-3 detail-delete">{{ session.role }}</span>
-                                        {% else %}
-                                        <span class="quest-card-badge quest-type ms-3 detail-delete">{{ session.role }}</span>
-                                        {% endif %}
+                                        <div class="mb-auto mt-2">
+                                            {% if session.role=='Warrior' %}
+                                            <span class="quest-card-badge quest-duration ms-3 detail-delete">{{ session.role }}</span>
+                                            {% elif session.role=='Mage' %}
+                                            <span class="quest-card-badge quest-difficulty ms-3 detail-delete">{{ session.role }}</span>
+                                            {% else %}
+                                            <span class="quest-card-badge quest-type ms-3 detail-delete">{{ session.role }}</span>
+                                            {% endif %} 
+                                        </div>
+                                    </div>
+                                    <div class="d-flex justify-content-center align-items-center text-center detail-delete">
+                                        <p class="quest-card-badge quest-location mt-2 text-center">Location: {{ session.location }}</p>
                                     </div>
                                     {% if session.companions %}
                                     <div class="profile-companion-container my-3 mx-4 p-3">
-                                        <h3 class="profile-companion-title text-center mb-2">Your companions</h3>
+                                        <span class="detail-session-title color-red text-center mb-2">Companion: </span>
                                         {% for companion in session.companions %}
-                                        <ul class="m-0 ms-4 p-0">
-                                            <li class="profile-companion-text ms-4">{{ companion }}</li>
-                                        </ul>
+                                        <span class="profile-companion-text ms-1 pb-2">{{ companion }}</span>
                                         {% endfor %}
                                     </div>
                                     {% endif %}

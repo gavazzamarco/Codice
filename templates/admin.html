@@ -67,7 +67,7 @@ active
                         </div>
                     </div>
                     <div class="profile-session-date">
-                        <span class="color-green">{{ infos.popular_session.day_name }}</span> <span class="color-blue">{{ infos.popular_session.hour }}:</span><span class="color-yellow">{{ infos.popular_session.minute }}</span>
+                        <span class="color-green">{{ infos.popular_session.day_name }}</span> <span class="color-blue">{{ infos.popular_session.hour_formatted }}:</span><span class="color-yellow">{{ infos.popular_session.minute_formatted }}</span>
                     </div>
                 </div>
                 {% else %}
@@ -166,7 +166,7 @@ active
                                 <div class="profile-master-session border-multicolor py-4 px-3 mb-4 container-fluid">
                                     <div class="d-flex align-items-center justify-content-around">
                                         <div class="profile-session-date">
-                                            <span class="color-green">{{ session.day }}</span> <span class="color-blue">{{ session.hour }}:</span><span class="color-yellow">{{ session.minute }}</span>
+                                            <span class="color-green">{{ session.day }}</span> <span class="color-blue">{{ session.hour_formatted }}:</span><span class="color-yellow">{{ session.minute_formatted }}</span>
                                         </div>
                                     </div>
                                     <div class="line-tiny mt-3 mb-3">

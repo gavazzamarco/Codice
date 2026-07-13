@@ -85,6 +85,11 @@ def get_filtered_quest(day, type, difficulty, role):
     conn.close()
     return filtered_quests
 
+def formatta_orario(sessione):
+    sessione["hour_formatted"] = f"{int(sessione['hour']):02d}"
+    sessione["minute_formatted"] = f"{int(sessione['minute']):02d}"
+    return sessione
+
 def get_all_info_of_all_quests():
     quests=[dict(row) for row in get_all_quest()]
     for quest in quests:
@@ -92,6 +97,7 @@ def get_all_info_of_all_quests():
         sessions=[dict(session) for session in session_dao.get_sessions_of_quest(quest["id"])]
         for session in sessions:
             session["day"]=DAYS_OF_WEEK[session["day"]]
+            formatta_orario(session)
             session["adventurers"]=[]
             reservations=reservation_dao.get_reservations_for_session(session["id"])
             total_booked=0

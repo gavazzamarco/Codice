@@ -6,9 +6,9 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime
 
-SIMULATE_DAY=2 # Wednesday
-SIMULATE_HOUR=18
-SIMULATE_MIN=25
+SIMULATE_DAY=0 # Wednesday
+SIMULATE_HOUR=00
+SIMULATE_MIN=00
 DAYS_OF_WEEK=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 LOCATIONS=["Axel", "Kingdom of Elroad", "Arcanletia"]
 DIFFICULTY=["Easy", "Medium", "Hard", "Legendary"]
@@ -99,11 +99,14 @@ def check_and_save_photo(photo, path):
 def create_account():
     name=request.form.get("name")
     surname=request.form.get("surname")
-    username=request.form.get("username")
+    username=request.form.get("username").strip()
     password=generate_password_hash(request.form.get("password"))
     role=request.form.get("role")
     profile_img=request.files["profile_img"]
     bio=request.form.get("bio")
+    if username is None or username=="":
+        flash("The username is mandatory", "danger")
+        return redirect(url_for('register'))
     if users_dao.get_user_by_username(username) is not None:
         flash('A user with this username already exists', 'danger')
         return redirect(url_for('register'))
@@ -152,7 +155,7 @@ def validation():
             bio=db_user["bio"],)
         login_user(new)
         flash("Welcome back! "+db_user["name"]+" "+db_user["surname"]+"!", "success")
-    return redirect(url_for("home"))
+    return redirect(url_for("profile"))
 
 @app.route("/logout")
 @login_required
@@ -264,6 +267,11 @@ def split_title(title):
     r=len(title)%4
     return [title[i*b + min(i, r) : (i+1)*b + min(i+1, r)] for i in range(4)]
 
+def formatta_orario(sessione):
+    sessione["hour_formatted"] = f"{int(sessione['hour']):02d}"
+    sessione["minute_formatted"] = f"{int(sessione['minute']):02d}"
+    return sessione
+
 @app.route("/quest/<int:quest_id>")
 def quest_detail(quest_id):
     quest_db=quests_dao.get_quest_by_id(quest_id)
@@ -273,6 +281,7 @@ def quest_detail(quest_id):
     sessions_db=[dict(row) for row in session_dao.get_sessions_of_quest(quest_id)]
     for session in sessions_db:
         session["day"]=DAYS_OF_WEEK[session["day"]]
+        formatta_orario(session)
         reservations_session=reservation_dao.get_reservations_for_session(session["id"])
         for role in ROLES:
             session[role]=LIMITS[role]
@@ -295,7 +304,7 @@ def book_session():
         flash("The selected session does not exist", "danger")
         return redirect(url_for('home')) 
     if not can_cancel(session["day"], session["hour"], session["minute"], 0): # NON posso prenotarmi a sessioni del passato
-        flash("You cannot join a session that has already passed or is starting in less than 8 hours", "danger")
+        flash("You cannot join a session that has already passed", "danger")
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
     if role not in ROLES:
         flash("The role must be selected from the available options", "danger")
@@ -332,6 +341,8 @@ def profile():
         return redirect(url_for('profile_adventurer'))
     elif current_user.role=="master":
         return redirect(url_for('profile_master'))
+    elif current_user.role=="admin":
+        return redirect(url_for('admin'))
     return redirect(url_for('home'))
 
 def can_cancel(day, hour, minute, SOGLIA=8*60):
@@ -350,6 +361,7 @@ def profile_adventurer():
         for session in quest["sessions"]:
             session["can_cancel"]=can_cancel(session["day"], session["hour"], session["minute"])
             session["day"]=DAYS_OF_WEEK[session["day"]]
+            formatta_orario(session)
     return render_template("profile_adventurer.html", quests=user_quests_dict)
 
 @app.route("/cancel_reservation/<int:session_id>")
@@ -377,8 +389,8 @@ def profile_master():
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for("home"))
     all_detailed_quests=quests_dao.get_all_info_of_all_quests()
-    for row in all_detailed_quests:
-        row["title_split"]=split_title(row["title"])
+    for quest in all_detailed_quests:
+        quest["title_split"]=split_title(quest["title"])
     return render_template("profile_master.html", quests=all_detailed_quests, days=DAYS_OF_WEEK, locations=LOCATIONS)
 
 @app.route("/cancel_session/<int:session_id>")
@@ -466,13 +478,15 @@ def create_session(quest_id):
     return redirect(url_for('profile'))
 
 @app.route("/admin")
+@login_required
 def admin():
-    # if current_user.role!="admin":
-    #     flash("You do not have permission to access this page", "danger")
-    #     return redirect(url_for("home"))
+    if current_user.role!="admin":
+        flash("You do not have permission to access this page", "danger")
+        return redirect(url_for("home"))
     adventurers_db=users_dao.get_adventures_with_number_of_participation()
     all_detailed_quests=quests_dao.get_all_info_of_all_quests()
     general_infos=quests_dao.get_admin_stats()
     if general_infos["popular_session"] and general_infos["popular_session"]["id"]!=-1:
         general_infos["popular_session"]["title"]=split_title(general_infos["popular_session"]["title"])
+        formatta_orario(general_infos["popular_session"])
     return render_template("admin.html", users=adventurers_db, quests=all_detailed_quests, infos=general_infos)

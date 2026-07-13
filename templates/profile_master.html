@@ -6,9 +6,9 @@
     <div class="col-9 d-flex profile-user-container border-multicolor">
         <div class="h-100">
             {% if current_user.profile_img %}
-            <img src="{{ url_for('static', filename=current_user.profile_img) }}" class="profile-user-img object-fit-cover" alt="Profile photo of {{ current_user.username }}">
+            <img src="{{ url_for('static', filename=current_user.profile_img) }}" class="profile-user-img border-multicolor object-fit-cover" alt="Profile photo of {{ current_user.username }}">
             {% else %}
-            <img src="{{ url_for('static', filename='images/no_profile_img.png') }}" class="profile-user-img object-fit-cover" alt="Default profile image">
+            <img src="{{ url_for('static', filename='images/no_profile_img.png') }}" class="profile-user-img border-multicolor object-fit-cover" alt="Default profile image">
             {% endif %}
         </div>
         <div class="h-100">
@@ -25,9 +25,9 @@
                     <span>{{ current_user.role }}</span>
                 </div>
             </div>
-            {% if current_user.description %}
+            {% if current_user.bio %}
             <div class="detail-description profile-description py-3 px-4 mt-3 ms-3">
-                <span>{{ current_user.description }} se ni mondo vi fosse un pò di bene ed ognuno si considerasse suo fratello si sarebbero meno pensieri e meno pene ed il mondo</span>
+                <span>{{ current_user.bio }}</span>
             </div>
             {% endif %}
         </div>
@@ -40,7 +40,7 @@
     {% if quests %}
     <div class="row justify-content-center profile-padding-bottom">
         {% for quest in quests %}
-        <div class="col-9 profile-padding-bottom card quest-container p-0">
+        <div class="col-9 quests-distance card quest-container p-0">
             <section class="position-relative border-bottom">
                 <img src="{{ url_for('static', filename=quest.illustration) }}" class="card-img object-fit-cover quest-card-image" alt="Illustration of quest {{quest.title }}">
                 <div class="card-img-overlay">
@@ -73,9 +73,9 @@
                         <div class="profile-master-session border-multicolor py-4 px-3 h-100 d-flex flex-column container-fluid">
                             <div class="d-flex align-items-center justify-content-around">
                                 <div class="profile-session-date text-center">
-                                    <span class="color-green">{{ session.day }}</span> <span class="color-blue">{{ session.hour }}:</span><span class="color-yellow">{{ session.minute }}</span>
+                                    <span class="color-green">{{ session.day }}</span> <span class="color-blue">{{ session.hour_formatted }}:</span><span class="color-yellow">{{ session.minute_formatted }}</span>
                                     <div class="d-flex justify-content-center align-items-center">
-                                        <p class="quest-card-badge quest-location profile-location mt-2">Location: {{ session.location }}</p>
+                                        <p class="quest-card-badge quest-location detail-delete mt-2">Location: {{ session.location }}</p>
                                     </div>
                                 </div>
                             </div>
@@ -118,7 +118,7 @@
                                             {% if adventurer.companions %}
                                                 <ul>
                                                 {% for companion in adventurer.companions %}
-                                                    <li class="ms-2">{{ companion }}</li>
+                                                    <li class="ms-2 profile-companion-text detail-delete">{{ companion }}</li>
                                                 {% endfor %}
                                                 </ul>
                                             {% endif %}
@@ -149,7 +149,7 @@
                                     <span class="color-red">{{ quest.title_split[0] }}</span><span class="color-yellow">{{ quest.title_split[1] }}</span><span class="color-green">{{ quest.title_split[2] }}</span><span class="color-blue">{{ quest.title_split[3] }}</span>
                                 </h1>
                                 <div class="text-center detail-session-title color-green mb-1 mt-3">
-                                    <h2 class="quest-card-title detail-modal-date">{{ session.day }} at {{ session.hour }}:{{ session.minute }}</h2>
+                                    <h2 class="quest-card-title detail-modal-date">{{ session.day }} at {{ session.hour_formatted }}:{{ session.minute_formatted }}</h2>
                                     <div class="d-flex justify-content-center align-items-center">
                                         <p class="quest-card-badge quest-duration mt-2">Location: {{ session.location }}</p>
                                     </div>
