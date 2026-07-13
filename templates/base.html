@@ -9,7 +9,7 @@
 </head>
 <body class="min-vh-100">
     <header class="sticky-top">
-        <div class="d-flex flex-wrap justify-content-between align-items-center navbar-container">
+        <nav class="d-flex flex-wrap justify-content-between align-items-center navbar-container">
             <a href="{{ url_for('home') }}" class="d-flex align-items-center text-decoration-none">
                 <img src="{{ url_for('static', filename='images/logo-header.jpg') }}" class="header-logo" alt="Logo Konosuba">
                 <span class="header-title ms-2">
@@ -37,7 +37,7 @@
                 </li>
                 {% endif %}
             </ul>
-        </div>
+        </nav>
         <div class="line-multicolor w-100 d-flex">
             <div class="background-red w-25 h-100"></div>
             <div class="background-yellow w-25 h-100"></div>
@@ -61,13 +61,11 @@
         {% block content %}
         {% endblock %}
     </main>
-    <div>
-        {% if current_user.is_authenticated and current_user.role=='master' %}
-        <a href="{{ url_for('quest_create') }}" class="common-button button-yellow quest-create-button border-multicolor {% block visibilty %}{% endblock %}">
-            <span class="color-red">NE</span><span class="color-yellow">W Q</span><span class="color-green">UE</span><span class="color-blue">ST</span>
-        </a>
-        {% endif %}
-    </div>
+    {% if current_user.is_authenticated and current_user.role=='master' %}
+    <a href="{{ url_for('quest_create') }}" class="common-button button-yellow quest-create-button border-multicolor {% block visibility %}{% endblock %}">
+        <span class="color-red">NE</span><span class="color-yellow">W Q</span><span class="color-green">UE</span><span class="color-blue">ST</span>
+    </a>
+    {% endif %}
     <footer>
         <div class="line-multicolor w-100 d-flex flex-row-reverse">
             <div class="background-red w-25 h-100"></div>
@@ -76,14 +74,14 @@
             <div class="background-blue w-25 h-100"></div>
         </div>
         <div class="container-fluid">
-            <div class="row d-flex justify-content-center">
+            <div class="row justify-content-center">
                 <div class="col-5 d-flex justify-content-center align-items-center mt-3 mb-3">
-                    <a href="{{ url_for('home') }}" class="d-flex align-items-center text-decoration-none">
+                    <a href="{{ url_for('home') }}" class="text-decoration-none">
                         <img src="{{ url_for('static', filename='images/logo-footer.png') }}" class="footer-logo" alt="Logo Konosuba">
                     </a>
                 </div>
                 <div class="col-5 text-center mt-4 mb-4 footer-text">
-                    <h1 class="footer-title">Guild Terms and Conditions:</h1>
+                    <h4 class="footer-title">Guild Terms and Conditions:</h4>
                     <span class="color-red">Adventurers browsing this site </span><span class="color-yellow">accept the risk of spontaneous </span><span class="color-green">explosions, giant toad attacks </span><span class="color-blue">and the total absence of Eris rewards</span>
                 </div>
             </div>

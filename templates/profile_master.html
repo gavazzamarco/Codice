@@ -13,7 +13,7 @@
         </div>
         <div class="h-100">
             <div class="d-flex align-items-center mt-2">
-                <div class="me-4 p3-4">
+                <div class="me-4">
                     <div class="profile-name-surname">
                         <span class="color-green">{{ current_user.name }}</span> <span class="color-blue">{{ current_user.surname }}</span>
                     </div>
@@ -21,13 +21,13 @@
                         <span class="color-red">{{ current_user.username }}</span>
                     </div>
                 </div>
-                <div class="quest-card-badge quest-location text-uppercase ms-4">
-                    <span>{{ current_user.role }}</span>
+                <div class="quest-card-badge quest-location text-uppercase logreg-input ms-4">
+                    {{ current_user.role }}
                 </div>
             </div>
             {% if current_user.bio %}
             <div class="detail-description profile-description py-3 px-4 mt-3 ms-3">
-                <span>{{ current_user.bio }}</span>
+                {{ current_user.bio }}
             </div>
             {% endif %}
         </div>
@@ -48,9 +48,9 @@
                         <div class="flex-grow-1 me-2">
                             <h2 class="card-title quest-card-title">{{ quest.title }}</h2>
                             <div class="d-flex flex-wrap">
-                                <div class="quest-card-badge quest-type"><span>Type:</span> <span>{{ quest.type }}</span></div>
-                                <div class="quest-card-badge quest-difficulty"><span>Difficulty:</span> <span>{{ quest.difficulty }}</span></div>
-                                <div class="quest-card-badge quest-duration"><span>Duration:</span> <span>{{ quest.duration }}</span></div>
+                                <div class="quest-card-badge quest-type">Type: {{ quest.type }}</div>
+                                <div class="quest-card-badge quest-difficulty">Difficulty: {{ quest.difficulty }}</div>
+                                <div class="quest-card-badge quest-duration">Duration: {{ quest.duration }}</div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center align-items-end mb-3 me-4">
@@ -59,7 +59,7 @@
                     </div>
                 </div>
             </section>
-            <section class="card-body profile-card-body container-fluid pb-4">
+            <section class="card-body profile-card-body pb-4">
                 <div class="d-flex align-items-center justify-content-center gap-3">
                     <h2 class="text-center profile-card-body-title mt-3 mb-4 pb-3 me-1">
                         <span class="color-red">Avail</span><span class="color-yellow">able</span> <span class="color-green">Sess</span><span class="color-blue">ions</span>
@@ -70,35 +70,29 @@
                 <div class="row justify-content-center pb-4">
                     {% for session in quest.sessions %}
                     <div class="col-5 mb-4 pb-3">
-                        <div class="profile-master-session border-multicolor py-4 px-3 h-100 d-flex flex-column container-fluid">
+                        <div class="profile-master-session border-multicolor py-4 px-3 h-100 d-flex flex-column">
                             <div class="d-flex align-items-center justify-content-around">
                                 <div class="profile-session-date text-center">
                                     <span class="color-green">{{ session.day }}</span> <span class="color-blue">{{ session.hour_formatted }}:</span><span class="color-yellow">{{ session.minute_formatted }}</span>
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        <p class="quest-card-badge quest-location detail-delete mt-2">Location: {{ session.location }}</p>
-                                    </div>
+                                    <p class="quest-card-badge quest-location detail-delete mt-2 d-inline-block">Location: {{ session.location }}</p>
                                 </div>
                             </div>
-                            <div class="line-tiny mt-3 mb-3">
-                                <div class="background-green w-100 h-100"></div>
-                            </div>
-                            <div class="row px-4">
+                            <div class="line-tiny background-green mt-3 mb-3"></div>
+                            <div class="row px-4 text-center">
                                 <div class="col-4 detail-session-info color-blue">
-                                    <div class="d-flex justify-content-center">{{ session.Warrior }}</div>
-                                    <p class="d-flex justify-content-center">Warriors</p>
+                                    <div>{{ session.Warrior }}</div>
+                                    <p>Warriors</p>
                                 </div>
                                 <div class="col-4 detail-session-info color-yellow">
-                                    <div class="d-flex justify-content-center">{{ session.Mage }}</div>
-                                    <p class="d-flex justify-content-center">Mages</p>
+                                    <div>{{ session.Mage }}</div>
+                                    <p>Mages</p>
                                 </div>
                                 <div class="col-4 detail-session-info color-red">
-                                    <div class="d-flex justify-content-center">{{ session.Healer }}</div>
-                                    <p class="d-flex justify-content-center">Healers</p>
+                                    <div>{{ session.Healer }}</div>
+                                    <p>Healers</p>
                                 </div>
                             </div>
-                            <div class="line-tiny mt-2 mb-4">
-                                <div class="background-yellow w-100 h-100"></div>
-                            </div>
+                            <div class="line-tiny background-yellow mt-2 mb-4"></div>
                             <div class="profile-companion-container m-3 p-3">
                                 <h3 class="profile-companion-title text-center mb-1">Adventurers [ {{session.total_booked }} ]</h3>
                                 {% for adventurer in session.adventurers %}
@@ -128,9 +122,7 @@
                                 {% endfor %}
                             </div>
                             {% if session.total_booked==0 %}
-                            <div class="line-tiny mt-4 mb-4">
-                                <div class="background-blue w-100 h-100"></div>
-                            </div>
+                            <div class="line-tiny background-blue mt-4 mb-4"></div>
                             <div class="d-flex m-2">
                                 <a href="{{ url_for('cancel_session', session_id=session.id) }}" class="w-50 button-flat cancel m-1 text-center text-decoration-none">Cancel</a>
                                 <button class="w-50 button-flat approve m-1 text-center" data-bs-toggle="modal" data-bs-target="#modify-{{ session.id }}">Modify</button>
@@ -150,9 +142,7 @@
                                 </h1>
                                 <div class="text-center detail-session-title color-green mb-1 mt-3">
                                     <h2 class="quest-card-title detail-modal-date">{{ session.day }} at {{ session.hour_formatted }}:{{ session.minute_formatted }}</h2>
-                                    <div class="d-flex justify-content-center align-items-center">
-                                        <p class="quest-card-badge quest-duration mt-2">Location: {{ session.location }}</p>
-                                    </div>
+                                    <p class="quest-card-badge quest-location detail-delete mt-2 d-inline-block">Location: {{ session.location }}</p>
                                 </div>
                                 <div class="modal-body container-fluid">
                                     <div class="row">
@@ -166,8 +156,8 @@
                                             </select>
                                         </div>
                                         <div class="col-6">
-                                            <label for="day" class="logreg-label detail-modal-label">Day*</label>
-                                            <select id="day" name="day" class="form-control logreg-input mb-4" required>
+                                            <label for="day-{{ session.id }}" class="logreg-label detail-modal-label">Day*</label>
+                                            <select id="day-{{ session.id }}" name="day" class="form-control logreg-input mb-4" required>
                                                 <option value="">Select a day</option>
                                                 {% for day in days %}
                                                 <option value="{{ day }}">{{ day }}</option>
@@ -175,12 +165,12 @@
                                             </select>
                                         </div>
                                         <div class="col-3">
-                                            <label for="hour" class="logreg-label detail-modal-label">Hour*</label>
-                                            <input type="number" id="hour" name="hour" class="form-control logreg-input mb-4" placeholder="0-23" required>
+                                            <label for="hour-{{ session.id }}" class="logreg-label detail-modal-label">Hour*</label>
+                                            <input type="number" id="hour-{{ session.id }}" name="hour" class="form-control logreg-input mb-4" placeholder="0-23" min="0" max="23" required>
                                         </div>
                                         <div class="col-3">
-                                            <label for="minute" class="logreg-label detail-modal-label">Minute*</label>
-                                            <input type="number" id="minute" name="minute" class="form-control logreg-input mb-4" placeholder="0-59" required>
+                                            <label for="minute-{{ session.id }}" class="logreg-label detail-modal-label">Minute*</label>
+                                            <input type="number" id="minute-{{ session.id }}" name="minute" class="form-control logreg-input mb-4" placeholder="0-59" min="0" max="59" required>
                                         </div>
                                     </div>
                                 </div>
@@ -199,7 +189,7 @@
                 <div class="modal-dialog modal-dialog-centered modal-lg">
                     <form action="{{ url_for('create_session', quest_id=quest.id) }}" method="POST" class="modal-content detail-modal-content">
                         <div class="d-flex justify-content-end mt-3 me-3 mb-0">
-                            <button type="button" class="btn-close" data-bs-modal="modal" data-bs-dismiss="modal" aria-label="Close"></button>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <h1 class="text-center detail-modal-title mb-2 mt-0">
                             <span class="color-red">{{ quest.title_split[0] }}</span><span class="color-yellow">{{ quest.title_split[1] }}</span><span class="color-green">{{ quest.title_split[2] }}</span><span class="color-blue">{{ quest.title_split[3] }}</span>
@@ -252,15 +242,11 @@
         <div class="col-9 card position-relative quest-container p-0 m-0">
             <img src="{{ url_for('static', filename='images/no_quests.png') }}" class="card-img object-fit-cover" alt="No quest created">
             <div class="card-img-overlay">
-                <div class="home-noquest-container w-100">
-                    <div class="d-flex align-items-center justify-content-center text-center">
-                        <h3 class="card-title quest-card-title home-noquest-title">
-                            You haven't created any quests. <br> Get to work right away
-                        </h3>
-                    </div>
-                    <div class="d-flex justify-content-center align-items-center">
-                        <a href="{{ url_for('quest_create') }}" class="common-button button-blue">Create a Quest</a>
-                    </div>
+                <div class="home-noquest-container w-100 d-flex flex-column align-items-center text-center">
+                    <h3 class="card-title quest-card-title home-noquest-title mb-3">
+                        You haven't created any quests<br>Get to work right away!
+                    </h3>
+                    <a href="{{ url_for('quest_create') }}" class="common-button button-blue">Create a Quest</a>
                 </div>
             </div>
         </div>

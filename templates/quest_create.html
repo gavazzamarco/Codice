@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %} Create Quest {% endblock %}
-{% block visibilty %} d-none {% endblock %}
+{% block visibility %} d-none {% endblock %}
 {% block content %}
 <!-- Classe boostrap: "container-fluid": di fatto mette width: 100% a tutte le dimensioni -->
 <section class="container-fluid create-container">
@@ -21,7 +21,7 @@
                 <div class="row">
                     <div class="col-6">
                         <label class="logreg-label" for="duration">Duration*</label>
-                        <input class="form-control logreg-input mb-4" type="number" id="duration" name="duration" placeholder="Expressed in minutes" required>
+                        <input class="form-control logreg-input mb-4" type="number" id="duration" name="duration" placeholder="Expressed in minutes" min="1" required>
                     </div>
                     <div class="col-6">
                         <label class="logreg-label" for="type">Type*</label>
@@ -43,7 +43,7 @@
                     </div>
                     <div class="col-6">
                         <label class="logreg-label" for="illustration">Illustration*</label>
-                        <input type="file" id="illustration" name="illustration" class="form-control logreg-input mb-4" accept="jpg,jpeg,webp,png" required>
+                        <input type="file" id="illustration" name="illustration" class="form-control logreg-input mb-4" accept=".jpg, .jpeg, .webp, .png" required>
                     </div>
                 </div>
             </div>
@@ -65,11 +65,11 @@
                     </div>
                     <div class="col-3">
                         <label class="logreg-label" for="hour">Hour*</label>
-                        <input type="number" id="hour" name="hour" class="form-control logreg-input mb-4" placeholder="0-23" required>
+                        <input type="number" id="hour" name="hour" class="form-control logreg-input mb-4" placeholder="0-23" min="0" max="23" required>
                     </div>
                     <div class="col-3">
                         <label class="logreg-label" for="minute">Minute*</label>
-                        <input type="number" id="minute" name="minute" class="form-control logreg-input mb-4" placeholder="0-59" required>
+                        <input type="number" id="minute" name="minute" class="form-control logreg-input mb-4" placeholder="0-59" min="0" max="59" required>
                     </div>
                     <div class="col-2 d-flex justify-content-end align-items-center my-3">
                         <button type="button" class="create-button-delete">X</button>
@@ -89,7 +89,7 @@
                 <button type="button" id="add-session" class="common-button button-blue detail-session-title">Add a new session</button>
             </div>
             <div class="d-flex m-4 pt-4">
-                <button class="w-50 button-flat cancel me-1" type="reset">Cancel</button>
+                <button class="w-50 button-flat cancel me-1" type="reset">Clear</button>
                 <button class="w-50 button-flat approve ms-1" type="submit">Create</button>
             </div>
         </div>

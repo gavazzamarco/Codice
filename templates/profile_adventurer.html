@@ -13,7 +13,7 @@
         </div>
         <div class="h-100">
             <div class="d-flex align-items-center mt-2">
-                <div class="me-4 p3-4">
+                <div class="me-4">
                     <div class="profile-name-surname">
                         <span class="color-green">{{ current_user.name }}</span> <span class="color-blue">{{ current_user.surname }}</span>
                     </div>
@@ -21,7 +21,7 @@
                         <span class="color-red">{{ current_user.username }}</span>
                     </div>
                 </div>
-                <div class="quest-card-badge quest-location text-uppercase ms-4">
+                <div class="quest-card-badge quest-location text-uppercase logreg-input ms-4">
                     <span>{{ current_user.role }}</span>
                 </div>
             </div>
@@ -38,10 +38,10 @@
         <span class="color-red">JO</span><span class="color-yellow">IN</span> <span class="color-green">QUE</span><span class="color-blue">STS</span>
     </h1>
     {% if quests %}
-    <div class="container-fluid profile-quests-container">
+    <div class="container-fluid">
         <div class="row justify-content-center">
             {% for quest in quests %}
-            <div class="col-5 profile-quests-container quests-distance">
+            <div class="col-5 quests-distance">
                 <!-- Ho dovuto aggiungere:
                  h-100 per forzare la card a prendere tutta l'altezza della colonna
                  d-flex flex-column per trasformare la card in un contenitore flex verticale.  
@@ -78,7 +78,7 @@
                             <div class="background-green w-25 h-100"></div>
                             <div class="background-blue w-25 h-100"></div>
                         </div>
-                        <div class="container-fluid pt-4">
+                        <div class="container-fluid pt-4 mb-4">
                             <div class="row align-items-center">
                                 <div class="col-9">
                                     <div class="d-flex align-items-center justify-content-around">
@@ -129,11 +129,11 @@
     {% else %}
     <div class="d-flex justify-content-center profile-padding-bottom">
         <div class="col-9 card position-relative quest-container p-0 m-0">
-            <img src="{{ url_for('static', filename='images/sessions.png') }}" class="card-img object-fit-cover" alt="No quest created">
+            <img src="{{ url_for('static', filename='images/sessions.png') }}" class="card-img object-fit-cover" alt="No booked session">
             <div class="card-img-overlay">
                 <div class="home-noquest-container w-100">
                     <div class="d-flex align-items-center justify-content-center text-center">
-                        <h3 class="card-title quest-card-title home-noquest-title">
+                        <h3 class="card-title quest-card-title home-noquest-title text-center">
                             You haven't booked any sessions yet. Discover all available quests
                         </h3>
                     </div>
