@@ -14,26 +14,26 @@
         <div class="h-100">
             <div class="d-flex align-items-center mt-2">
                 <div class="me-4">
-                    <div class="profile-name-surname">
+                    <div class="text-size-21">
                         <span class="color-green">{{ current_user.name }}</span> <span class="color-blue">{{ current_user.surname }}</span>
                     </div>
-                    <div class="profile-username">
+                    <div class="text-size-18">
                         <span class="color-red">{{ current_user.username }}</span>
                     </div>
                 </div>
-                <div class="quest-card-badge quest-location text-uppercase logreg-input ms-4">
+                <div class="quest-card-badge quest-location text-uppercase text-serif-bold ms-4">
                     <span>{{ current_user.role }}</span>
                 </div>
             </div>
             {% if current_user.bio %}
-            <div class="detail-description profile-description py-3 px-4 mt-3 ms-3">
+            <div class="text-small-white profile-description py-3 px-4 mt-3 ms-3">
                 <span>{{ current_user.bio }}</span>
             </div>
             {% endif %}
         </div>
     </div>
 </section>
-<section class="profile-padding-bottom">
+<section class="padding-bottom-80">
     <h1 class="text-center page-title">
         <span class="color-red">JO</span><span class="color-yellow">IN</span> <span class="color-green">QUE</span><span class="color-blue">STS</span>
     </h1>
@@ -41,7 +41,7 @@
     <div class="container-fluid">
         <div class="row justify-content-center">
             {% for quest in quests %}
-            <div class="col-5 quests-distance">
+            <div class="col-5 margin-bottom-50">
                 <!-- Ho dovuto aggiungere:
                  h-100 per forzare la card a prendere tutta l'altezza della colonna
                  d-flex flex-column per trasformare la card in un contenitore flex verticale.  
@@ -53,7 +53,7 @@
                         <div class="card-img-overlay">
                             <div class="quest-card-text w-100 d-flex justify-content-between">
                                 <div class="flex-grow-1 me-2">
-                                    <h2 class="card-title quest-card-title">{{ quest.title }}</h2>
+                                    <h2 class="card-title title-big-yellow">{{ quest.title }}</h2>
                                     <div class="d-flex flex-wrap">
                                         <div class="quest-card-badge quest-type"><span>Type:</span> <span>{{ quest.type }}</span></div>
                                         <div class="quest-card-badge quest-difficulty"><span>Difficulty:</span> <span>{{ quest.difficulty }}</span></div>
@@ -67,7 +67,7 @@
                         </div>
                     </div>
                     <div class="card-body profile-card-body flex-grow-1">
-                        <h2 class="text-center profile-card-body-title mt-3 mb-4 pb-3">
+                        <h2 class="text-center text-size-40 mt-3 mb-4 pb-3">
                             <span class="color-red">Boo</span><span class="color-yellow">ked</span> <span class="color-green">Sess</span><span class="color-blue">ions</span>
                         </h2>
                         {% if quest.sessions %}
@@ -87,20 +87,20 @@
                                         </div>
                                         <div class="mb-auto mt-2">
                                             {% if session.role=='Warrior' %}
-                                            <span class="quest-card-badge quest-duration ms-3 detail-delete">{{ session.role }}</span>
+                                            <span class="quest-card-badge quest-duration ms-3 text-size-14">{{ session.role }}</span>
                                             {% elif session.role=='Mage' %}
-                                            <span class="quest-card-badge quest-difficulty ms-3 detail-delete">{{ session.role }}</span>
+                                            <span class="quest-card-badge quest-difficulty ms-3 text-size-14">{{ session.role }}</span>
                                             {% else %}
-                                            <span class="quest-card-badge quest-type ms-3 detail-delete">{{ session.role }}</span>
+                                            <span class="quest-card-badge quest-type ms-3 text-size-14">{{ session.role }}</span>
                                             {% endif %} 
                                         </div>
                                     </div>
-                                    <div class="d-flex justify-content-center align-items-center text-center detail-delete">
+                                    <div class="d-flex justify-content-center align-items-center text-center text-size-14">
                                         <p class="quest-card-badge quest-location mt-2 text-center">Location: {{ session.location }}</p>
                                     </div>
                                     {% if session.companions %}
                                     <div class="profile-companion-container my-3 mx-4 p-3">
-                                        <span class="detail-session-title color-red text-center mb-2">Companion: </span>
+                                        <span class="text-size-17 color-red text-center mb-2">Companion: </span>
                                         {% for companion in session.companions %}
                                         <span class="profile-companion-text ms-1 pb-2">{{ companion }}</span>
                                         {% endfor %}
@@ -110,7 +110,7 @@
                                 <div class="col-3">
                                     <div class="d-flex justify-content-center mb-1">
                                         {% if session.can_cancel %}
-                                        <a href="{{ url_for('cancel_reservation', session_id=session.session_id) }}" class="common-button button-blue profile-name-surname">Cancel</a>
+                                        <a href="{{ url_for('cancel_reservation', session_id=session.session_id) }}" class="common-button button-blue text-size-21">Cancel</a>
                                         {% else %}
                                         <span class="profile-locked">LOCKED</span>
                                         {% endif %}
@@ -127,13 +127,13 @@
         </div>
     </div>
     {% else %}
-    <div class="d-flex justify-content-center profile-padding-bottom">
+    <div class="d-flex justify-content-center padding-bottom-80">
         <div class="col-9 card position-relative quest-container p-0 m-0">
             <img src="{{ url_for('static', filename='images/sessions.png') }}" class="card-img object-fit-cover" alt="No booked session">
             <div class="card-img-overlay">
                 <div class="home-noquest-container w-100">
                     <div class="d-flex align-items-center justify-content-center text-center">
-                        <h3 class="card-title quest-card-title home-noquest-title text-center">
+                        <h3 class="card-title title-big-yellow home-noquest-title text-center">
                             You haven't booked any sessions yet. Discover all available quests
                         </h3>
                     </div>

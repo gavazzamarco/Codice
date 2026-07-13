@@ -109,6 +109,10 @@ def get_all_info_of_all_quests():
                     "companions":[comp_row['username'] for comp_row in reservation_dao.get_companions_for_reservation(reservation["id"])]})
                 total_booked+=reservation["total_people"]
                 role_counts[reservation["role"]]+=reservation["total_people"]
+            session["most_requested_roles"]=[]
+            if total_booked>0:
+                most_requested=[role for role, count in role_counts.items() if count==max(role_counts.values())]
+                session["most_requested_roles"]=most_requested
             session["total_booked"]=total_booked
             for role in LIMITS:
                 session[role]=LIMITS[role]-role_counts[role]
@@ -120,17 +124,21 @@ def get_admin_stats():
     all_info={"total_adventurers":len(users_dao.get_adventures_with_number_of_participation()), "total_quests":len(all_detailed_quests), "total_sessions":0, "total_participations":0, "popular_session":None}
     total_roles={"Warrior":0, "Mage":0, "Healer":0}
     total_types={"Combact":0, "Exploration":0, "Stealth":0, "Magic":0, "Survival":0}
-    popular_session={"id": -1, "total":0, "location":"", "title":"", "day":"", "hour":-1, "minute":-1}
+    popular_sessions=[]
+    max_popular_session=0
     for quest in all_detailed_quests:
         for session in quest["sessions"]:
             all_info["total_sessions"]+=1
             all_info["total_participations"]+=session["total_booked"]
             total_types[quest["type"]]+=session["total_booked"]
-            if session["total_booked"]>popular_session["total"]:
-                popular_session={"id": session["id"], "total":session["total_booked"], "title":quest["title"], "location":session["location"], "day_name":session["day"], "hour":session["hour"], "minute":session["minute"]}
+            if session["total_booked"]>max_popular_session:
+                max_popular_session=session["total_booked"]
+                popular_sessions=[{"id": session["id"], "total":session["total_booked"], "title":quest["title"], "location":session["location"], "day_name":session["day"], "hour":session["hour"], "minute":session["minute"]}]
+            elif session["total_booked"]==max_popular_session and session["total_booked"]!=0:
+                popular_sessions.append({"id": session["id"], "total":session["total_booked"], "title":quest["title"], "location":session["location"], "day_name":session["day"], "hour":session["hour"], "minute":session["minute"]})
             for adventurer in session["adventurers"]:
                 total_roles[adventurer["role"]]+=(len(adventurer["companions"])+1)
     all_info["total_roles"]=total_roles
-    all_info["popular_type"]=max(total_types, key=total_types.get)
-    all_info["popular_session"]=popular_session
+    all_info["popular_type"]=max(total_types, key=total_types.get) if max(total_types.values())>0 else None
+    all_info["popular_sessions"]=popular_sessions
     return all_info

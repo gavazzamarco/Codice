@@ -17,12 +17,12 @@
         <div class="background-blue w-25 h-100"></div>
     </div>
 </section>
-<section class="col-10 home-filtri-box border-multicolor mx-auto">
+<section class="col-10 dark-box border-multicolor mx-auto">
     <!-- Posso mettere la classe row anche nella form -->
     <form action="{{ url_for('home_filter') }}" method="POST" class="row">
         <div class="col">
             <label for="day" class="home-filtri-label color-red ps-1 pb-1">Day</label>
-            <select id="day" name="day" class="form-control logreg-input">
+            <select id="day" name="day" class="form-control text-serif-bold">
                 <option value="">Select a day</option>
                 {% for day in days %}
                 <option value="{{ day }}" {% if day==giorno %} selected {% endif %}>{{ day }}</option>
@@ -31,7 +31,7 @@
         </div>
         <div class="col">
             <label for="type" class="home-filtri-label color-yellow ps-1 pb-1">Type</label>
-            <select id="type" name="type" class="form-control logreg-input">
+            <select id="type" name="type" class="form-control text-serif-bold">
                 <option value="">Select a type</option>
                 {% for type in types %}
                 <option value="{{ type }}" {% if type==tipo %} selected {% endif %}>{{ type }}</option>
@@ -40,7 +40,7 @@
         </div>
         <div class="col">
             <label for="difficulty" class="home-filtri-label color-green ps-1 pb-1">Difficulty</label>
-            <select id="difficulty" name="difficulty" class="form-control logreg-input">
+            <select id="difficulty" name="difficulty" class="form-control text-serif-bold">
                 <option value="">Select a difficulty</option>
                 {% for difficulty in difficulties %}
                 <option value="{{ difficulty }}" {% if difficulty==difficolta %} selected {% endif %}>{{ difficulty
@@ -50,7 +50,7 @@
         </div>
         <div class="col">
             <label for="role" class="home-filtri-label color-blue ps-1 pb-1">Role</label>
-            <select id="role" name="role" class="form-control logreg-input">
+            <select id="role" name="role" class="form-control text-serif-bold">
                 <option value="">Select a role</option>
                 {% for role in roles %}
                 <option value="{{ role }}" {% if role==ruolo %} selected {% endif %}>{{ role }}</option>
@@ -66,13 +66,13 @@
     </form>
 </section>
 <!-- Ho dovuto aggiungere container-flui per evitare lo strabordamento -->
-<section class="home-quest-container container-fluid">
+<section class="padding-bottom-70 container-fluid">
     <h2 class="page-title text-center">
         <span class="color-red">AVAIL</span><span class="color-yellow">ABLE</span> <span class="color-green">QUE</span><span class="color-blue">STS</span>
     </h2>
     {% if quests %}
     {% for quest in quests %}
-    <div class="row quests-distance">
+    <div class="row margin-bottom-50">
         <div class="col-2 d-flex align-items-center justify-content-center">
             {% if quest.foto_sinistra %}
             <img src="{{ url_for('static', filename=quest.foto_sinistra) }}" class="img-fluid object-fit-cover lateral-figure" alt="Decoration photo">
@@ -83,7 +83,7 @@
             <div class="card-img-overlay">
                 <div class="quest-card-text w-100 d-flex justify-content-between">
                     <div class="flex-grow-1 me-2">
-                        <h3 class="card-title quest-card-title">{{ quest.title }}</h3>
+                        <h3 class="card-title title-big-yellow">{{ quest.title }}</h3>
                         <div class="d-flex flex-wrap">
                             <div class="quest-card-badge quest-type">Type: {{ quest.type }}</div>
                             <div class="quest-card-badge quest-difficulty">Difficulty: {{ quest.difficulty }}</div>
@@ -109,7 +109,7 @@
             <img src="{{ url_for('static', filename='images/filtraggio.png') }}" class="card-img object-fit-cover" alt="Image no quest found">
             <div class="card-img-overlay">
                 <div class="home-noquest-container w-100 d-flex flex-column align-items-center text-center">
-                    <h3 class="card-title quest-card-title home-noquest-title">
+                    <h3 class="card-title title-big-yellow home-noquest-title">
                         There are no quests currently available or that match the filters you set
                     </h3>
                     <a href="{{ url_for('home') }}" class="common-button button-blue">Reset filters</a>

@@ -26,6 +26,14 @@ if __name__ == "__main__":
     admin_img = ""
     admin_bio = ""
 
+    admin_name = "Luna"
+    admin_surname = ""
+    admin_username = "luna"
+    admin_password = generate_password_hash("Luna")  # NOTA: In produzione la password dovrebbe essere hashata
+    admin_role = "master"                  # Viene inserito come un normale utente ma con ruolo 'admin'
+    admin_img = "images/profile_imgs/1783940535_luna.png"
+    admin_bio = "Welcome to the Axel Adventurer's Guild! My name is Luna, and I am the head receptionist here. My main achievements include managing the daily quest board, processing bounty rewards, and somehow keeping this entire establishment running smoothly despite the daily chaos. If you want to register as an adventurer, pick up a quest, or cash in a reward, I am always happy to assist you! Please choose your quests responsibly... my stress levels are counting on it."
+
     try:
         create_user(
             name=admin_name,
@@ -36,6 +44,8 @@ if __name__ == "__main__":
             profile_img=admin_img,
             bio=admin_bio
         )
+
+
         print(f"Utente admin '{admin_username}' inserito con successo.")
     except sqlite3.IntegrityError as e:
         print(f"Errore durante l'inserimento: {e}. Probabilmente lo username '{admin_username}' esiste già.")

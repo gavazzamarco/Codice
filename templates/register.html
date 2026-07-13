@@ -5,27 +5,27 @@
 <section class="d-flex justify-content-center">
     <div class="col-6 logreg-card border-multicolor">
         <form action="{{ url_for('create_account') }}" method="POST" enctype="multipart/form-data" class="container-fluid">
-            <h1 class="text-center logreg-title mb-4 mt-4 pb-2">
+            <h1 class="text-center text-size-33 mb-4 mt-4 pb-2">
                 <span class="color-red">The</span> <span class="color-yellow">adve</span><span class="color-green">nture</span> <span class="color-blue">begin</span>
             </h1>
             <div class="row mb-4">
                 <div class="col-6">
                     <label for="name" class="logreg-label">Name*</label>
-                    <input type="text" id="name" name="name" class="form-control logreg-input" placeholder="Kazuma" required>
+                    <input type="text" id="name" name="name" class="form-control text-serif-bold" placeholder="Kazuma" required>
                 </div>
                 <div class="col-6">
                     <label for="surname" class="logreg-label">Surname*</label>
-                    <input type="text" id="surname" name="surname" class="form-control logreg-input" placeholder="Satou" required>
+                    <input type="text" id="surname" name="surname" class="form-control text-serif-bold" placeholder="Satou" required>
                 </div>
             </div>
             <label for="username" class="logreg-label">Username*</label>
-            <input type="text" id="username" name="username" class="form-control logreg-input mb-4" placeholder="kazumasatou" required>
+            <input type="text" id="username" name="username" class="form-control text-serif-bold mb-4" placeholder="kazumasatou" required>
             <label for="password" class="logreg-label">Password*</label>
-            <input type="password" id="password" name="password" class="form-control logreg-input mb-4" required>
+            <input type="password" id="password" name="password" class="form-control text-serif-bold mb-4" required>
             <div class="row mb-4">
                 <div class="col-6">
                     <label class="logreg-label" for="role">Role*</label>
-                    <select id="role" name="role" class="form-control logreg-input">
+                    <select id="role" name="role" class="form-control text-serif-bold">
                         <option value="None">Select a role</option>
                         <option value="adventurer">Adventure</option>
                         <option value="master">Guild Master</option>
@@ -33,11 +33,11 @@
                 </div>
                 <div class="col-6">
                     <label class="logreg-label" for="profile_img">Profile image (optional)</label>
-                    <input type="file" id="profile_img" name="profile_img" class="form-control logreg-input" accept="jpg,jpeg,webp,png">
+                    <input type="file" id="profile_img" name="profile_img" class="form-control text-serif-bold" accept="jpg,jpeg,webp,png">
                 </div>
             </div>
             <label class="logreg-label" for="bio">Biography (optional)</label>
-            <textarea id="bio" name="bio" class="form-control logreg-input mb-4" rows="4" placeholder="Share your past story and let others know about your achievements"></textarea>
+            <textarea id="bio" name="bio" class="form-control text-serif-bold mb-4" rows="4" placeholder="Share your past story and let others know about your achievements"></textarea>
             <div class="d-flex my-4 pt-3">
                 <button class="w-50 button-flat cancel m-1" type="reset">Cancel</button>
                 <button class="w-50 button-flat approve m-1" type="submit">Create</button>

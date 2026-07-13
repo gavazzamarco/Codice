@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime
 
-SIMULATE_DAY=0 # Wednesday
+SIMULATE_DAY=0
 SIMULATE_HOUR=00
 SIMULATE_MIN=00
 DAYS_OF_WEEK=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -486,7 +486,7 @@ def admin():
     adventurers_db=users_dao.get_adventures_with_number_of_participation()
     all_detailed_quests=quests_dao.get_all_info_of_all_quests()
     general_infos=quests_dao.get_admin_stats()
-    if general_infos["popular_session"] and general_infos["popular_session"]["id"]!=-1:
-        general_infos["popular_session"]["title"]=split_title(general_infos["popular_session"]["title"])
-        formatta_orario(general_infos["popular_session"])
+    for session in general_infos["popular_sessions"]:
+        session["title"]=split_title(session["title"])
+        formatta_orario(session)
     return render_template("admin.html", users=adventurers_db, quests=all_detailed_quests, infos=general_infos)

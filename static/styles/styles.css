@@ -22,21 +22,21 @@ body {
 .background-yellow { background-color: var(--darkness); }
 .background-green { background-color: var(--kazuma); }
 .background-blue { background-color: var(--aqua); }
+.background-grey { background: var(--grey); }
 
 .border-bottom-red { border-bottom: 2px solid var(--megumin); }
 .border-bottom-yellow { border-bottom: 2px solid var(--darkness); }
 .border-bottom-green { border-bottom: 2px solid var(--kazuma); }
 .border-bottom-blue { border-bottom: 2px solid var(--aqua); }
-
-.line-multicolor { height: 5px; }
-.line-tiny { height: 3px; }
-
 .border-multicolor {
     border-bottom: 4px solid var(--kazuma) !important;
     border-top: 4px solid var(--megumin) !important;
     border-left: 4px solid var(--darkness) !important;
     border-right: 4px solid var(--aqua) !important;
 }
+
+.line-multicolor { height: 5px; }
+.line-tiny { height: 3px; }
 
 .navbar-container { padding: 20px 40px; }
 
@@ -96,7 +96,6 @@ body {
     right: 20px;
     background: black !important;
 }
-
 .quest-create-button:hover { font-size: 2.45rem !important; }
 
 .footer-logo { width: 250px; }
@@ -127,7 +126,7 @@ body {
     padding: 15px 50px;
 }
 
-.home-filtri-box {
+.dark-box {
     background: var(--dark);
     padding: 40px 30px;
     border-radius: 20px;
@@ -213,14 +212,15 @@ body {
     padding: 4px 0px !important;
 }
 
-.home-quest-container { padding-bottom: 70px; }
+.padding-bottom-70 { padding-bottom: 70px; }
+.padding-bottom-80 { padding-bottom: 80px; }
 
 .page-title {
     font-size: 7rem;
     margin-bottom: 40px;
 }
 
-.quests-distance { margin-bottom: 50px; }
+.margin-bottom-50 { margin-bottom: 50px; }
 .lateral-figure { height: 420px; }
 
 .quest-container {
@@ -244,7 +244,7 @@ body {
     font-size: 1.3rem;
 }
 
-.quest-card-title {
+.title-big-yellow {
     font-size: 3.8rem;
     font-weight: 500;
     letter-spacing: 2px;
@@ -279,6 +279,12 @@ body {
     background: rgb(0, 0, 132);
 }
 
+.trending { 
+    border: 3px solid rgb(255, 197, 255);
+    color: rgb(255, 197, 243);
+    background: rgb(98, 1, 98);
+ }
+
 .quest-location {
     border: 3px solid var(--darkness);
     color: var(--darkness);
@@ -295,6 +301,20 @@ body {
     width: 850px;
 }
 
+.text-size-09 { font-size: 0.9rem; }
+.text-size-43 { font-size: 4.3rem; }
+.text-size-14 { font-size: 1.4rem !important; }
+.text-size-50 { font-size: 5rem; }
+.text-size-26 { font-size: 2.6rem !important; }
+.text-size-21 { font-size: 2.1rem; }
+.text-size-18 { font-size: 1.8rem; }
+.text-size-33 { font-size: 3.3rem; }
+.text-size-28 { font-size: 2.8rem; }
+.text-size-19 { font-size: 1.9rem !important; }
+.text-size-17 { font-size: 1.7rem; }
+.text-size-15 { font-size: 1.5rem; }
+.text-size-40 { font-size: 4rem; }
+
 .detail-container {
     margin: 10px;
     border: 4px solid var(--kazuma);
@@ -309,7 +329,7 @@ body {
     margin-bottom: 60px;
 }
 
-.detail-description {
+.text-small-white {
     font-family: serif;
     font-size: 1.5rem;
     color: white;
@@ -324,8 +344,7 @@ body {
 
 .detail-info {
     font-size: 1.6rem;
-    font-family: fantasy;
-    letter-spacing: 3px;
+    letter-spacing: 2px;
 }
 
 .detail-session-container {
@@ -333,19 +352,10 @@ body {
     border: 4px solid var(--megumin);
 }
 
-.detail-session-title { font-size: 1.7rem; }
-.detail-session-info { font-size: 1.5rem; }
-
-.detail-modal-content { background: var(--grey); }
-.detail-modal-title { font-size: 4.3rem; }
-.detail-modal-date { font-size: 2.8rem; }
-.detail-modal-info { font-size: 1.9rem !important; }
-
 .detail-modal-label { 
     font-size: 1.8rem !important;
     letter-spacing: 1px; 
 }
-.detail-delete { font-size: 1.4rem !important; }
 
 .detail-modal-button {
     width: 40%;
@@ -359,8 +369,6 @@ body {
     margin: 90px;
 }
 
-.logreg-title { font-size: 3.3rem; }
-
 .logreg-label {
     color: white;
     font-weight: 100;
@@ -368,7 +376,7 @@ body {
     margin-bottom: 3px;
 }
 
-.logreg-input {
+.text-serif-bold {
     font-family: serif;
     font-size: 1.3rem;
     font-weight: 700;
@@ -381,7 +389,7 @@ body {
     margin-bottom: 25px;
 }
 
-.create-session-card {
+.dark-box-grey-border {
     background: black;
     margin: 2px;
     border: 3px solid grey;
@@ -420,24 +428,15 @@ body {
     margin-right: 13px;
 }
 
-.profile-name-surname { font-size: 2.1rem; }
-.profile-username { font-size: 1.8rem; }
-
 .profile-description {
     background: black;
     border: 2px solid rgb(138, 138, 138);
     border-radius: 15px;
 }
 
-.profile-padding-bottom { padding-bottom: 80px; }
-
 .profile-card-body {
     background: var(--dark);
     border-radius: 6px;
-}
-
-.profile-card-body-title{
-    font-size: 4rem;
 }
 
 .profile-master-session {
@@ -483,8 +482,3 @@ body {
     border-radius: 25px;
     margin-bottom: 65px; 
 }
-
-.admin-stats-title { font-size: 5rem; }
-.admin-stats-number { font-size: 4.3rem; }
-.admin-stats-description { font-size: 2.6rem; }
-.admin-type-badge { margin: 0px 160px; }
