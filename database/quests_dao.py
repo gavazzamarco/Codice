@@ -36,10 +36,10 @@ def get_all_quest():
     conn=sqlite3.connect(DB_PATH)
     conn.row_factory=sqlite3.Row
     cursor=conn.cursor()
-    query=""" SELECT q.* FROM quests q
-        JOIN sessions s ON q.id=s.quest_id
+    query="""SELECT q.* FROM quests q
+        LEFT JOIN sessions s ON q.id=s.quest_id
         GROUP BY q.id
-        ORDER BY MIN(s.day*1440+s.hour*60+s.minute) ASC"""
+        ORDER BY IFNULL(MIN(s.day*1440+s.hour*60+s.minute), 99999) ASC"""
     cursor.execute(query)
     all_quest=cursor.fetchall()
     conn.commit()
@@ -57,28 +57,29 @@ def get_filtered_quest(day, type, difficulty, role):
             continue
         if difficulty and quest['difficulty']!=difficulty:
             continue
-        if day is not None:
-            query="SELECT * FROM sessions WHERE quest_id=? AND day=?"
-            cursor.execute(query, (quest["id"], day))
-            sessions_to_check=cursor.fetchall()
-        else:
-            query="SELECT * FROM sessions WHERE quest_id=?"
-            cursor.execute(query, (quest["id"],))
-            sessions_to_check=cursor.fetchall()
-        if not sessions_to_check:
-            continue
-        if role:
-            has_available_session=False
-            for session in sessions_to_check:
-                query="SELECT SUM(total_people) AS totale FROM reservations WHERE session_id=? AND role=?"
-                cursor.execute(query, (session["id"], role))
-                result=cursor.fetchone()
-                count=result['totale'] if (result and result['totale'] is not None) else 0
-                if count<LIMITS[role]:
-                    has_available_session=True
-                    break
-            if not has_available_session:
+        if (day is not None) or role:
+            if day is not None:
+                query="SELECT * FROM sessions WHERE quest_id=? AND day=?"
+                cursor.execute(query, (quest["id"], day))
+                sessions_to_check=cursor.fetchall()
+            else:
+                query="SELECT * FROM sessions WHERE quest_id=?"
+                cursor.execute(query, (quest["id"],))
+                sessions_to_check=cursor.fetchall()
+            if not sessions_to_check:
                 continue
+            if role:
+                has_available_session=False
+                for session in sessions_to_check:
+                    query="SELECT SUM(total_people) AS totale FROM reservations WHERE session_id=? AND role=?"
+                    cursor.execute(query, (session["id"], role))
+                    result=cursor.fetchone()
+                    count=result['totale'] if (result and result['totale'] is not None) else 0
+                    if count<LIMITS[role]:
+                        has_available_session=True
+                        break
+                if not has_available_session:
+                    continue
         filtered_quests.append(quest)
     conn.commit()
     cursor.close()
@@ -121,7 +122,7 @@ def get_all_info_of_all_quests():
 
 def get_admin_stats():
     all_detailed_quests=get_all_info_of_all_quests()
-    all_info={"total_adventurers":len(users_dao.get_adventures_with_number_of_participation()), "total_quests":len(all_detailed_quests), "total_sessions":0, "total_participations":0, "popular_session":None}
+    all_info={"total_adventurers":len(users_dao.get_adventures_with_number_of_participation()), "total_quests":len(all_detailed_quests), "total_sessions":0, "total_participations":0, "popular_types":[]}
     total_roles={"Warrior":0, "Mage":0, "Healer":0}
     total_types={"Combact":0, "Exploration":0, "Stealth":0, "Magic":0, "Survival":0}
     popular_sessions=[]
@@ -139,6 +140,8 @@ def get_admin_stats():
             for adventurer in session["adventurers"]:
                 total_roles[adventurer["role"]]+=(len(adventurer["companions"])+1)
     all_info["total_roles"]=total_roles
-    all_info["popular_type"]=max(total_types, key=total_types.get) if max(total_types.values())>0 else None
+    for key, val in total_types.items():
+        if max(total_types.values())>0 and val==max(total_types.values()):
+            all_info["popular_types"].append(key)
     all_info["popular_sessions"]=popular_sessions
     return all_info

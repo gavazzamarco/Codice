@@ -38,18 +38,6 @@ def get_user_by_username(username):
     conn.close()
     return db_user
 
-def get_master():
-    conn=sqlite3.connect(DB_PATH)
-    conn.row_factory=sqlite3.Row
-    cursor=conn.cursor()
-    query="SELECT * FROM users WHERE users.role='master'"
-    cursor.execute(query)
-    db_user=cursor.fetchone()
-    conn.commit()
-    cursor.close()
-    conn.close()
-    return db_user
-
 def get_adventures_with_number_of_participation():
     conn=sqlite3.connect(DB_PATH)
     conn.row_factory=sqlite3.Row

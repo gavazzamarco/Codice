@@ -24,20 +24,6 @@ body {
 .background-blue { background-color: var(--aqua); }
 .background-grey { background: var(--grey); }
 
-.border-bottom-red { border-bottom: 2px solid var(--megumin); }
-.border-bottom-yellow { border-bottom: 2px solid var(--darkness); }
-.border-bottom-green { border-bottom: 2px solid var(--kazuma); }
-.border-bottom-blue { border-bottom: 2px solid var(--aqua); }
-.border-multicolor {
-    border-bottom: 4px solid var(--kazuma) !important;
-    border-top: 4px solid var(--megumin) !important;
-    border-left: 4px solid var(--darkness) !important;
-    border-right: 4px solid var(--aqua) !important;
-}
-
-.line-multicolor { height: 5px; }
-.line-tiny { height: 3px; }
-
 .navbar-container { padding: 20px 40px; }
 
 .header-logo {
@@ -81,6 +67,20 @@ body {
     box-shadow: 4px 4px 0px rgb(171, 32, 1);
 }
 .header-nav-item:hover .header-nav-link{ color: var(--megumin) !important; }
+
+.border-bottom-red { border-bottom: 2px solid var(--megumin); }
+.border-bottom-yellow { border-bottom: 2px solid var(--darkness); }
+.border-bottom-green { border-bottom: 2px solid var(--kazuma); }
+.border-bottom-blue { border-bottom: 2px solid var(--aqua); }
+.border-multicolor {
+    border-bottom: 4px solid var(--kazuma) !important;
+    border-top: 4px solid var(--megumin) !important;
+    border-left: 4px solid var(--darkness) !important;
+    border-right: 4px solid var(--aqua) !important;
+}
+
+.line-multicolor { height: 5px; }
+.line-tiny { height: 3px; }
 
 .flash-messages {
     position: fixed;
@@ -258,7 +258,7 @@ body {
     margin-right: 10px;
     font-family: sans-serif;
     font-weight: 600;
-    margin-bottom: 3px;
+    margin-bottom: 4px;
 }
 
 .quest-type {

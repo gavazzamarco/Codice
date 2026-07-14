@@ -3,7 +3,6 @@
 {% block home_active %} active {% endblock %}
 {% block content %}
 <section class="position-relative w-100">
-    <!-- Classe boostrap "img-fluid" che implementa la responsività -->
     <img src="{{ url_for('static', filename='images/quests.png') }}" class="img-fluid" alt="Home image">
     <div class="home-title-container d-flex justify-content-center w-100">
         <h1 class="home-title border-multicolor text-center">
@@ -11,14 +10,10 @@
         </h1>
     </div>
     <div class="line-multicolor w-100 d-flex">
-        <div class="background-red w-25 h-100"></div>
-        <div class="background-yellow w-25 h-100"></div>
-        <div class="background-green w-25 h-100"></div>
-        <div class="background-blue w-25 h-100"></div>
+        <div class="background-red w-25 h-100"></div> <div class="background-yellow w-25 h-100"></div> <div class="background-green w-25 h-100"></div> <div class="background-blue w-25 h-100"></div>
     </div>
 </section>
 <section class="col-10 dark-box border-multicolor mx-auto">
-    <!-- Posso mettere la classe row anche nella form -->
     <form action="{{ url_for('home_filter') }}" method="POST" class="row">
         <div class="col">
             <label for="day" class="home-filtri-label color-red ps-1 pb-1">Day</label>
@@ -65,7 +60,6 @@
         </div>
     </form>
 </section>
-<!-- Ho dovuto aggiungere container-flui per evitare lo strabordamento -->
 <section class="padding-bottom-70 container-fluid">
     <h2 class="page-title text-center">
         <span class="color-red">AVAIL</span><span class="color-yellow">ABLE</span> <span class="color-green">QUE</span><span class="color-blue">STS</span>
@@ -91,7 +85,7 @@
                         </div>
                     </div>
                     <div class="d-flex justify-content-center align-items-end mb-3 me-4">
-                        <a href="{{ url_for('quest_detail', quest_id=quest.id) }}" class="common-button button-yellow">View</a>
+                        <a href="{{ url_for('quest_detail', quest_id=quest.id) }}" class="common-button button-yellow text-size-33">View</a>
                     </div> 
                 </div>
             </div>

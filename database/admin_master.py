@@ -18,8 +18,8 @@ def create_user(name, surname, username, password, role, profile_img, bio):
 # Esempio di inserimento dell'utente amministratore
 if __name__ == "__main__":
     # Definizione dei dati dell'amministratore
-    admin_name = "Admin"
-    admin_surname = "Global"
+    admin_name = "Guild Council administrator"
+    admin_surname = ""
     admin_username = "admin"
     admin_password = generate_password_hash("Admin")  # NOTA: In produzione la password dovrebbe essere hashata
     admin_role = "admin"                  # Viene inserito come un normale utente ma con ruolo 'admin'
@@ -31,7 +31,7 @@ if __name__ == "__main__":
     admin_username = "luna"
     admin_password = generate_password_hash("Luna")  # NOTA: In produzione la password dovrebbe essere hashata
     admin_role = "master"                  # Viene inserito come un normale utente ma con ruolo 'admin'
-    admin_img = "images/profile_imgs/1783940535_luna.png"
+    admin_img = "images/profile_imgs/luna.png"
     admin_bio = "Welcome to the Axel Adventurer's Guild! My name is Luna, and I am the head receptionist here. My main achievements include managing the daily quest board, processing bounty rewards, and somehow keeping this entire establishment running smoothly despite the daily chaos. If you want to register as an adventurer, pick up a quest, or cash in a reward, I am always happy to assist you! Please choose your quests responsibly... my stress levels are counting on it."
 
     try:
