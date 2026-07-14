@@ -69,8 +69,8 @@
                 {% if quest.sessions %}
                 <div class="row justify-content-center pb-4">
                     {% for session in quest.sessions %}
-                    <div class="col-5 mb-4 pb-3">
-                        <div class="profile-master-session border-multicolor py-4 px-3 h-100 d-flex flex-column">
+                    <div class="col-5 mb-4 pb-3 d-flex flex-column">
+                        <div class="profile-master-session border-multicolor py-4 px-3 h-100">
                             <div class="d-flex align-items-center justify-content-around">
                                 <div class="profile-session-date text-center">
                                     <span class="color-green">{{ session.day }}</span> <span class="color-blue">{{ session.hour_formatted }}:</span><span class="color-yellow">{{ session.minute_formatted }}</span>
@@ -81,21 +81,21 @@
                             <div class="row px-4 text-center">
                                 <div class="col-4 text-size-15 color-blue">
                                     <div>{{ session.Warrior }}</div>
-                                    <p class="mb-0">Warriors</p>
+                                    <p class="mb-0">Warriors<br><span class="text-size-14">LEFT</span></p>
                                     {% if 'Warrior' in session.most_requested_roles %}
                                     <p class="quest-card-badge trending text-size-09 d-inline-block mx-auto mt-0">Trending</p>
                                     {% endif %}
                                 </div>
                                 <div class="col-4 text-size-15 color-yellow">
                                     <div>{{ session.Mage }}</div>
-                                    <p class="mb-0">Mages</p>
+                                    <p class="mb-0">Mages<br><span class="text-size-14">LEFT</span></p>
                                     {% if 'Mage' in session.most_requested_roles %}
                                     <p class="quest-card-badge trending text-size-09 d-inline-block mx-auto">Trending</p>
                                     {% endif %}
                                 </div>
                                 <div class="col-4 text-size-15 color-red ">
                                     <div>{{ session.Healer }}</div>
-                                    <p class="mb-0">Healers</p>
+                                    <p class="mb-0">Healers<br><span class="text-size-14">LEFT</span></p>
                                     {% if 'Healer' in session.most_requested_roles %}
                                     <p class="quest-card-badge trending text-size-09 d-inline-block mx-auto">Trending</p>
                                     {% endif %}
@@ -125,7 +125,7 @@
                                                 {% endfor %}
                                                 </ul>
                                             {% endif %}
-                                        </li>  
+                                        </li> 
                                     </ul>
                                 </div>
                                 {% endfor %}

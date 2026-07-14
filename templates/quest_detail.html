@@ -28,14 +28,15 @@
                     <span class="color-blue">Difficulty: {{ quest.difficulty }}</span>
                 </p>
             </section>
-            <section class="detail-container detail-session-container container-fluid pb-4">
+            <section class="detail-container detail-session-container container-fluid pb-4 mb-4">
                 <h2 class="title-big-yellow d-flex justify-content-center mt-4 pb-1 mb-0">Sessions</h2>
                 {% if current_user.is_authenticated %}
-                {% if current_user.role=="master" %}
+                {% if current_user.role=='master' %}
                 <p class="text-small-white text-center mt-0 mb-0 p-4 pt-2">The Guild Master cannot book any sessions</p>
-                {% elif current_user.role=="admin" %}
+                {% elif current_user.role=='admin' %}
                 <p class="text-small-white text-center mt-0 mb-0 p-4 pt-2">The Guild Council administrator cannot book any sessions</p>
                 {% else %}
+                {% if sessions %}
                 {% for session in sessions %}
                 <div class="line-multicolor w-100 d-flex mt-3 px-2">
                     <div class="background-red w-25 h-100"></div> <div class="background-yellow w-25 h-100"></div> <div class="background-green w-25 h-100"></div> <div class="background-blue w-25 h-100"></div>
@@ -53,21 +54,29 @@
                         <div class="row text-center">
                             <div class="col-4 text-size-15 color-blue">
                                 <div>{{ session.Warrior }}</div>
-                                <p>Warriors</p>
+                                <p>Warriors<br><span class="text-size-14">LEFT</span></p>
                             </div>
                             <div class="col-4 text-size-15 color-yellow">
                                 <div>{{ session.Mage }}</div>
-                                <p>Mages</p>
+                                <p>Mages<br><span class="text-size-14">LEFT</span></p>
                             </div>
                             <div class="col-4 text-size-15 color-red">
                                 <div>{{ session.Healer }}</div>
-                                <p>Healers</p>
+                                <p>Healers<br><span class="text-size-14">LEFT</span></p>
                             </div>
                         </div>
                     </div>
                     <div class="col-2 d-flex justify-content-center align-items-center">
-                        <button type="button" class="common-button button-blue text-size-17" data-bs-toggle="modal" data-bs-target="#bookDate-{{ session.id }}">JOIN</button>
-                    </div>
+                    {% if session.id in reservations_user %}
+                    {% if session.can_cancel %}
+                    <a href="{{ url_for('cancel_reservation', session_id=session.id) }}" class="common-button button-yellow text-size-15 py-2">CANCEL</a>
+                    {% else %}
+                    <span class="profile-locked text-size-14 m-0 p-2">LOCKED</span>
+                    {% endif %}
+                    {% else %}
+                    <button type="button" class="common-button button-blue text-size-17" data-bs-toggle="modal" data-bs-target="#bookDate-{{ session.id }}">JOIN</button>
+                    {% endif %}
+                </div>
                 </div>
                 <div class="modal fade" id="bookDate-{{ session.id }}" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg">
@@ -121,6 +130,9 @@
                     </div>
                 </div>
                 {% endfor %}
+                {% else %}
+                <p class="text-small-white text-center mt-0 mb-0 p-4 pt-2">No sessions are currently available for this quest</p>
+                {% endif %}
                 {% endif %}
                 {% else %}
                 <p class="text-small-white text-center mt-0 mb-0 p-4">Only registered adventurers can book sessions</p>

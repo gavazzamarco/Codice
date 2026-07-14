@@ -169,10 +169,10 @@
                             <span class="color-red">Avail</span><span class="color-yellow">able</span> <span class="color-green">Sess</span><span class="color-blue">ions</span>
                         </h2>
                         {% if quest.sessions %}
-                        <div class="row align-items-center justify-content-center">
+                        <div class="row justify-content-center">
                             {% for session in quest.sessions %}
-                            <div class="col-5">
-                                <div class="profile-master-session border-multicolor py-4 px-3 mb-4 container-fluid">
+                            <div class="col-5 d-flex flex-column">
+                                <div class="profile-master-session border-multicolor py-4 px-3 mb-4 container-fluid h-100">
                                     <div class="profile-session-date text-center">
                                         <span class="color-green">{{ session.day }}</span> <span class="color-blue">{{ session.hour_formatted }}:</span><span class="color-yellow">{{ session.minute_formatted }}</span>
                                     </div>
@@ -180,15 +180,15 @@
                                     <div class="row px-4 text-center">
                                         <div class="col-4 text-size-15 color-blue">
                                             <div>{{ session.Warrior }}</div>
-                                            <p>Warriors</p>
+                                            <p>Warriors<br><span class="text-size-14">LEFT</span></p>
                                         </div>
                                         <div class="col-4 text-size-15 color-yellow">
                                             <div>{{ session.Mage }}</div>
-                                            <p>Mages</p>
+                                            <p>Mages<br><span class="text-size-14">LEFT</span></p>
                                         </div>
                                         <div class="col-4 text-size-15 color-red">
                                             <div>{{ session.Healer }}</div>
-                                            <p>Healers</p>
+                                            <p>Healers<br><span class="text-size-14">LEFT</span></p>
                                         </div>
                                     </div>
                                     <div class="line-tiny background-yellow w-100 mt-2 mb-4"></div>
@@ -218,6 +218,7 @@
                                         </ul>
                                         {% endfor %}
                                     </div>
+                                    <div class="flex-grow-1"></div>
                                 </div>
                             </div>
                             {% endfor %}

@@ -7,8 +7,8 @@ from werkzeug.utils import secure_filename
 from datetime import datetime
 
 SIMULATE_DAY=0
-SIMULATE_HOUR=00
-SIMULATE_MIN=00
+SIMULATE_HOUR=14
+SIMULATE_MIN=30
 DAYS_OF_WEEK=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 LOCATIONS=["Axel", "Kingdom of Elroad", "Arcanletia"]
 DIFFICULTY=["Easy", "Medium", "Hard", "Legendary"]
@@ -67,14 +67,9 @@ def load_user(user_id):
     db_user=users_dao.get_user_by_id(user_id)
     if db_user is not None:
         user=User(
-            id=db_user["id"],
-            name=db_user["name"],
-            surname=db_user["surname"],
-            username=db_user["username"],
-            password=db_user["password"],
-            role=db_user["role"],
-            profile_img=db_user["profile_img"],
-            bio=db_user["bio"],)
+            id=db_user["id"], name=db_user["name"], surname=db_user["surname"],
+            username=db_user["username"], password=db_user["password"],
+            role=db_user["role"], profile_img=db_user["profile_img"], bio=db_user["bio"],)
     else:
         user=None
     return user
@@ -101,7 +96,6 @@ def create_account():
     surname=request.form.get("surname")
     username=request.form.get("username").strip()
     password=generate_password_hash(request.form.get("password"))
-    role=request.form.get("role")
     profile_img=request.files["profile_img"]
     bio=request.form.get("bio")
     if username is None or username=="":
@@ -110,19 +104,13 @@ def create_account():
     if users_dao.get_user_by_username(username) is not None:
         flash('A user with this username already exists', 'danger')
         return redirect(url_for('register'))
-    if role!="adventurer" and role!="master":
-        flash('Please select a valid role', 'danger')
-        return redirect(url_for('register'))
-    if role=="master" and users_dao.get_master():
-        flash('There is already a Game Master; choose another role', 'danger')
-        return redirect(url_for('register'))
     photo_path=None
     if profile_img and profile_img.filename!="":
         photo_path=check_and_save_photo(profile_img, "images/profile_imgs/")
         if photo_path=="":
             flash('The photo format provided is incorrect. Only jpg, jpeg, png, and webp are allowed', 'danger')
             return redirect(url_for('register'))
-    users_dao.create_user(name, surname, username, password, role, photo_path, bio)
+    users_dao.create_user(name, surname, username, password, "adventurer", photo_path, bio)
     flash('Registration successful! Please log in', 'success')
     return redirect(url_for('login'))
 
@@ -145,14 +133,9 @@ def validation():
         return redirect(url_for("login"))
     else:
         new=User(
-            id=db_user["id"],
-            name=db_user["name"],
-            surname=db_user["surname"],
-            username=db_user["username"],
-            password=db_user["password"],
-            role=db_user["role"],
-            profile_img=db_user["profile_img"],
-            bio=db_user["bio"],)
+            id=db_user["id"], name=db_user["name"], surname=db_user["surname"],
+            username=db_user["username"], password=db_user["password"],
+            role=db_user["role"], profile_img=db_user["profile_img"], bio=db_user["bio"],)
         login_user(new)
         flash("Welcome back! "+db_user["name"]+" "+db_user["surname"]+"!", "success")
     return redirect(url_for("profile"))
@@ -261,16 +244,16 @@ def quest_check_and_save():
         flash("The session of ["+session[3]+":"+DAYS_OF_WEEK[session[0]]+" h"+str(session[1])+":"+str(session[2])+"] is created correctly", 'success')   
     return redirect(url_for('profile'))
 
-# DA MODIFICARE
 def split_title(title):
-    b=len(title)//4
-    r=len(title)%4
-    return [title[i*b + min(i, r) : (i+1)*b + min(i+1, r)] for i in range(4)]
-
-def formatta_orario(sessione):
-    sessione["hour_formatted"] = f"{int(sessione['hour']):02d}"
-    sessione["minute_formatted"] = f"{int(sessione['minute']):02d}"
-    return sessione
+    base_size=len(title)//4
+    remainder=len(title)%4
+    parts=[]
+    start=0
+    for i in range(4):
+        size=base_size+(1 if i < remainder else 0)
+        parts.append(title[start:start+size])
+        start=start+size
+    return parts
 
 @app.route("/quest/<int:quest_id>")
 def quest_detail(quest_id):
@@ -280,15 +263,21 @@ def quest_detail(quest_id):
         return redirect(url_for('home'))
     sessions_db=[dict(row) for row in session_dao.get_sessions_of_quest(quest_id)]
     for session in sessions_db:
+        session["can_cancel"]=can_cancel(session["day"], session["hour"], session["minute"])
         session["day"]=DAYS_OF_WEEK[session["day"]]
-        formatta_orario(session)
+        format_time(session)
         reservations_session=reservation_dao.get_reservations_for_session(session["id"])
         for role in ROLES:
             session[role]=LIMITS[role]
             for reservation in reservations_session:
                 if reservation["role"]==role:
                     session[role]-=reservation["total_people"]
-    return render_template('quest_detail.html', quest=quest_db, titolo=split_title(quest_db["title"]), sessions=sessions_db, roles=ROLES)
+    reservations_user_db=[reservation["session_id"] for reservation in reservation_dao.get_reservations_of_user(current_user.id)]
+    return render_template('quest_detail.html', quest=quest_db, titolo=split_title(quest_db["title"]), sessions=sessions_db, roles=ROLES, reservations_user=reservations_user_db)
+
+def format_time(sessione):
+    sessione["hour_formatted"]=f"{int(sessione['hour']):02d}"
+    sessione["minute_formatted"]=f"{int(sessione['minute']):02d}"
 
 @app.route("/book_session", methods=["POST"])
 @login_required
@@ -298,7 +287,7 @@ def book_session():
         return redirect(url_for('home'))
     session_id=request.form.get("session_id")
     role=request.form.get("role")
-    companions=[c.strip() for c in request.form.getlist("companion") if c.strip()]
+    companions=[comp.strip() for comp in request.form.getlist("companion") if comp.strip()]
     session=session_dao.get_session_by_id(session_id)
     if not session:
         flash("The selected session does not exist", "danger")
@@ -361,7 +350,7 @@ def profile_adventurer():
         for session in quest["sessions"]:
             session["can_cancel"]=can_cancel(session["day"], session["hour"], session["minute"])
             session["day"]=DAYS_OF_WEEK[session["day"]]
-            formatta_orario(session)
+            format_time(session)
     return render_template("profile_adventurer.html", quests=user_quests_dict)
 
 @app.route("/cancel_reservation/<int:session_id>")
@@ -376,7 +365,7 @@ def cancel_reservation(session_id):
         flash("The selected reservation does not exist", "danger")
         return redirect(url_for('profile'))
     if can_cancel(session["day"], session["hour"], session["minute"])==False:
-        flash("You cannot modify or cancel this participation less than 8 hours before the session starts", "danger")
+        flash("You cannot modify or cancel a booking less than 8 hours before the start of the session", "danger")
         return redirect(url_for('profile'))
     reservation_dao.delete_reservation(reservation["id"])
     flash("The partecipation was cancelled successfully", "success")
@@ -488,5 +477,5 @@ def admin():
     general_infos=quests_dao.get_admin_stats()
     for session in general_infos["popular_sessions"]:
         session["title"]=split_title(session["title"])
-        formatta_orario(session)
+        format_time(session)
     return render_template("admin.html", users=adventurers_db, quests=all_detailed_quests, infos=general_infos)

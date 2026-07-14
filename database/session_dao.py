@@ -18,7 +18,7 @@ def get_all_session():
     conn=sqlite3.connect(DB_PATH)
     conn.row_factory=sqlite3.Row
     cursor=conn.cursor()
-    query="SELECT * FROM sessions"
+    query="SELECT * FROM sessions GROUP BY id ORDER BY IFNULL(MIN(day*1440+hour*60+minute), 99999) ASC"
     cursor.execute(query)
     all_session=cursor.fetchall()
     conn.commit()
@@ -30,7 +30,7 @@ def get_sessions_of_quest(quest_id):
     conn=sqlite3.connect(DB_PATH)
     conn.row_factory=sqlite3.Row
     cursor=conn.cursor()
-    query="SELECT * FROM sessions WHERE quest_id=?"
+    query="SELECT * FROM sessions WHERE quest_id=? GROUP BY id ORDER BY IFNULL(MIN(day*1440+hour*60+minute), 99999) ASC"
     cursor.execute(query, (quest_id,))
     sessions=cursor.fetchall()
     conn.commit()

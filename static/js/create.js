@@ -1,6 +1,5 @@
 const addSession=document.querySelector("#add-session");
 const container=document.querySelector("#session-container");
-
 addSession.addEventListener("click", function() {
     const newSession=document.createElement("div");
     newSession.classList.add("dark-box-grey-border", "row", "d-flex", "justify-content-center", "p-2");
@@ -37,10 +36,8 @@ addSession.addEventListener("click", function() {
         `;
     container.appendChild(newSession);
 });
-
 container.addEventListener("click", function(event) {
     if (event.target.classList.contains("create-button-delete")) {
-        // Trova il genitore più vicino con la classe 'create-session-card' e rimuovilo dal DOM
-        event.target.closest(".create-session-card").remove();
+        event.target.closest(".dark-box-grey-border").remove();
     }
 });
