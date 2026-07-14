@@ -74,38 +74,44 @@
                     <span class="profile-locked text-size-14 m-0 p-2">LOCKED</span>
                     {% endif %}
                     {% else %}
+                    {% if session.is_past %}
+                    <span class="profile-locked text-size-14 m-0 p-2 trending">ENDED</span>
+                    {% else %}
                     <button type="button" class="common-button button-blue text-size-17" data-bs-toggle="modal" data-bs-target="#bookDate-{{ session.id }}">JOIN</button>
+                    {% endif %}
                     {% endif %}
                 </div>
                 </div>
                 <div class="modal fade" id="bookDate-{{ session.id }}" tabindex="-1" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                    <div class="modal-dialog modal-dialog-centered modal-lg rounded border-multicolor">
                         <form action="{{ url_for('book_session') }}" method="POST" class="modal-content background-grey">
                             <div class="d-flex justify-content-end mt-3 me-3 mb-0">
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <h1 class="text-center text-size-43 mb-2 mt-0">
+                            <h1 class="text-center text-size-43 mb-2 mt-0 px-2">
                                 <span class="color-red">{{ titolo[0] }}</span><span class="color-yellow">{{ titolo[1] }}</span><span class="color-green">{{ titolo[2] }}</span><span class="color-blue">{{ titolo[3] }}</span>
+                                <div class="line-tiny background-yellow mt-4 mb-4"></div>
                             </h1>
                             <div class="m-3 mt-0 container-fluid">
                                 <h2 class="text-size-28 text-center color-green mb-1 mt-3">
                                     {{ session.day }} at {{ session.hour_formatted }}:{{ session.minute_formatted }} 
                                 </h2>
-                                <div class="row">
+                                <div class="row text-center mt-3">
                                     <div class="col-4 text-size-19 color-blue">
-                                        <div class="d-flex justify-content-center">{{ session.Warrior }}</div>
-                                        <p class="d-flex justify-content-center">Warriors</p>
+                                        <div class="text-size-21">{{ session.Warrior }}</div>
+                                        <p>Warriors<br><span class="text-size-14">LEFT</span></p>
                                     </div>
                                     <div class="col-4 text-size-19 color-yellow">
-                                        <div class="d-flex justify-content-center">{{ session.Mage }}</div>
-                                        <p class="d-flex justify-content-center">Mages</p>
+                                        <div class="text-size-21">{{ session.Mage }}</div>
+                                        <p>Mages<br><span class="text-size-14">LEFT</span></p>
                                     </div>
                                     <div class="col-4 text-size-19 color-red">
-                                        <div class="d-flex justify-content-center">{{ session.Healer }}</div>
-                                        <p class="d-flex justify-content-center">Healers</p>
+                                        <div class="text-size-21">{{ session.Healer }}</div>
+                                        <p>Healers<br><span class="text-size-14">LEFT</span></p>
                                     </div>
                                 </div>
                             </div>
+                            <div class="line-tiny background-green mt-4 mb-4 mx-2"></div>
                             <div class="modal-body px-4 mx-4">
                                 <input type="hidden" name="session_id" value="{{ session.id }}">
                                 <label for="role-{{ session.id }}" class="logreg-label detail-modal-label">Role* (yours and that of any companions)</label>

@@ -2,13 +2,8 @@
 {% block title %} Create Quest {% endblock %}
 {% block visibility %} d-none {% endblock %}
 {% block content %}
-<!-- Classe boostrap: "container-fluid": di fatto mette width: 100% a tutte le dimensioni -->
 <section class="container-fluid create-container">
     <form action="{{ url_for('quest_check_and_save') }}" method="POST" enctype="multipart/form-data" class="row align-items-start justify-content-center">
-        <!-- align-item-start serve siccome se no, di default, row viene gestita
-         come una flexbox con proprietà align-element-stretch, ossia ogni elemento
-         va ad occupare tutto lo spazio disponibile ed in tale modo avrei due
-         card della stessa altezza -->
         <div class="col-6 me-2">
             <div class="logreg-card border-multicolor container-fluid">
                 <h1 class="create-section-title text-center">

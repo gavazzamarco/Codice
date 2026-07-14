@@ -6,7 +6,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime
 
-SIMULATE_DAY=0
+SIMULATE_DAY=2
 SIMULATE_HOUR=14
 SIMULATE_MIN=30
 DAYS_OF_WEEK=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
@@ -132,8 +132,7 @@ def validation():
         flash("The password is wrong", "danger")
         return redirect(url_for("login"))
     else:
-        new=User(
-            id=db_user["id"], name=db_user["name"], surname=db_user["surname"],
+        new=User(id=db_user["id"], name=db_user["name"], surname=db_user["surname"],
             username=db_user["username"], password=db_user["password"],
             role=db_user["role"], profile_img=db_user["profile_img"], bio=db_user["bio"],)
         login_user(new)
@@ -150,7 +149,7 @@ def logout():
 @app.route("/quest_create")
 @login_required
 def quest_create():
-    if (not current_user.is_authenticated) or current_user.role!="master":
+    if current_user.role!="master":
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for('home'))
     return render_template("quest_create.html", days=DAYS_OF_WEEK, types=TYPES, difficulties=DIFFICULTY, locations=LOCATIONS)
@@ -231,7 +230,7 @@ def quest_check_and_save():
         if check_overlap(days[index], starts_hours[index], starts_minutes[index], duration, locations[index], session_dao.get_all_session())==False:
             valid_sessions.append((DAYS_OF_WEEK.index(days[index]), int(starts_hours[index]), int(starts_minutes[index]), locations[index]))
     if len(valid_sessions)==0:
-        flash("All the entered sessions overlap with other existing sessions", "danger")
+        flash("All the entered sessions overlap with other existing sessions so no quest was created", "danger")
         return redirect(url_for('quest_create'))
     path_photo=check_and_save_photo(illustration, "images/illustrations/")
     if path_photo=="":
@@ -264,6 +263,7 @@ def quest_detail(quest_id):
     sessions_db=[dict(row) for row in session_dao.get_sessions_of_quest(quest_id)]
     for session in sessions_db:
         session["can_cancel"]=can_cancel(session["day"], session["hour"], session["minute"])
+        session["is_past"]=not can_cancel(session["day"], session["hour"], session["minute"], 0)
         session["day"]=DAYS_OF_WEEK[session["day"]]
         format_time(session)
         reservations_session=reservation_dao.get_reservations_for_session(session["id"])
@@ -272,7 +272,9 @@ def quest_detail(quest_id):
             for reservation in reservations_session:
                 if reservation["role"]==role:
                     session[role]-=reservation["total_people"]
-    reservations_user_db=[reservation["session_id"] for reservation in reservation_dao.get_reservations_of_user(current_user.id)]
+    reservations_user_db=[]
+    if current_user.is_authenticated:
+        reservations_user_db=[reservation["session_id"] for reservation in reservation_dao.get_reservations_of_user(current_user.id)]
     return render_template('quest_detail.html', quest=quest_db, titolo=split_title(quest_db["title"]), sessions=sessions_db, roles=ROLES, reservations_user=reservations_user_db)
 
 def format_time(sessione):
@@ -369,7 +371,7 @@ def cancel_reservation(session_id):
         return redirect(url_for('profile'))
     reservation_dao.delete_reservation(reservation["id"])
     flash("The partecipation was cancelled successfully", "success")
-    return redirect(url_for('profile'))
+    return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
 
 @app.route("/profile_master")
 @login_required

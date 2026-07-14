@@ -279,17 +279,17 @@ body {
     background: rgb(0, 0, 132);
 }
 
-.trending { 
-    border: 3px solid rgb(255, 197, 255);
-    color: rgb(255, 197, 243);
-    background: rgb(98, 1, 98);
- }
-
 .quest-location {
     border: 3px solid var(--darkness);
     color: var(--darkness);
     background: rgb(149, 56, 3);
 }
+
+.trending { 
+    border: 3px solid rgb(255, 197, 255) !important;
+    color: rgb(255, 197, 243) !important;
+    background: rgb(98, 1, 98) !important;
+ }
 
 .home-noquest-container {
     position: absolute;
@@ -454,7 +454,7 @@ body {
     color: var(--darkness);
     background: var(--megumin);
     border: 4px solid var(--darkness);
-    border-radius: 5px;
+    border-radius: 15px;
     font-size: 1.35rem;
     font-weight: 400;
 }

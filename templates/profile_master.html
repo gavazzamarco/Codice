@@ -14,21 +14,15 @@
         <div class="h-100">
             <div class="d-flex align-items-center mt-2">
                 <div class="me-4">
-                    <div class="text-size-21">
-                        <span class="color-green">{{ current_user.name }}</span> <span class="color-blue">{{ current_user.surname }}</span>
-                    </div>
-                    <div class="text-size-18">
-                        <span class="color-red">{{ current_user.username }}</span>
-                    </div>
+                    <p class="text-size-21 mb-0"><span class="color-green">{{ current_user.name }}</span> <span class="color-blue">{{ current_user.surname }}</span></p>
+                    <p class="text-size-18 mt-0"><span class="color-red">{{ current_user.username }}</span></p>
                 </div>
                 <div class="quest-card-badge quest-location text-uppercase text-serif-bold ms-4">
                     {{ current_user.role }}
                 </div>
             </div>
             {% if current_user.bio %}
-            <div class="text-small-white profile-description py-3 px-4 mt-3 ms-3">
-                {{ current_user.bio }}
-            </div>
+            <div class="text-small-white profile-description py-3 px-4 mt-3 ms-3">{{ current_user.bio }}</div>
             {% endif %}
         </div>
     </div>
@@ -141,7 +135,7 @@
                         </div>
                     </div>
                     <div class="modal fade" id="modify-{{ session.id }}" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-dialog modal-dialog-centered modal-lg  modal-lg rounded border-multicolor">
                             <form action="{{ url_for('modify_session', session_id=session.id) }}" method="POST" class="modal-content background-grey">
                                 <div class="d-flex justify-content-end mt-3 me-3 mb-0">
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -195,7 +189,7 @@
                 {% endif %}
             </section>
             <div class="modal fade" id="create-{{ quest.id }}" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg">
+                <div class="modal-dialog modal-dialog-centered modal-lg  modal-lg rounded border-multicolor">
                     <form action="{{ url_for('create_session', quest_id=quest.id) }}" method="POST" class="modal-content background-grey">
                         <div class="d-flex justify-content-end mt-3 me-3 mb-0">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
