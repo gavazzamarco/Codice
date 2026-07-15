@@ -85,9 +85,8 @@ def check_and_save_photo(photo, path):
     estensioni_consentite={"jpg", "jpeg", "png", "webp"}
     if not photo or ('.' not in photo.filename) or (photo.filename.rsplit('.')[-1] not in estensioni_consentite):
         return ""
-    filename_secure=secure_filename(photo.filename)
     secs=str(int(datetime.now().timestamp()))
-    path_db=path+secs+"_"+filename_secure
+    path_db=path+secs+"_"+secure_filename(photo.filename)
     photo.save("static/"+path_db)
     return path_db
 
@@ -365,10 +364,10 @@ def cancel_reservation(session_id):
     reservation=reservation_dao.get_reservation_by_session_for_user(current_user.id, session_id)
     if not reservation:
         flash("The selected reservation does not exist", "danger")
-        return redirect(url_for('profile'))
+        return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
     if can_cancel(session["day"], session["hour"], session["minute"])==False:
         flash("You cannot modify or cancel a booking less than 8 hours before the start of the session", "danger")
-        return redirect(url_for('profile'))
+        return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
     reservation_dao.delete_reservation(reservation["id"])
     flash("The partecipation was cancelled successfully", "success")
     return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
@@ -414,6 +413,7 @@ def modify_session(session_id):
     day=request.form.get("day")
     hour=request.form.get("hour")
     minute=request.form.get("minute")
+    
     quest=quests_dao.get_quest_by_id(session["quest_id"])
     exist_sessions=[ses for ses in session_dao.get_all_session() if ses["id"]!=session_id]
     if validate_and_create_session(quest["id"], location, day, hour, minute, int(quest["duration"]), exist_sessions, True)==False:

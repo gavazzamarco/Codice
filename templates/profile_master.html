@@ -2,29 +2,27 @@
 {% block title %} Profile {% endblock %}
 {% block profile_active %} active {% endblock %}
 {% block content %}
-<section class="d-flex justify-content-center pt-4 mb-4">
-    <div class="col-9 d-flex profile-user-container border-multicolor">
-        <div class="h-100">
-            {% if current_user.profile_img %}
-            <img src="{{ url_for('static', filename=current_user.profile_img) }}" class="profile-user-img border-multicolor object-fit-cover" alt="Profile photo of {{ current_user.username }}">
-            {% else %}
-            <img src="{{ url_for('static', filename='images/no_profile_img.png') }}" class="profile-user-img border-multicolor object-fit-cover" alt="Default profile image">
-            {% endif %}
-        </div>
-        <div class="h-100">
-            <div class="d-flex align-items-center mt-2">
-                <div class="me-4">
-                    <p class="text-size-21 mb-0"><span class="color-green">{{ current_user.name }}</span> <span class="color-blue">{{ current_user.surname }}</span></p>
-                    <p class="text-size-18 mt-0"><span class="color-red">{{ current_user.username }}</span></p>
-                </div>
-                <div class="quest-card-badge quest-location text-uppercase text-serif-bold ms-4">
-                    {{ current_user.role }}
-                </div>
+<section class="col-9 d-flex profile-user-container border-multicolor pt-4 mb-4 mx-auto">
+    <div class="h-100">
+        {% if current_user.profile_img %}
+        <img src="{{ url_for('static', filename=current_user.profile_img) }}" class="profile-user-img border-multicolor object-fit-cover" alt="Profile photo of {{ current_user.username }}">
+        {% else %}
+        <img src="{{ url_for('static', filename='images/no_profile_img.png') }}" class="profile-user-img border-multicolor object-fit-cover" alt="Default profile image">
+        {% endif %}
+    </div>
+    <div class="h-100">
+        <div class="d-flex align-items-center mt-2">
+            <div class="me-4">
+                <p class="text-size-21 mb-0"><span class="color-green">{{ current_user.name }}</span> <span class="color-blue">{{ current_user.surname }}</span></p>
+                <p class="text-size-18 mt-0 fst-italic"><span class="color-red">{{ current_user.username }}</span></p>
             </div>
-            {% if current_user.bio %}
-            <div class="text-small-white profile-description py-3 px-4 mt-3 ms-3">{{ current_user.bio }}</div>
-            {% endif %}
+            <div class="quest-card-badge quest-location text-uppercase text-serif-bold ms-4">
+                {{ current_user.role }}
+            </div>
         </div>
+        {% if current_user.bio %}
+        <div class="text-small-white profile-description py-3 px-4 mt-3 ms-3">{{ current_user.bio }}</div>
+        {% endif %}
     </div>
 </section>
 <section class="container-fluid">
@@ -48,7 +46,7 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-center align-items-end mb-3 me-4">
-                            <a href="{{ url_for('quest_detail', quest_id=quest.id) }}" class="common-button button-yellow">View</a>
+                            <a href="{{ url_for('quest_detail', quest_id=quest.id) }}" class="common-button button-yellow text-size-33">View</a>
                         </div>
                     </div>
                 </div>
@@ -64,12 +62,10 @@
                 <div class="row justify-content-center pb-4">
                     {% for session in quest.sessions %}
                     <div class="col-5 mb-4 pb-3 d-flex flex-column">
-                        <div class="profile-master-session border-multicolor py-4 px-3 h-100">
-                            <div class="d-flex align-items-center justify-content-around">
-                                <div class="profile-session-date text-center">
-                                    <span class="color-green">{{ session.day }} at</span> <span class="color-blue">{% if session.hour < 10 %}0{% endif %}{{ session.hour }}:</span><span class="color-yellow">{% if session.minute < 10 %}0{% endif %}{{ session.minute }}</span>
-                                    <p class="quest-card-badge quest-location text-size-14 mt-2 d-inline-block">Location: {{ session.location }}</p>
-                                </div>
+                        <div class="profile-master-session border-multicolor py-4 px-3 h-100 container-fluid">
+                            <div class="profile-session-date text-center">
+                                <span class="color-green">{{ session.day }} at</span> <span class="color-blue">{% if session.hour < 10 %}0{% endif %}{{ session.hour }}:</span><span class="color-yellow">{% if session.minute < 10 %}0{% endif %}{{ session.minute }}</span>
+                                <p class="quest-card-badge quest-location text-size-14 mt-2 d-inline-flex">Location: {{ session.location }}</p>
                             </div>
                             <div class="line-tiny background-green mt-3 mb-3"></div>
                             <div class="row px-4 text-center">
@@ -77,7 +73,7 @@
                                     <div>{{ session.Warrior }}</div>
                                     <p class="mb-0">Warriors<br><span class="text-size-14">LEFT</span></p>
                                     {% if 'Warrior' in session.most_requested_roles %}
-                                    <p class="quest-card-badge trending text-size-09 d-inline-block mx-auto mt-0">Trending</p>
+                                    <p class="quest-card-badge trending text-size-09 d-inline-flex mx-auto mt-0">Trending</p>
                                     {% endif %}
                                 </div>
                                 <div class="col-4 text-size-15 color-yellow">
@@ -99,29 +95,23 @@
                             <div class="profile-companion-container m-3 p-3">
                                 <h3 class="profile-companion-title text-center mb-1">Adventurers [ {{session.total_booked }} ]</h3>
                                 {% for adventurer in session.adventurers %}
-                                <div class="d-flex align-items-center justify-content-start mb-1">
-                                    <ul class="mt-3 d-flex align-items-center justify-content-around">
-                                        <li>
-                                            <div class="d-flex align-items-center">
-                                                <span class="profile-companion-text ms-2">{{ adventurer.username }} </span>
-                                                {% if adventurer.role=='Warrior' %}
-                                                <span class="quest-card-badge quest-duration ms-3">{{ adventurer.role }}</span>
-                                                {% elif adventurer.role=='Mage' %}
-                                                <span class="quest-card-badge quest-difficulty ms-3">{{ adventurer.role }}</span>
-                                                {% else %}
-                                                <span class="quest-card-badge quest-type ms-3">{{ adventurer.role }}</span>
-                                                {% endif %}
-                                            </div>
-                                            {% if adventurer.companions %}
-                                                <ul>
-                                                {% for companion in adventurer.companions %}
-                                                    <li class="ms-2 profile-companion-text text-size-14">{{ companion }}</li>
-                                                {% endfor %}
-                                                </ul>
-                                            {% endif %}
-                                        </li> 
-                                    </ul>
-                                </div>
+                                <ul class="mt-3 d-flex align-items-center justify-content-start">
+                                    <li>
+                                        <div class="d-flex align-items-center">
+                                            <span class="profile-companion-text ms-2">{{ adventurer.username }} </span>
+                                            <span class="quest-card-badge ms-3 {% if adventurer.role=='Warrior' %}quest-duration{% elif adventurer.role=='Mage' %}quest-difficulty{% else %}quest-type{% endif %}">
+                                                {{ adventurer.role }}
+                                            </span>
+                                        </div>
+                                        {% if adventurer.companions %}
+                                            <ul>
+                                            {% for companion in adventurer.companions %}
+                                                <li class="ms-2 profile-companion-text text-size-14">{{ companion }}</li>
+                                            {% endfor %}
+                                            </ul>
+                                        {% endif %}
+                                    </li> 
+                                </ul>
                                 {% endfor %}
                             </div>
                             {% if session.total_booked==0 %}
@@ -131,8 +121,8 @@
                                 <button class="w-50 button-flat approve m-1 text-center" data-bs-toggle="modal" data-bs-target="#modify-{{ session.id }}">Modify</button>
                             </div>
                             {% endif %}
-                            <div class="flex-grow-1"></div>
                         </div>
+                        <div class="flex-grow-1"></div>
                     </div>
                     <div class="modal fade" id="modify-{{ session.id }}" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg  modal-lg rounded">
@@ -178,7 +168,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-center mb-4 mt-3">
-                                    <button class="button-flat cancel m-1 detail-modal-button text-center" type="reset">Cancel</button>
+                                    <button class="button-flat cancel m-1 detail-modal-button text-center" type="reset">Clear</button>
                                     <button class="button-flat approve m-1 detail-modal-button text-center" type="submit">Modify</button>
                                 </div>
                             </form>
@@ -186,10 +176,12 @@
                     </div>
                     {% endfor %}
                 </div>
+                {% else %}
+                <p class="text-small-white text-center mt-0 mb-0 p-4 pt-2">No sessions are currently available for this quest</p>
                 {% endif %}
             </section>
             <div class="modal fade" id="create-{{ quest.id }}" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg  modal-lg rounded border-multicolor">
+                <div class="modal-dialog modal-dialog-centered modal-lg modal-lg rounded border-multicolor">
                     <form action="{{ url_for('create_session', quest_id=quest.id) }}" method="POST" class="modal-content background-grey">
                         <div class="d-flex justify-content-end mt-3 me-3 mb-0">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -241,16 +233,14 @@
         {% endfor %}
     </div>
     {% else %}
-    <div class="d-flex justify-content-center padding-bottom-80">
-        <div class="col-9 card position-relative quest-container p-0 m-0">
-            <img src="{{ url_for('static', filename='images/no_quests.png') }}" class="card-img object-fit-cover" alt="No quest created">
-            <div class="card-img-overlay">
-                <div class="home-noquest-container w-100 d-flex flex-column align-items-center text-center">
-                    <h3 class="card-title title-big-yellow home-noquest-title mb-3">
-                        You haven't created any quests<br>Get to work right away!
-                    </h3>
-                    <a href="{{ url_for('quest_create') }}" class="common-button button-blue">Create a Quest</a>
-                </div>
+    <div class="col-9 card position-relative quest-container p-0 mb-4 mx-auto">
+        <img src="{{ url_for('static', filename='images/no_quests.png') }}" class="card-img object-fit-cover" alt="No quest created">
+        <div class="card-img-overlay">
+            <div class="home-noquest-container w-100 d-flex flex-column align-items-center text-center">
+                <h3 class="card-title title-big-yellow home-noquest-title mb-3">
+                    You haven't created any quests<br>Get to work right away!
+                </h3>
+                <a href="{{ url_for('quest_create') }}" class="common-button button-blue">Create a Quest</a>
             </div>
         </div>
     </div>

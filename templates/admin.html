@@ -6,46 +6,46 @@
     <span class="color-red">Guild </span><span class="color-yellow">Council </span><span class="color-green">Admini</span><span class="color-blue">strator</span>
 </h1>
 <section class="padding-bottom-80">
-    <div class="container-fluid admin-container-stats col-9 border-multicolor">
-        <h2 class="title-big-yellow text-size-50 d-flex justify-content-center mt-3 pb-3 mb-1">General stats</h2>
-        <div class="row d-flex justify-content-center align-items-center">
-            <div class="col-3 color-blue text-center">
+    <div class="container-fluid admin-container-stats col-9 border-multicolor mx-auto text-center">
+        <h2 class="title-big-yellow text-size-50 mt-3 pb-3 mb-1">General stats</h2>
+        <div class="row">
+            <div class="col-3 color-blue">
                 <div class="text-size-43">{{ infos.total_adventurers }}</div>
                 <p class="text-size-26">Total<br> Adventurers</p>
             </div>
-            <div class="col-3 color-green text-center">
+            <div class="col-3 color-green">
                 <div class="text-size-43">{{ infos.total_quests }}</div>
                 <p class="text-size-26">Total<br> Quests</p>
             </div>
-            <div class="col-3 color-yellow text-center">
+            <div class="col-3 color-yellow">
                 <div class="text-size-43">{{ infos.total_sessions }}</div>
                 <p class="text-size-26">Total<br> Sessions</p>
             </div>
-            <div class="col-3 color-red text-center">
+            <div class="col-3 color-red">
                 <div class="text-size-43">{{ infos.total_participations }}</div>
                 <p class="text-size-26">Total<br> Participations</p>
             </div>
         </div>
     </div>
-    <div class="container-fluid admin-container-stats col-9 border-multicolor">
-        <h2 class="title-big-yellow text-size-50 d-flex justify-content-center mt-3 pb-3 mb-1">Roles stats</h2>
+    <div class="container-fluid admin-container-stats col-9 border-multicolor mx-auto text-center">
+        <h2 class="title-big-yellow text-size-50 mt-3 pb-3 mb-1">Roles stats</h2>
         <div class="row d-flex align-items-center pb-4">
-            <div class="col-4 color-blue text-center">
+            <div class="col-4 color-blue">
                 <div class="text-size-43">{{ infos.total_roles.Warrior }}</div>
                 <p class="quest-card-badge quest-duration text-size-26 mx-4">Warriors</p>
             </div>
-            <div class="col-4 color-yellow text-center">
+            <div class="col-4 color-yellow">
                 <div class="text-size-43">{{ infos.total_roles.Mage }}</div>
                 <p class="quest-card-badge quest-location text-size-26 mx-4">Mages</p>
             </div>
-            <div class="col-4 color-red text-center">
+            <div class="col-4 color-red">
                 <div class="text-size-43">{{ infos.total_roles.Healer }}</div>
                 <p class="quest-card-badge quest-type text-size-26 mx-4">Healers</p>
             </div>
         </div>
     </div>
-    <div class="container-fluid admin-container-stats col-9 border-multicolor">
-        <h2 class="title-big-yellow text-size-50 d-flex justify-content-center mt-3 pb-3 mb-4">Popular contents</h2>
+    <div class="container-fluid admin-container-stats col-9 border-multicolor mx-auto">
+        <h2 class="title-big-yellow text-size-50 text-center mt-3 pb-3 mb-4">Popular contents</h2>
         <div class="color-yellow text-center mx-auto w-100">
             {% if infos.popular_types %}
             <div class="row d-flex justify-content-center align-items-center">
@@ -57,23 +57,21 @@
                 {% endfor %}
             </div>
             {% else %}
-            <p class="dark-box-grey-border text-small-white py-3 px-4 text-size-26 text-center">There is no popular role at the moment</p>
+            <p class="dark-box-grey-border text-small-white py-3 px-4 text-size-26 text-center d-inline-flex">There is no popular role at the moment</p>
             {% endif %}
         </div>
         <div class="line-multicolor w-100 d-flex flex-row-reverse mt-4">
             <div class="background-red w-25 h-100"></div> <div class="background-yellow w-25 h-100"></div> <div class="background-green w-25 h-100"></div> <div class="background-blue w-25 h-100"></div>
         </div>
-        <p class="text-size-40 color-blue text-center mt-4 mb-0">Popular Sessions</p>
+        <p class="text-size-40 color-red text-center mt-4 mb-0">Popular Sessions</p>
         {% if infos.popular_sessions %}
         <div class="row d-flex justify-content-center g-4 my-4">
             {% for session in infos.popular_sessions %}
             <div class="col-6 text-center d-flex">
                 <div class="d-flex flex-column justify-content-center profile-master-session dark-box border-multicolor m-0">
-                    <div class="mb-3">
+                    <div class="mb-3 text-center">
                         <h3 class="text-size-33 mb-2 pb-2"><span class="color-red">{{ session.title[0] }}</span><span class="color-yellow">{{ session.title[1] }}</span><span class="color-green">{{ session.title[2] }}</span><span class="color-blue">{{ session.title[3] }}</span></h3>
-                        <div class="d-flex justify-content-center align-items-center">
-                            <p class="quest-card-badge quest-duration text-size-14">Location: {{ session.location }}</p>
-                        </div>
+                        <p class="quest-card-badge quest-duration text-size-14 d-inline-flex">Location: {{ session.location }}</p>
                     </div>
                     <div class="profile-session-date">
                         <span class="color-green">{{ session.day_name }} at</span> <span class="color-blue">{% if session.hour < 10 %}0{% endif %}{{ session.hour }}:</span><span class="color-yellow">{% if session.minute < 10 %}0{% endif %}{{ session.minute }}</span>
@@ -107,12 +105,8 @@
             <div class="h-100">
                 <div class="d-flex align-items-center mt-2">
                     <div class="me-4">
-                        <div class="text-size-21">
-                            <span class="color-green">{{ user.name }}</span> <span class="color-blue">{{ user.surname }}</span>
-                        </div>
-                        <div class="text-size-18">
-                            <span class="color-red">{{ user.username }}</span>
-                        </div>
+                        <p class="text-size-21 mb-0"><span class="color-green">{{ user.name }}</span> <span class="color-blue">{{ user.surname }}</span></p>
+                        <p class="text-size-18 mt-0 fst-italic"><span class="color-red">{{ user.username }}</span></p>
                     </div>
                     <div class="d-flex gap-4 ms-3 text-size-14">
                         <div class="quest-card-badge quest-location text-uppercase me-3"> {{ user.role }}</div>
@@ -132,107 +126,105 @@
     {% endfor %}
     {% else %}
     <div class="d-flex justify-content-center text-center">
-        <p class="dark-box-grey-border text-small-white col-6 py-3 px-4 text-size-21">There are currently no registered adventurers</p>
+        <p class="dark-box-grey-border text-small-white col-6 py-3 px-4 text-size-26">There are currently no registered adventurers</p>
     </div>
     {% endif %}
 </section>
-<section>
+<section class="container-fluid">
     <h1 class="text-center page-title">
         <span class="color-red">CREA</span><span class="color-yellow">TED</span> <span class="color-green">QUE</span><span class="color-blue">STS</span>
     </h1>
     {% if quests %}
-    <div class="container-fluid">
-        <div class="row justify-content-center padding-bottom-80">
-            {% for quest in quests %}
-            <div class="col-9 padding-bottom-80">
-                <div class="card quest-container">
-                    <section class="position-relative border-bottom">
-                        <img src="{{ url_for('static', filename=quest.illustration) }}" class="card-img object-fit-cover quest-card-image" alt="Illustration of quest {{quest.title }}">
-                        <div class="card-img-overlay">
-                            <div class="quest-card-text w-100 d-flex justify-content-between">
-                                <div class="flex-grow-1 me-2">
-                                    <h2 class="card-title title-big-yellow">{{ quest.title }}</h2>
-                                    <div class="d-flex flex-wrap">
-                                        <div class="quest-card-badge quest-type"><span>Type:</span> <span>{{ quest.type }}</span></div>
-                                        <div class="quest-card-badge quest-difficulty"><span>Difficulty:</span> <span>{{ quest.difficulty }}</span></div>
-                                        <div class="quest-card-badge quest-duration"><span>Duration:</span> <span>{{ quest.duration }}</span></div>
-                                    </div>
-                                </div>
-                                <div class="d-flex justify-content-center align-items-end mb-3 me-4">
-                                    <a href="{{ url_for('quest_detail', quest_id=quest.id) }}" class="common-button button-yellow">View</a>
+    <div class="row justify-content-center padding-bottom-80">
+        {% for quest in quests %}
+        <div class="col-9 padding-bottom-80">
+            <div class="card quest-container">
+                <section class="position-relative border-bottom">
+                    <img src="{{ url_for('static', filename=quest.illustration) }}" class="card-img object-fit-cover quest-card-image" alt="Illustration of quest {{quest.title }}">
+                    <div class="card-img-overlay">
+                        <div class="quest-card-text w-100 d-flex justify-content-between">
+                            <div class="flex-grow-1 me-2">
+                                <h2 class="card-title title-big-yellow">{{ quest.title }}</h2>
+                                <div class="d-flex flex-wrap">
+                                    <div class="quest-card-badge quest-type"><span>Type:</span> <span>{{ quest.type }}</span></div>
+                                    <div class="quest-card-badge quest-difficulty"><span>Difficulty:</span> <span>{{ quest.difficulty }}</span></div>
+                                    <div class="quest-card-badge quest-duration"><span>Duration:</span> <span>{{ quest.duration }}</span></div>
                                 </div>
                             </div>
+                            <div class="d-flex justify-content-center align-items-end mb-3 me-4">
+                                <a href="{{ url_for('quest_detail', quest_id=quest.id) }}" class="common-button button-yellow">View</a>
+                            </div>
                         </div>
-                    </section>
-                    <section class="card-body profile-card-body container-fluid">
-                        <h2 class="text-center text-size-40 mt-3 mb-4 pb-3">
-                            <span class="color-red">Avail</span><span class="color-yellow">able</span> <span class="color-green">Sess</span><span class="color-blue">ions</span>
-                        </h2>
-                        {% if quest.sessions %}
-                        <div class="row justify-content-center">
-                            {% for session in quest.sessions %}
-                            <div class="col-5 d-flex flex-column">
-                                <div class="profile-master-session border-multicolor py-4 px-3 mb-4 container-fluid h-100">
-                                    <div class="profile-session-date text-center">
-                                        <span class="color-green">{{ session.day }}</span> <span class="color-blue">{% if session.hour < 10 %}0{% endif %}{{ session.hour }}:</span><span class="color-yellow">{% if session.minute < 10 %}0{% endif %}{{ session.minute }}</span>
+                    </div>
+                </section>
+                <section class="card-body profile-card-body container-fluid">
+                    <h2 class="text-center text-size-40 mt-3 mb-4 pb-3">
+                        <span class="color-red">Avail</span><span class="color-yellow">able</span> <span class="color-green">Sess</span><span class="color-blue">ions</span>
+                    </h2>
+                    {% if quest.sessions %}
+                    <div class="row justify-content-center">
+                        {% for session in quest.sessions %}
+                        <div class="col-5 d-flex flex-column">
+                            <div class="profile-master-session border-multicolor py-4 px-3 mb-4 container-fluid h-100">
+                                <div class="profile-session-date text-center">
+                                    <span class="color-green">{{ session.day }}</span> <span class="color-blue">{% if session.hour < 10 %}0{% endif %}{{ session.hour }}:</span><span class="color-yellow">{% if session.minute < 10 %}0{% endif %}{{ session.minute }}</span>
+                                </div>
+                                <div class="line-tiny background-green w-100 mt-3 mb-3"></div>
+                                <div class="row px-4 text-center">
+                                    <div class="col-4 text-size-15 color-blue">
+                                        <div>{{ session.Warrior }}</div>
+                                        <p>Warriors<br><span class="text-size-14">LEFT</span></p>
                                     </div>
-                                    <div class="line-tiny background-green w-100 mt-3 mb-3"></div>
-                                    <div class="row px-4 text-center">
-                                        <div class="col-4 text-size-15 color-blue">
-                                            <div>{{ session.Warrior }}</div>
-                                            <p>Warriors<br><span class="text-size-14">LEFT</span></p>
-                                        </div>
-                                        <div class="col-4 text-size-15 color-yellow">
-                                            <div>{{ session.Mage }}</div>
-                                            <p>Mages<br><span class="text-size-14">LEFT</span></p>
-                                        </div>
-                                        <div class="col-4 text-size-15 color-red">
-                                            <div>{{ session.Healer }}</div>
-                                            <p>Healers<br><span class="text-size-14">LEFT</span></p>
-                                        </div>
+                                    <div class="col-4 text-size-15 color-yellow">
+                                        <div>{{ session.Mage }}</div>
+                                        <p>Mages<br><span class="text-size-14">LEFT</span></p>
                                     </div>
-                                    <div class="line-tiny background-yellow w-100 mt-2 mb-4"></div>
-                                    <div class="profile-companion-container m-3 p-3">
-                                        <h3 class="profile-companion-title text-center mb-1">Adventurers [ {{session.total_booked }} ]</h3>
-                                        {% for adventurer in session.adventurers %}
-                                        <ul class="mt-3 pb-1 d-flex align-items-center justify-content-start">
-                                            <li>
-                                                <div class="d-flex align-items-center">
-                                                    <span class="profile-companion-text ms-2">{{ adventurer.username }} </span>
-                                                    {% if adventurer.role=='Warrior' %}
-                                                    <span class="quest-card-badge quest-duration ms-3">{{ adventurer.role }}</span>
-                                                    {% elif adventurer.role=='Mage' %}
-                                                    <span class="quest-card-badge quest-difficulty ms-3">{{ adventurer.role }}</span>
-                                                    {% else %}
-                                                    <span class="quest-card-badge quest-type ms-3">{{ adventurer.role }}</span>
-                                                    {% endif %}
-                                                </div>
-                                                {% if adventurer.companions %}
-                                                    <ul>
-                                                    {% for companion in adventurer.companions %}
-                                                        <li class="ms-2 profile-companion-text text-size-14">{{ companion }}</li>
-                                                    {% endfor %}
-                                                    </ul>
+                                    <div class="col-4 text-size-15 color-red">
+                                        <div>{{ session.Healer }}</div>
+                                        <p>Healers<br><span class="text-size-14">LEFT</span></p>
+                                    </div>
+                                </div>
+                                <div class="line-tiny background-yellow w-100 mt-2 mb-4"></div>
+                                <div class="profile-companion-container m-3 p-3">
+                                    <h3 class="profile-companion-title text-center mb-1">Adventurers [ {{session.total_booked }} ]</h3>
+                                    {% for adventurer in session.adventurers %}
+                                    <ul class="mt-3 pb-1 d-flex align-items-center justify-content-start">
+                                        <li>
+                                            <div class="d-flex align-items-center">
+                                                <span class="profile-companion-text ms-2">{{ adventurer.username }} </span>
+                                                {% if adventurer.role=='Warrior' %}
+                                                <span class="quest-card-badge quest-duration ms-3">{{ adventurer.role }}</span>
+                                                {% elif adventurer.role=='Mage' %}
+                                                <span class="quest-card-badge quest-difficulty ms-3">{{ adventurer.role }}</span>
+                                                {% else %}
+                                                <span class="quest-card-badge quest-type ms-3">{{ adventurer.role }}</span>
                                                 {% endif %}
-                                            </li>  
-                                        </ul>
-                                        {% endfor %}
-                                    </div>
-                                    <div class="flex-grow-1"></div>
+                                            </div>
+                                            {% if adventurer.companions %}
+                                                <ul>
+                                                {% for companion in adventurer.companions %}
+                                                    <li class="ms-2 profile-companion-text text-size-14">{{ companion }}</li>
+                                                {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </li>  
+                                    </ul>
+                                    {% endfor %}
                                 </div>
                             </div>
-                            {% endfor %}
+                            <div class="flex-grow-1"></div>
                         </div>
-                        {% endif %}
-                    </section>
-                </div>
+                        {% endfor %}
+                    </div>
+                    {% endif %}
+                </section>
             </div>
-            {% endfor %}
         </div>
+        {% endfor %}
     </div>
     {% else %}
     <div class="d-flex justify-content-center text-center mb-4 pb-4">
-        <p class="dark-box-grey-border text-small-white col-6 py-3 px-4 text-size-21">No quests have been created at this time</p>
+        <p class="dark-box-grey-border text-small-white col-6 py-3 px-4 text-size-26">No quests have been created at this time</p>
     </div>
     {% endif %}
 </section>

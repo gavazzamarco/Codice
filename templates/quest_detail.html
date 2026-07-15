@@ -11,25 +11,25 @@
                 <img src="{{ url_for('static', filename=quest.illustration) }}" class="img-fluid" alt="Image of {{quest.title}}">
             </div>
             <section class="detail-container detail-description-container">
-                <h2 class="title-big-yellow d-flex justify-content-center mt-4 pt-2">Quest Description</h2>
+                <h2 class="title-big-yellow text-center mt-4 pt-2">Quest Description</h2>
                 <p class="text-small-white text-center px-4">{{ quest.description }}</p>
             </section>
         </div>
         <div class="col-4">
-            <section class="detail-container detail-info-container detail-info px-4 pb-4">
-                <h2 class="title-big-yellow d-flex justify-content-center mt-3 pb-3 mb-0 border-bottom-red">Quest Info</h2>
-                <p class="text-center border-bottom-green m-0 p-0 py-2">
+            <section class="detail-container detail-info-container detail-info px-4 pb-4 text-center">
+                <h2 class="title-big-yellow mt-3 pb-3 mb-0 border-bottom-red">Quest Info</h2>
+                <p class="border-bottom-green m-0 p-0 py-2">
                     <span class="color-red">Duration: {{ quest.duration }} min</span>
                 </p>
-                <p class="text-center border-bottom-blue m-0 p-0 py-2">
+                <p class="border-bottom-blue m-0 p-0 py-2">
                     <span class="color-green">Type: {{ quest.type }}</span>
                 </p>
-                <p class="text-center py-2 pb-0">
+                <p class="py-2 pb-0">
                     <span class="color-blue">Difficulty: {{ quest.difficulty }}</span>
                 </p>
             </section>
             <section class="detail-container detail-session-container container-fluid pb-4 mb-4">
-                <h2 class="title-big-yellow d-flex justify-content-center mt-4 pb-1 mb-0">Sessions</h2>
+                <h2 class="title-big-yellow text-center mt-4 pb-1 mb-0">Sessions</h2>
                 {% if current_user.is_authenticated %}
                 {% if current_user.role=='master' %}
                 <p class="text-small-white text-center mt-0 mb-0 p-4 pt-2">The Guild Master cannot book any sessions</p>
@@ -42,7 +42,7 @@
                     <div class="background-red w-25 h-100"></div> <div class="background-yellow w-25 h-100"></div> <div class="background-green w-25 h-100"></div> <div class="background-blue w-25 h-100"></div>
                 </div>
                 <div class="row">
-                    <div class="col-9 ms-2 me-2 container-fluid">
+                    <div class="col-9 container-fluid ms-2 me-2">
                         <div class="text-center text-size-17 color-green mb-1 mt-3">
                             {{ session.day }} at {% if session.hour < 10 %}0{% endif %}{{ session.hour }}:{% if session.minute < 10 %}0{% endif %}{{ session.minute }}
                         </div>
@@ -68,30 +68,30 @@
                     </div>
                     <div class="col-2 d-flex justify-content-center align-items-center">
                     {% if session.id in reservations_user %}
-                    {% if session.can_cancel %}
-                    <a href="{{ url_for('cancel_reservation', session_id=session.id) }}" class="common-button button-yellow text-size-15 py-2">CANCEL</a>
+                        {% if session.can_cancel %}
+                        <a href="{{ url_for('cancel_reservation', session_id=session.id) }}" class="common-button button-yellow text-size-15 py-2">CANCEL</a>
+                        {% else %}
+                        <span class="profile-locked text-size-14 m-0 p-2">LOCKED</span>
+                        {% endif %}
                     {% else %}
-                    <span class="profile-locked text-size-14 m-0 p-2">LOCKED</span>
-                    {% endif %}
-                    {% else %}
-                    {% if session.is_past %}
-                    <span class="profile-locked text-size-14 m-0 p-2 trending">ENDED</span>
-                    {% else %}
-                    <button type="button" class="common-button button-blue text-size-17" data-bs-toggle="modal" data-bs-target="#bookDate-{{ session.id }}">JOIN</button>
-                    {% endif %}
+                        {% if session.is_past %}
+                        <span class="profile-locked text-size-14 m-0 p-2 trending">ENDED</span>
+                        {% else %}
+                        <button type="button" class="common-button button-blue text-size-17" data-bs-toggle="modal" data-bs-target="#bookDate-{{ session.id }}">JOIN</button>
+                        {% endif %}
                     {% endif %}
                 </div>
                 </div>
                 <div class="modal fade" id="bookDate-{{ session.id }}" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg rounded border-multicolor">
-                        <form action="{{ url_for('book_session') }}" method="POST" class="modal-content background-grey">
+                        <form action="{{ url_for('book_session') }}" method="POST" class="modal-content profile-card-body">
                             <div class="d-flex justify-content-end mt-3 me-3 mb-0">
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
                             <h1 class="text-center text-size-43 mb-2 mt-0 px-2">
                                 <span class="color-red">{{ titolo[0] }}</span><span class="color-yellow">{{ titolo[1] }}</span><span class="color-green">{{ titolo[2] }}</span><span class="color-blue">{{ titolo[3] }}</span>
-                                <div class="line-tiny background-yellow mt-4 mb-4"></div>
                             </h1>
+                            <div class="line-tiny background-yellow mt-4 mb-4 mx-2"></div>
                             <div class="m-3 mt-0 container-fluid">
                                 <h2 class="text-size-28 text-center color-green mb-1 mt-3">
                                     {{ session.day }} at {% if session.hour < 10 %}0{% endif %}{{ session.hour }}:{% if session.minute < 10 %}0{% endif %}{{ session.minute }}
@@ -118,9 +118,7 @@
                                 <select name="role" id="role-{{ session.id }}" class="form-control text-serif-bold mb-4" required>
                                     <option value="">Select a Role</option>
                                     {% for role in roles %}
-                                    {% if role %}
                                     <option value="{{ role }}">{{ role }}</option>
-                                    {% endif %}
                                     {% endfor %}
                                 </select>
                                 <div id="companion-container-{{ session.id }}"></div>
@@ -128,9 +126,9 @@
                                     <button type="button" class="common-button button-blue text-size-19 detail-add-companion" data-session-id="{{ session.id }}">Add a companion</button>
                                 </div>
                             </div>
-                            <div class="d-flex justify-content-center mb-4">
-                                <button class="button-flat cancel m-1 detail-modal-button text-center" type="reset">Cancel</button>
-                                <button class="button-flat approve m-1 detail-modal-button text-center" type="submit">Book</button>
+                            <div class="d-flex justify-content-center mb-4 gap-3">
+                                <button class="button-flat cancel detail-modal-button text-center" type="reset">Clear</button>
+                                <button class="button-flat approve detail-modal-button text-center" type="submit">Book</button>
                             </div>
                         </form>
                     </div>

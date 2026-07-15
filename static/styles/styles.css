@@ -309,6 +309,7 @@ body {
 .text-size-40 { font-size: 4rem; }
 
 .detail-container {
+    background: var(--dark);
     margin: 10px;
     border: 4px solid var(--kazuma);
     border-radius: 40px;
@@ -316,7 +317,6 @@ body {
 .detail-container img { border-radius: 36px; }
 
 .detail-description-container {
-    background: var(--dark);
     border-color: var(--aqua);
     margin-top: 40px;
     margin-bottom: 60px;
@@ -330,7 +330,6 @@ body {
 }
 
 .detail-info-container {
-    background: var(--dark);
     border: 4px solid var(--darkness);
     margin-bottom: 40px;
 }
@@ -340,10 +339,7 @@ body {
     letter-spacing: 2px;
 }
 
-.detail-session-container {
-    background: var(--dark);
-    border: 4px solid var(--megumin);
-}
+.detail-session-container { border: 4px solid var(--megumin); }
 
 .detail-modal-label { 
     font-size: 1.8rem !important;
@@ -460,7 +456,7 @@ body {
 
 .profile-companion-title {
     font-size: 1.9rem;
-    color: blueviolet;
+    color: rgb(133, 37, 222);
 }
 
 .profile-companion-text {
