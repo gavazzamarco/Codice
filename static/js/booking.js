@@ -12,8 +12,7 @@ document.addEventListener("click", function(event) {
                         <button type="button" class="create-button-delete detail-delete">X</button>
                     </div>
                     <input type="text" name="companion" class="form-control logreg-input mb-4" required>
-                </div>
-            `;
+                </div>`;
             container.appendChild(newCompanion);
             if (container.children.length>=1) {
                 event.target.parentElement.classList.add("d-none");

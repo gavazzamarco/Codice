@@ -32,8 +32,7 @@ addSession.addEventListener("click", function() {
                 <option value="{{ location }}">{{ location }}</option>
                 {% endfor %}
             </select>
-        </div>
-        `;
+        </div>`;
     container.appendChild(newSession);
 });
 container.addEventListener("click", function(event) {

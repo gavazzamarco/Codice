@@ -9,12 +9,10 @@
 </head>
 <body class="min-vh-100">
     <header class="sticky-top">
-        <nav class="d-flex flex-wrap justify-content-between align-items-center navbar-container">
-            <a href="{{ url_for('home') }}" class="d-flex align-items-center text-decoration-none">
+        <nav class="d-flex flex-wrap justify-content-between align-items-center padding-navbar">
+            <a href="{{ url_for('home') }}" class="d-flex align-items-center text-decoration-none header-title gap-2">
                 <img src="{{ url_for('static', filename='images/logo-header.jpg') }}" class="header-logo" alt="Logo Konosuba">
-                <span class="header-title ms-2">
-                    <span class="color-red">Ko</span> <span class="color-yellow">no</span> <span class="color-green">su</span> <span class="color-blue">ba</span>
-                </span>
+                <span class="color-red">Ko</span> <span class="color-yellow">no</span> <span class="color-green">su</span> <span class="color-blue">ba</span>
             </a>
             <ul class="nav nav-pills">
                 <li class="nav-item header-nav-item {% block home_active %}{% endblock %}">
@@ -39,10 +37,7 @@
             </ul>
         </nav>
         <div class="line-multicolor w-100 d-flex">
-            <div class="background-red w-25 h-100"></div>
-            <div class="background-yellow w-25 h-100"></div>
-            <div class="background-green w-25 h-100"></div>
-            <div class="background-blue w-25 h-100"></div>
+            <div class="background-red w-25 h-100"></div> <div class="background-yellow w-25 h-100"></div> <div class="background-green w-25 h-100"></div> <div class="background-blue w-25 h-100"></div>
         </div>
     </header>
     <div class="flash-messages d-flex flex-wrap">

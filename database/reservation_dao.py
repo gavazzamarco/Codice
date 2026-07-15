@@ -1,10 +1,7 @@
-import os
 import sqlite3
 from database import quests_dao, session_dao
 
-# Per pythonanywhere
-BASE_DIR=os.path.dirname(os.path.abspath(__file__))
-DB_PATH=os.path.join(BASE_DIR, "Konosuba.db")
+DB_PATH="database/Konosuba.db"
 
 def create_reservation(user_id, session_id, role, total_people):
     conn=sqlite3.connect(DB_PATH)

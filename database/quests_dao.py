@@ -1,13 +1,9 @@
-import os
 import sqlite3
 from database import reservation_dao, session_dao, users_dao
 
 LIMITS={"Warrior": 4,  "Mage":3, "Healer":2}
 DAYS_OF_WEEK=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
-
-# Per pythonanywhere
-BASE_DIR=os.path.dirname(os.path.abspath(__file__))
-DB_PATH=os.path.join(BASE_DIR, "Konosuba.db")
+DB_PATH="database/Konosuba.db"
 
 def create_quest(title, duration, type, difficulty, description, illustration):
     conn=sqlite3.connect(DB_PATH)

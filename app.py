@@ -26,7 +26,7 @@ def assegna_foto(filtered_quests):
     for index, quest in enumerate(filtered_quests):
         quest["foto_destra"]=quest["foto_sinistra"]=""
         if (index%4==0):
-            quest["foto_sinistra"]='images/home/aqua1.png'
+            quest["foto_sinistra"]='images/home/aqua.png'
         elif (index%4==1):
             quest["foto_destra"]='images/home/megumin.png'
         elif (index%4==2):
@@ -59,6 +59,7 @@ def home_filter():
     if role!="" and role not in ROLES:
         flash("The role is mandatory and must be selected from the available options", "danger")
         return redirect(url_for('home'))
+    
     filtered_quests=assegna_foto([dict(row) for row in quests_dao.get_filtered_quest(day_index, type, difficulty, role)])
     return render_template("home.html", days=DAYS_OF_WEEK, types=TYPES, difficulties=DIFFICULTY, roles=ROLES, quests=filtered_quests, giorno=day, tipo=type, difficolta=difficulty, ruolo=role)
 
@@ -110,6 +111,7 @@ def create_account():
         if photo_path=="":
             flash('The photo format provided is incorrect. Only jpg, jpeg, png, and webp are allowed', 'danger')
             return redirect(url_for('register'))
+    
     users_dao.create_user(name, surname, username, password, "adventurer", photo_path, bio)
     flash('Registration successful! Please log in', 'success')
     return redirect(url_for('login'))
@@ -209,6 +211,7 @@ def quest_check_and_save():
     starts_hours=request.form.getlist("hour")
     starts_minutes=request.form.getlist("minute")
     locations=request.form.getlist("location")
+    
     if not title:
         flash("The title is mandatory", "danger")
         return redirect(url_for('quest_create'))
@@ -229,8 +232,10 @@ def quest_check_and_save():
     if path_photo=="":
         flash("The illustration is mandatory. Only jpg, jpeg, png, and webp are allowed", 'danger')
         return redirect(url_for('quest_create'))
+    
     quest_id=quests_dao.create_quest(title, duration, type, difficulty, description, path_photo)
     flash("The quest was created correctly", 'success')
+    
     valid_sessions=[]
     exist_sessions=session_dao.get_all_session()
     for index in range(min(len(days), len(starts_hours), len(starts_minutes), len(locations))):
@@ -256,7 +261,7 @@ def split_title(title):
 def quest_detail(quest_id):
     quest_db=quests_dao.get_quest_by_id(quest_id)
     if not quest_db:
-        flash("Quest non trovata", "danger")
+        flash("Quest not found", "danger")
         return redirect(url_for('home'))
     sessions_db=[dict(row) for row in session_dao.get_sessions_of_quest(quest_id)]
     for session in sessions_db:
@@ -278,12 +283,13 @@ def quest_detail(quest_id):
 @login_required
 def book_session():
     if current_user.role!="adventurer":
-        flash("To book a spot, you must be logged in as an adventurer", "danger")
+        flash("To book a spot you must be logged in as an adventurer", "danger")
         return redirect(url_for('home'))
     session_id=request.form.get("session_id")
     role=request.form.get("role")
     companions=[comp.strip() for comp in request.form.getlist("companion") if comp.strip()]
     session=session_dao.get_session_by_id(session_id)
+    
     if not session:
         flash("The selected session does not exist", "danger")
         return redirect(url_for('home')) 
@@ -296,6 +302,10 @@ def book_session():
     if len(companions)>1:
         flash("You are allowed to bring a maximum of one additional companions", "danger")
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
+    reservations_user=reservation_dao.get_reservations_of_user(current_user.id)
+    if len(reservations_user)>=3:
+        flash("It is not possible to book more than 3 sessions per week", "danger")
+        return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
     reservations_session=reservation_dao.get_reservations_for_session(session_id)
     count=0
     for reservation in reservations_session:
@@ -304,14 +314,11 @@ def book_session():
     if (LIMITS[role]-(count+(len(companions)+1)))<0:
         flash("You have booked more seats than are available for the category "+role, "danger")
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
-    reservations_user=reservation_dao.get_reservations_of_user(current_user.id)
-    sessions_booked=[session_dao.get_session_by_id(reservation_db["session_id"]) for reservation_db in reservations_user]
-    if len(reservations_user)>=3:
-        flash("It is not possible to book more than 3 sessions per week", "danger")
-        return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
     quest=quests_dao.get_quest_by_id(session["quest_id"])
+    sessions_booked=[session_dao.get_session_by_id(reservation_db["session_id"]) for reservation_db in reservations_user]
     if check_overlap(DAYS_OF_WEEK[session["day"]], session["hour"], session["minute"], quest["duration"], "all", sessions_booked)==True:
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
+    
     reservation_id=reservation_dao.create_reservation(current_user.id, session_id, role, int(len(companions))+1)
     for companion in companions:
         reservation_dao.add_companions(reservation_id, companion)

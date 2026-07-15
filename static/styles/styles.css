@@ -24,8 +24,7 @@ body {
 .background-blue { background-color: var(--aqua); }
 .background-grey { background: var(--grey); }
 
-.navbar-container { padding: 20px 40px; }
-
+.padding-navbar { padding: 20px 40px; }
 .header-logo {
     width: 90px;
     height: 90px;
@@ -38,11 +37,6 @@ body {
     font-weight: 800;
 }
 
-/* L'ordine con cui metto questi elementi influenza la visualizzazione */
-/* Se metto prima hover e poi active, preverrà active su hover, quindi passando
-    sopra ad un elemento active quello NON assumerà le proprietà legate all'hover */
-/* Invece, se metto prima active e poi hover, preverrà hover su active, quindi passando
-    sopra ad un elemento active quello assumerà le proprietà legate all'hover */
 .header-nav-item {
     border: 2px solid var(--darkness);
     border-radius: 25px;
@@ -99,7 +93,6 @@ body {
 .quest-create-button:hover { font-size: 2.45rem !important; }
 
 .footer-logo { width: 250px; }
-
 .footer-text {
     font-size: 1.3rem;
     font-weight: 100;
@@ -134,7 +127,7 @@ body {
 }
 
 .home-filtri-label {
-    font-size: 1.3rem;
+    font-size: 1.6rem;
     font-weight: 400;
     letter-spacing: 2px;
 }
@@ -214,14 +207,14 @@ body {
 
 .padding-bottom-70 { padding-bottom: 70px; }
 .padding-bottom-80 { padding-bottom: 80px; }
+.margin-bottom-50 { margin-bottom: 50px; }
 
 .page-title {
     font-size: 7rem;
     margin-bottom: 40px;
 }
 
-.margin-bottom-50 { margin-bottom: 50px; }
-.lateral-figure { height: 420px; }
+.lateral-figure { max-height: 450px; }
 
 .quest-container {
     border: 4px solid white;

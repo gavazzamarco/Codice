@@ -1,9 +1,6 @@
-import os
 import sqlite3
 
-# Per pythonanywhere
-BASE_DIR=os.path.dirname(os.path.abspath(__file__))
-DB_PATH=os.path.join(BASE_DIR, "Konosuba.db")
+DB_PATH="database/Konosuba.db"
 
 def get_user_by_id(user_id):
     conn=sqlite3.connect(DB_PATH)

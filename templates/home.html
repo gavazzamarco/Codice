@@ -20,7 +20,7 @@
             <select id="day" name="day" class="form-control text-serif-bold">
                 <option value="">Select a day</option>
                 {% for day in days %}
-                <option value="{{ day }}" {% if day==giorno %} selected {% endif %}>{{ day }}</option>
+                <option value="{{ day }}" {% if day==giorno %}selected{% endif %}>{{ day }}</option>
                 {% endfor %}
             </select>
         </div>
@@ -98,16 +98,14 @@
     </div>
     {% endfor %}
     {% else %}
-    <div class="d-flex justify-content-center">
-        <div class="col-8 card position-relative quest-container p-0 m-0">
-            <img src="{{ url_for('static', filename='images/filtraggio.png') }}" class="card-img object-fit-cover" alt="Image no quest found">
-            <div class="card-img-overlay">
-                <div class="home-noquest-container w-100 d-flex flex-column align-items-center text-center">
-                    <h3 class="card-title title-big-yellow home-noquest-title">
-                        There are no quests currently available or that match the filters you set
-                    </h3>
-                    <a href="{{ url_for('home') }}" class="common-button button-blue">Reset filters</a>
-                </div>
+    <div class="col-8 card position-relative quest-container p-0 mx-auto">
+        <img src="{{ url_for('static', filename='images/filtraggio.png') }}" class="card-img object-fit-cover" alt="Image no quest found">
+        <div class="card-img-overlay">
+            <div class="home-noquest-container w-100 d-flex flex-column align-items-center text-center">
+                <h3 class="card-title title-big-yellow home-noquest-title">
+                    There are no quests currently available or that match the filters you set
+                </h3>
+                <a href="{{ url_for('home') }}" class="common-button button-blue">Reset filters</a>
             </div>
         </div>
     </div>
