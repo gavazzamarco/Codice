@@ -25,7 +25,7 @@
         {% endif %}
     </div>
 </section>
-<section class="container-fluid">
+<section class="container-fluid padding-bottom-70">
     <h1 class="text-center page-title">
         <span class="color-red">CREA</span><span class="color-yellow">TED</span> <span class="color-green">QUE</span><span class="color-blue">STS</span>
     </h1>
@@ -233,7 +233,7 @@
         {% endfor %}
     </div>
     {% else %}
-    <div class="col-9 card position-relative quest-container p-0 mb-4 mx-auto">
+    <div class="col-9 card position-relative quest-container p-0 mx-auto">
         <img src="{{ url_for('static', filename='images/no_quests.png') }}" class="card-img object-fit-cover" alt="No quest created">
         <div class="card-img-overlay">
             <div class="home-noquest-container w-100 d-flex flex-column align-items-center text-center">
