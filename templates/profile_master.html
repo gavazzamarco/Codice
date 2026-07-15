@@ -16,7 +16,7 @@
                 <p class="text-size-21 mb-0"><span class="color-green">{{ current_user.name }}</span> <span class="color-blue">{{ current_user.surname }}</span></p>
                 <p class="text-size-18 mt-0 fst-italic"><span class="color-red">{{ current_user.username }}</span></p>
             </div>
-            <div class="quest-card-badge quest-location text-uppercase text-serif-bold ms-4">
+            <div class="common-badge badge-yellow text-uppercase text-serif-bold ms-4">
                 {{ current_user.role }}
             </div>
         </div>
@@ -40,9 +40,9 @@
                         <div class="flex-grow-1 me-2">
                             <h2 class="card-title title-big-yellow">{{ quest.title }}</h2>
                             <div class="d-flex flex-wrap">
-                                <div class="quest-card-badge quest-type">Type: {{ quest.type }}</div>
-                                <div class="quest-card-badge quest-difficulty">Difficulty: {{ quest.difficulty }}</div>
-                                <div class="quest-card-badge quest-duration">Duration: {{ quest.duration }}</div>
+                                <div class="common-badge badge-red">Type: {{ quest.type }}</div>
+                                <div class="common-badge badge-green">Difficulty: {{ quest.difficulty }}</div>
+                                <div class="common-badge badge-blue">Duration: {{ quest.duration }}</div>
                             </div>
                         </div>
                         <div class="d-flex justify-content-center align-items-end mb-3 me-4">
@@ -65,7 +65,7 @@
                         <div class="profile-master-session border-multicolor py-4 px-3 h-100 container-fluid">
                             <div class="profile-session-date text-center">
                                 <span class="color-green">{{ session.day }} at</span> <span class="color-blue">{% if session.hour < 10 %}0{% endif %}{{ session.hour }}:</span><span class="color-yellow">{% if session.minute < 10 %}0{% endif %}{{ session.minute }}</span>
-                                <p class="quest-card-badge quest-location text-size-14 mt-2 d-inline-flex">Location: {{ session.location }}</p>
+                                <p class="common-badge badge-yellow text-size-14 mt-2 d-inline-flex">Location: {{ session.location }}</p>
                             </div>
                             <div class="line-tiny background-green mt-3 mb-3"></div>
                             <div class="row px-4 text-center">
@@ -73,21 +73,21 @@
                                     <div>{{ session.Warrior }}</div>
                                     <p class="mb-0">Warriors<br><span class="text-size-14">LEFT</span></p>
                                     {% if 'Warrior' in session.most_requested_roles %}
-                                    <p class="quest-card-badge trending text-size-09 d-inline-flex mx-auto mt-0">Trending</p>
+                                    <p class="common-badge badge-pink text-size-09 d-inline-flex mx-auto mt-0">badge-pink</p>
                                     {% endif %}
                                 </div>
                                 <div class="col-4 text-size-15 color-yellow">
                                     <div>{{ session.Mage }}</div>
                                     <p class="mb-0">Mages<br><span class="text-size-14">LEFT</span></p>
                                     {% if 'Mage' in session.most_requested_roles %}
-                                    <p class="quest-card-badge trending text-size-09 d-inline-block mx-auto">Trending</p>
+                                    <p class="common-badge badge-pink text-size-09 d-inline-block mx-auto">badge-pink</p>
                                     {% endif %}
                                 </div>
                                 <div class="col-4 text-size-15 color-red ">
                                     <div>{{ session.Healer }}</div>
                                     <p class="mb-0">Healers<br><span class="text-size-14">LEFT</span></p>
                                     {% if 'Healer' in session.most_requested_roles %}
-                                    <p class="quest-card-badge trending text-size-09 d-inline-block mx-auto">Trending</p>
+                                    <p class="common-badge badge-pink text-size-09 d-inline-block mx-auto">badge-pink</p>
                                     {% endif %}
                                 </div>
                             </div>
@@ -99,7 +99,7 @@
                                     <li>
                                         <div class="d-flex align-items-center">
                                             <span class="profile-companion-text ms-2">{{ adventurer.username }} </span>
-                                            <span class="quest-card-badge ms-3 {% if adventurer.role=='Warrior' %}quest-duration{% elif adventurer.role=='Mage' %}quest-difficulty{% else %}quest-type{% endif %}">
+                                            <span class="common-badge ms-3 {% if adventurer.role=='Warrior' %}badge-blue{% elif adventurer.role=='Mage' %}badge-green{% else %}badge-red{% endif %}">
                                                 {{ adventurer.role }}
                                             </span>
                                         </div>
@@ -135,7 +135,7 @@
                                 </h1>
                                 <div class="text-center text-size-17 color-green mb-1 mt-3">
                                     <h2 class="title-big-yellow text-size-28">{{ session.day }} at {% if session.hour < 10 %}0{% endif %}{{ session.hour }}:{% if session.minute < 10 %}0{% endif %}{{ session.minute }}</h2>
-                                    <p class="quest-card-badge quest-location text-size-14 mt-2 d-inline-block">Location: {{ session.location }}</p>
+                                    <p class="common-badge badge-yellow text-size-14 mt-2 d-inline-block">Location: {{ session.location }}</p>
                                 </div>
                                 <div class="modal-body container-fluid">
                                     <div class="row">

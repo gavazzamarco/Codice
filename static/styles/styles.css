@@ -245,7 +245,7 @@ body {
     text-shadow: 6px 2px 0px black;
 }
 
-.quest-card-badge {
+.common-badge {
     padding: 5px 10px;
     border-radius: 8px;
     margin-right: 10px;
@@ -254,31 +254,31 @@ body {
     margin-bottom: 4px;
 }
 
-.quest-type {
+.badge-red {
     border: 3px solid var(--megumin);
     color: var(--megumin);
     background: rgb(99, 4, 4);
 }
 
-.quest-difficulty {
+.badge-green {
     border: 3px solid var(--kazuma);
     color: var(--kazuma);
     background: rgb(0, 85, 0);
 }
 
-.quest-duration {
+.badge-blue {
     border: 3px solid var(--aqua);
     color: var(--aqua);
     background: rgb(0, 0, 132);
 }
 
-.quest-location {
+.badge-yellow {
     border: 3px solid var(--darkness);
     color: var(--darkness);
     background: rgb(149, 56, 3);
 }
 
-.trending { 
+.badge-pink { 
     border: 3px solid rgb(255, 197, 255) !important;
     color: rgb(255, 197, 243) !important;
     background: rgb(98, 1, 98) !important;

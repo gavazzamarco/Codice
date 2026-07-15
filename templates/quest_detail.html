@@ -47,7 +47,7 @@
                             {{ session.day }} at {% if session.hour < 10 %}0{% endif %}{{ session.hour }}:{% if session.minute < 10 %}0{% endif %}{{ session.minute }}
                         </div>
                         <div class="d-flex justify-content-center mb-2">
-                            <p class="quest-card-badge quest-location text-center m-0">
+                            <p class="common-badge badge-yellow text-center m-0">
                                 <span class="text-size-14 px-2">{{ session.location }}</span>
                             </p>
                         </div>
@@ -75,7 +75,7 @@
                         {% endif %}
                     {% else %}
                         {% if session.is_past %}
-                        <span class="profile-locked text-size-14 m-0 p-2 trending">ENDED</span>
+                        <span class="profile-locked text-size-14 m-0 p-2 badge-pink">ENDED</span>
                         {% else %}
                         <button type="button" class="common-button button-blue text-size-17" data-bs-toggle="modal" data-bs-target="#bookDate-{{ session.id }}">JOIN</button>
                         {% endif %}

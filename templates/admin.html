@@ -32,15 +32,15 @@
         <div class="row d-flex align-items-center pb-4">
             <div class="col-4 color-blue">
                 <div class="text-size-43">{{ infos.total_roles.Warrior }}</div>
-                <p class="quest-card-badge quest-duration text-size-26 mx-4">Warriors</p>
+                <p class="common-badge badge-blue text-size-26 mx-4">Warriors</p>
             </div>
             <div class="col-4 color-yellow">
                 <div class="text-size-43">{{ infos.total_roles.Mage }}</div>
-                <p class="quest-card-badge quest-location text-size-26 mx-4">Mages</p>
+                <p class="common-badge badge-yellow text-size-26 mx-4">Mages</p>
             </div>
             <div class="col-4 color-red">
                 <div class="text-size-43">{{ infos.total_roles.Healer }}</div>
-                <p class="quest-card-badge quest-type text-size-26 mx-4">Healers</p>
+                <p class="common-badge badge-red text-size-26 mx-4">Healers</p>
             </div>
         </div>
     </div>
@@ -51,7 +51,7 @@
             <div class="row d-flex justify-content-center align-items-center">
                 {% for type in infos.popular_types %}
                 <div class="col-6 text-center mb-4 pt-3">
-                    <div class="quest-card-badge trending text-size-26 d-inline-flex">{{ type }}</div>
+                    <div class="common-badge badge-pink text-size-26 d-inline-flex">{{ type }}</div>
                     <p class="profile-companion-title text-size-26 mt-3">Popular<br>Quest Type</p>
                 </div>
                 {% endfor %}
@@ -71,7 +71,7 @@
                 <div class="d-flex flex-column justify-content-center profile-master-session dark-box border-multicolor m-0">
                     <div class="mb-3 text-center">
                         <h3 class="text-size-33 mb-2 pb-2"><span class="color-red">{{ session.title[0] }}</span><span class="color-yellow">{{ session.title[1] }}</span><span class="color-green">{{ session.title[2] }}</span><span class="color-blue">{{ session.title[3] }}</span></h3>
-                        <p class="quest-card-badge quest-duration text-size-14 d-inline-flex">Location: {{ session.location }}</p>
+                        <p class="common-badge badge-blue text-size-14 d-inline-flex">Location: {{ session.location }}</p>
                     </div>
                     <div class="profile-session-date">
                         <span class="color-green">{{ session.day_name }} at</span> <span class="color-blue">{% if session.hour < 10 %}0{% endif %}{{ session.hour }}:</span><span class="color-yellow">{% if session.minute < 10 %}0{% endif %}{{ session.minute }}</span>
@@ -109,8 +109,8 @@
                         <p class="text-size-18 mt-0 fst-italic"><span class="color-red">{{ user.username }}</span></p>
                     </div>
                     <div class="d-flex gap-4 ms-3 text-size-14">
-                        <div class="quest-card-badge quest-location text-uppercase me-3"> {{ user.role }}</div>
-                        <div class="d-flex align-items-center quest-card-badge quest-difficulty">
+                        <div class="common-badge badge-yellow text-uppercase me-3"> {{ user.role }}</div>
+                        <div class="d-flex align-items-center common-badge badge-green">
                             Quest participations: {{ user.participations_count }}
                         </div>
                     </div>
@@ -146,9 +146,9 @@
                             <div class="flex-grow-1 me-2">
                                 <h2 class="card-title title-big-yellow">{{ quest.title }}</h2>
                                 <div class="d-flex flex-wrap">
-                                    <div class="quest-card-badge quest-type"><span>Type:</span> <span>{{ quest.type }}</span></div>
-                                    <div class="quest-card-badge quest-difficulty"><span>Difficulty:</span> <span>{{ quest.difficulty }}</span></div>
-                                    <div class="quest-card-badge quest-duration"><span>Duration:</span> <span>{{ quest.duration }}</span></div>
+                                    <div class="common-badge badge-red"><span>Type:</span> <span>{{ quest.type }}</span></div>
+                                    <div class="common-badge badge-green"><span>Difficulty:</span> <span>{{ quest.difficulty }}</span></div>
+                                    <div class="common-badge badge-blue"><span>Duration:</span> <span>{{ quest.duration }}</span></div>
                                 </div>
                             </div>
                             <div class="d-flex justify-content-center align-items-end mb-3 me-4">
@@ -193,11 +193,11 @@
                                             <div class="d-flex align-items-center">
                                                 <span class="profile-companion-text ms-2">{{ adventurer.username }} </span>
                                                 {% if adventurer.role=='Warrior' %}
-                                                <span class="quest-card-badge quest-duration ms-3">{{ adventurer.role }}</span>
+                                                <span class="common-badge badge-blue ms-3">{{ adventurer.role }}</span>
                                                 {% elif adventurer.role=='Mage' %}
-                                                <span class="quest-card-badge quest-difficulty ms-3">{{ adventurer.role }}</span>
+                                                <span class="common-badge badge-green ms-3">{{ adventurer.role }}</span>
                                                 {% else %}
-                                                <span class="quest-card-badge quest-type ms-3">{{ adventurer.role }}</span>
+                                                <span class="common-badge badge-red ms-3">{{ adventurer.role }}</span>
                                                 {% endif %}
                                             </div>
                                             {% if adventurer.companions %}

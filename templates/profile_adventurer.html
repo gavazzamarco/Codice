@@ -17,7 +17,7 @@
                     <p class="text-size-21 mb-0"><span class="color-green">{{ current_user.name }}</span> <span class="color-blue">{{ current_user.surname }}</span></p>
                     <p class="text-size-18 mt-0 fst-italic"><span class="color-red">{{ current_user.username }}</span></p>
                 </div>
-                <div class="quest-card-badge quest-location text-uppercase text-serif-bold ms-4">
+                <div class="common-badge badge-yellow text-uppercase text-serif-bold ms-4">
                     <span>{{ current_user.role }}</span>
                 </div>
             </div>
@@ -46,9 +46,9 @@
                                 <div class="flex-grow-1 me-2">
                                     <h2 class="card-title title-big-yellow">{{ quest.title }}</h2>
                                     <div class="d-flex flex-wrap">
-                                        <div class="quest-card-badge quest-type"><span>Type:</span> <span>{{ quest.type }}</span></div>
-                                        <div class="quest-card-badge quest-difficulty"><span>Difficulty:</span> <span>{{ quest.difficulty }}</span></div>
-                                        <div class="quest-card-badge quest-duration"><span>Duration:</span> <span>{{ quest.duration }}</span></div>
+                                        <div class="common-badge badge-red"><span>Type:</span> <span>{{ quest.type }}</span></div>
+                                        <div class="common-badge badge-green"><span>Difficulty:</span> <span>{{ quest.difficulty }}</span></div>
+                                        <div class="common-badge badge-blue"><span>Duration:</span> <span>{{ quest.duration }}</span></div>
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-center align-items-end mb-3 me-4">
@@ -78,16 +78,16 @@
                                         </div>
                                         <div class="mb-auto mt-2">
                                             {% if session.role=='Warrior' %}
-                                            <span class="quest-card-badge quest-duration ms-3 text-size-14">{{ session.role }}</span>
+                                            <span class="common-badge badge-blue ms-3 text-size-14">{{ session.role }}</span>
                                             {% elif session.role=='Mage' %}
-                                            <span class="quest-card-badge quest-difficulty ms-3 text-size-14">{{ session.role }}</span>
+                                            <span class="common-badge badge-green ms-3 text-size-14">{{ session.role }}</span>
                                             {% else %}
-                                            <span class="quest-card-badge quest-type ms-3 text-size-14">{{ session.role }}</span>
+                                            <span class="common-badge badge-red ms-3 text-size-14">{{ session.role }}</span>
                                             {% endif %} 
                                         </div>
                                     </div>
                                     <div class="d-flex justify-content-center align-items-center text-center text-size-14">
-                                        <p class="quest-card-badge quest-location mt-2 text-center">Location: {{ session.location }}</p>
+                                        <p class="common-badge badge-yellow mt-2 text-center">Location: {{ session.location }}</p>
                                     </div>
                                     {% if session.companions %}
                                     <div class="profile-companion-container my-3 mx-4 p-3">
