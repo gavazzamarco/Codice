@@ -361,6 +361,9 @@ def cancel_reservation(session_id):
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for("home"))
     session=session_dao.get_session_by_id(session_id)
+    if not session:
+        flash("The selected session does not exist", "danger")
+        return redirect(url_for('home'))
     reservation=reservation_dao.get_reservation_by_session_for_user(current_user.id, session_id)
     if not reservation:
         flash("The selected reservation does not exist", "danger")

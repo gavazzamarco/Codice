@@ -140,8 +140,8 @@
                                 <div class="modal-body container-fluid">
                                     <div class="row">
                                         <div class="mb-3 px-3">
-                                            <label for="location" class="logreg-label detail-modal-label">Location</label>
-                                            <select id="location" name="location" class="form-control text-serif-bold mb-4">
+                                            <label for="location-{{ session.id }}" class="logreg-label detail-modal-label">Location</label>
+                                            <select id="location-{{ session.id }}" name="location" class="form-control text-serif-bold mb-4" required>
                                                 <option value="">Select a location</option>
                                                 {% for location in locations %}
                                                 <option value="{{ location }}">{{ location }}</option>
