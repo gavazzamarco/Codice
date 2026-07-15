@@ -44,7 +44,7 @@
                 <div class="row">
                     <div class="col-9 ms-2 me-2 container-fluid">
                         <div class="text-center text-size-17 color-green mb-1 mt-3">
-                            {{ session.day }} at {{ session.hour_formatted }}:{{ session.minute_formatted }}
+                            {{ session.day }} at {% if session.hour < 10 %}0{% endif %}{{ session.hour }}:{% if session.minute < 10 %}0{% endif %}{{ session.minute }}
                         </div>
                         <div class="d-flex justify-content-center mb-2">
                             <p class="quest-card-badge quest-location text-center m-0">
@@ -94,7 +94,7 @@
                             </h1>
                             <div class="m-3 mt-0 container-fluid">
                                 <h2 class="text-size-28 text-center color-green mb-1 mt-3">
-                                    {{ session.day }} at {{ session.hour_formatted }}:{{ session.minute_formatted }} 
+                                    {{ session.day }} at {% if session.hour < 10 %}0{% endif %}{{ session.hour }}:{% if session.minute < 10 %}0{% endif %}{{ session.minute }}
                                 </h2>
                                 <div class="row text-center mt-3">
                                     <div class="col-4 text-size-19 color-blue">

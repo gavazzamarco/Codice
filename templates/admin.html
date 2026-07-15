@@ -76,7 +76,7 @@
                         </div>
                     </div>
                     <div class="profile-session-date">
-                        <span class="color-green">{{ session.day_name }}</span> <span class="color-blue">{{ session.hour_formatted }}:</span><span class="color-yellow">{{ session.minute_formatted }}</span>
+                        <span class="color-green">{{ session.day_name }} at</span> <span class="color-blue">{% if session.hour < 10 %}0{% endif %}{{ session.hour }}:</span><span class="color-yellow">{% if session.minute < 10 %}0{% endif %}{{ session.minute }}</span>
                     </div>
                 </div>
             </div>
@@ -174,7 +174,7 @@
                             <div class="col-5 d-flex flex-column">
                                 <div class="profile-master-session border-multicolor py-4 px-3 mb-4 container-fluid h-100">
                                     <div class="profile-session-date text-center">
-                                        <span class="color-green">{{ session.day }}</span> <span class="color-blue">{{ session.hour_formatted }}:</span><span class="color-yellow">{{ session.minute_formatted }}</span>
+                                        <span class="color-green">{{ session.day }}</span> <span class="color-blue">{% if session.hour < 10 %}0{% endif %}{{ session.hour }}:</span><span class="color-yellow">{% if session.minute < 10 %}0{% endif %}{{ session.minute }}</span>
                                     </div>
                                     <div class="line-tiny background-green w-100 mt-3 mb-3"></div>
                                     <div class="row px-4 text-center">

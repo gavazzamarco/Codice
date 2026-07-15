@@ -78,7 +78,7 @@ def get_filtered_quest(day, type, difficulty, role):
                     if count<LIMITS[role]:
                         has_available_session=True
                         break
-                if not has_available_session:
+                if has_available_session==False:
                     continue
         filtered_quests.append(quest)
     conn.commit()
@@ -86,19 +86,13 @@ def get_filtered_quest(day, type, difficulty, role):
     conn.close()
     return filtered_quests
 
-def formatta_orario(sessione):
-    sessione["hour_formatted"] = f"{int(sessione['hour']):02d}"
-    sessione["minute_formatted"] = f"{int(sessione['minute']):02d}"
-    return sessione
-
 def get_all_info_of_all_quests():
     quests=[dict(row) for row in get_all_quest()]
     for quest in quests:
         quest["sessions"]=[]
-        sessions=[dict(session) for session in session_dao.get_sessions_of_quest(quest["id"])]
-        for session in sessions:
+        sessions_of_quest=[dict(session) for session in session_dao.get_sessions_of_quest(quest["id"])]
+        for session in sessions_of_quest:
             session["day"]=DAYS_OF_WEEK[session["day"]]
-            formatta_orario(session)
             session["adventurers"]=[]
             reservations=reservation_dao.get_reservations_for_session(session["id"])
             total_booked=0
@@ -134,9 +128,11 @@ def get_admin_stats():
             total_types[quest["type"]]+=session["total_booked"]
             if session["total_booked"]>max_popular_session:
                 max_popular_session=session["total_booked"]
-                popular_sessions=[{"id": session["id"], "total":session["total_booked"], "title":quest["title"], "location":session["location"], "day_name":session["day"], "hour":session["hour"], "minute":session["minute"]}]
+                popular_sessions=[{"id": session["id"], "total":session["total_booked"], 
+                    "title":quest["title"], "location":session["location"], "day_name":session["day"], "hour":session["hour"], "minute":session["minute"]}]
             elif session["total_booked"]==max_popular_session and session["total_booked"]!=0:
-                popular_sessions.append({"id": session["id"], "total":session["total_booked"], "title":quest["title"], "location":session["location"], "day_name":session["day"], "hour":session["hour"], "minute":session["minute"]})
+                popular_sessions.append({"id": session["id"], "total":session["total_booked"], 
+                    "title":quest["title"], "location":session["location"], "day_name":session["day"], "hour":session["hour"], "minute":session["minute"]})
             for adventurer in session["adventurers"]:
                 total_roles[adventurer["role"]]+=(len(adventurer["companions"])+1)
     all_info["total_roles"]=total_roles

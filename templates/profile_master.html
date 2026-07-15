@@ -67,7 +67,7 @@
                         <div class="profile-master-session border-multicolor py-4 px-3 h-100">
                             <div class="d-flex align-items-center justify-content-around">
                                 <div class="profile-session-date text-center">
-                                    <span class="color-green">{{ session.day }}</span> <span class="color-blue">{{ session.hour_formatted }}:</span><span class="color-yellow">{{ session.minute_formatted }}</span>
+                                    <span class="color-green">{{ session.day }} at</span> <span class="color-blue">{% if session.hour < 10 %}0{% endif %}{{ session.hour }}:</span><span class="color-yellow">{% if session.minute < 10 %}0{% endif %}{{ session.minute }}</span>
                                     <p class="quest-card-badge quest-location text-size-14 mt-2 d-inline-block">Location: {{ session.location }}</p>
                                 </div>
                             </div>
@@ -135,8 +135,8 @@
                         </div>
                     </div>
                     <div class="modal fade" id="modify-{{ session.id }}" tabindex="-1" aria-hidden="true">
-                        <div class="modal-dialog modal-dialog-centered modal-lg  modal-lg rounded border-multicolor">
-                            <form action="{{ url_for('modify_session', session_id=session.id) }}" method="POST" class="modal-content background-grey">
+                        <div class="modal-dialog modal-dialog-centered modal-lg  modal-lg rounded">
+                            <form action="{{ url_for('modify_session', session_id=session.id) }}" method="POST" class="modal-content background-grey border-multicolor">
                                 <div class="d-flex justify-content-end mt-3 me-3 mb-0">
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
@@ -144,7 +144,7 @@
                                     <span class="color-red">{{ quest.title_split[0] }}</span><span class="color-yellow">{{ quest.title_split[1] }}</span><span class="color-green">{{ quest.title_split[2] }}</span><span class="color-blue">{{ quest.title_split[3] }}</span>
                                 </h1>
                                 <div class="text-center text-size-17 color-green mb-1 mt-3">
-                                    <h2 class="title-big-yellow text-size-28">{{ session.day }} at {{ session.hour_formatted }}:{{ session.minute_formatted }}</h2>
+                                    <h2 class="title-big-yellow text-size-28">{{ session.day }} at {% if session.hour < 10 %}0{% endif %}{{ session.hour }}:{% if session.minute < 10 %}0{% endif %}{{ session.minute }}</h2>
                                     <p class="quest-card-badge quest-location text-size-14 mt-2 d-inline-block">Location: {{ session.location }}</p>
                                 </div>
                                 <div class="modal-body container-fluid">

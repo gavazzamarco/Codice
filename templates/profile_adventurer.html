@@ -74,7 +74,7 @@
                                 <div class="col-9">
                                     <div class="d-flex align-items-center justify-content-around">
                                         <div class="profile-session-date">
-                                            <span class="color-green">{{ session.day }}</span> <span class="color-blue">{{ session.hour_formatted }}:</span><span class="color-yellow">{{ session.minute_formatted }}</span>  
+                                            <span class="color-green">{{ session.day }}</span> <span class="color-blue">{% if session.hour < 10 %}0{% endif %}{{ session.hour }}:</span><span class="color-yellow">{% if session.minute < 10 %}0{% endif %}{{ session.minute }}</span>  
                                         </div>
                                         <div class="mb-auto mt-2">
                                             {% if session.role=='Warrior' %}
@@ -100,7 +100,9 @@
                                 </div>
                                 <div class="col-3">
                                     <div class="d-flex flex-column justify-content-center align-items-center mb-1">
-                                        {% if session.can_cancel %}
+                                        {% if session.is_past %}
+                                        <span class="profile-locked trending">ENDED</span>
+                                        {% elif session.can_cancel %}
                                         <a href="{{ url_for('quest_detail', quest_id=quest.id) }}" class="common-button button-yellow text-size-21 mb-3">Modify</a>
                                         <a href="{{ url_for('cancel_reservation', session_id=session.session_id) }}" class="common-button button-blue text-size-21">Cancel</a>
                                         {% else %}
