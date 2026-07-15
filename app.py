@@ -170,7 +170,7 @@ def check_overlap(day, hour, minute, duration, location, sessions):
             saved={"start": conversione_minuti_assoluti(session["day"], session["hour"], session["minute"])}
             saved["end"]=saved["start"]+int(quest["duration"])
             if (max(saved["start"], current["start"]))<min(saved["end"], current["end"]):
-                flash("The session of ["+DAYS_OF_WEEK[day]+" h"+str(hour)+":"+str(minute)+"] conflicts with the quest ["+quest["title"] +"]", 'danger')
+                flash("The session of ["+str(DAYS_OF_WEEK[day])+" h"+str(hour)+":"+str(minute)+"] conflicts with the quest ["+quest["title"] +"]", 'danger')
                 return True
     return False
 
@@ -191,7 +191,7 @@ def validate_and_create_session(quest_id, location, day, hour, minute, duration,
         return False
     session_dao.create_session(quest_id, location, DAYS_OF_WEEK.index(day), int(hour), int(minute))
     if flag_mod==False:
-        flash("The session of ["+location+":"+DAYS_OF_WEEK[day]+" h"+str(hour)+":"+str(minute)+"] is created correctly", 'success')
+        flash("The session of ["+location+":"+day+" h"+str(hour)+":"+str(minute)+"] is created correctly", 'success')
     return True
 
 @app.route("/quest_check_and_save", methods=["POST"])
