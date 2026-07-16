@@ -197,7 +197,7 @@ def validate_and_create_session(quest_id, location, day, hour, minute, duration,
 @app.route("/quest_check_and_save", methods=["POST"])
 @login_required
 def quest_check_and_save():
-    if (not current_user.is_authenticated) or current_user.role!="master":
+    if current_user.role!="master":
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for('home'))
     title=request.form.get("title")

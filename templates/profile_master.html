@@ -73,21 +73,21 @@
                                     <div>{{ session.Warrior }}</div>
                                     <p class="mb-0">Warriors<br><span class="text-size-14">LEFT</span></p>
                                     {% if 'Warrior' in session.most_requested_roles %}
-                                    <p class="common-badge badge-pink text-size-09 d-inline-flex mx-auto mt-0">badge-pink</p>
+                                    <p class="common-badge badge-pink text-size-09 d-inline-flex mx-auto mt-0">Trending</p>
                                     {% endif %}
                                 </div>
                                 <div class="col-4 text-size-15 color-yellow">
                                     <div>{{ session.Mage }}</div>
                                     <p class="mb-0">Mages<br><span class="text-size-14">LEFT</span></p>
                                     {% if 'Mage' in session.most_requested_roles %}
-                                    <p class="common-badge badge-pink text-size-09 d-inline-block mx-auto">badge-pink</p>
+                                    <p class="common-badge badge-pink text-size-09 d-inline-block mx-auto">Trending</p>
                                     {% endif %}
                                 </div>
                                 <div class="col-4 text-size-15 color-red ">
                                     <div>{{ session.Healer }}</div>
                                     <p class="mb-0">Healers<br><span class="text-size-14">LEFT</span></p>
                                     {% if 'Healer' in session.most_requested_roles %}
-                                    <p class="common-badge badge-pink text-size-09 d-inline-block mx-auto">badge-pink</p>
+                                    <p class="common-badge badge-pink text-size-09 d-inline-block mx-auto">Trending</p>
                                     {% endif %}
                                 </div>
                             </div>
@@ -181,8 +181,8 @@
                 {% endif %}
             </section>
             <div class="modal fade" id="create-{{ quest.id }}" tabindex="-1" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered modal-lg modal-lg rounded border-multicolor">
-                    <form action="{{ url_for('create_session', quest_id=quest.id) }}" method="POST" class="modal-content background-grey">
+                <div class="modal-dialog modal-dialog-centered modal-lg modal-lg rounded ">
+                    <form action="{{ url_for('create_session', quest_id=quest.id) }}" method="POST" class="modal-content background-grey border-multicolor">
                         <div class="d-flex justify-content-end mt-3 me-3 mb-0">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
