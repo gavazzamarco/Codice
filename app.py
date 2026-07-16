@@ -9,6 +9,7 @@ from datetime import datetime
 SIMULATE_DAY=2
 SIMULATE_HOUR=14
 SIMULATE_MIN=30
+# Valori prefediniti passati alle form
 DAYS_OF_WEEK=["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"]
 LOCATIONS=["Axel", "Kingdom of Elroad", "Arcanletia"]
 DIFFICULTY=["Easy", "Medium", "Hard", "Legendary"]
@@ -22,6 +23,8 @@ app.config["SECRET_KEY"]="KoNoSuBa-secret-key"
 login_manager=LoginManager()
 login_manager.init_app(app)
 
+# Le quest nella sezione home compaiono con delle foto a destra e sinistra
+# e questa funzione serve proprio ad assegnare ad ogni quest la foto che avrà di lato
 def assegna_foto(filtered_quests):
     for index, quest in enumerate(filtered_quests):
         quest["foto_destra"]=quest["foto_sinistra"]=""
@@ -35,11 +38,16 @@ def assegna_foto(filtered_quests):
             quest["foto_destra"]='images/home/kazuma.png'
     return filtered_quests
 
+# Home normale in cui vengono visualizzate tutte le quest mai create, anche quelle
+# senza sessioni, ordinate in base alla sessione che inizia prima nel tempo
 @app.route("/")
 def home():
     filtered_quests=assegna_foto([dict(row) for row in quests_dao.get_all_quest()])
     return render_template("home.html", days=DAYS_OF_WEEK, types=TYPES, difficulties=DIFFICULTY, roles=ROLES, quests=filtered_quests)
 
+# Quando nella home si preme il bottone search di fatto invio i dati 
+# tramite una form a questa funzione che prima gli valida e poi 
+# resituisce le quest filtrate secondo i parametri richiesti dall'utente
 @app.route("/home_filter", methods=["POST"])
 def home_filter():
     day=request.form.get("day")
@@ -75,12 +83,17 @@ def load_user(user_id):
         user=None
     return user
 
+# Ruote che mostra la grafica della pagina di registrazione e basta
 @app.route("/register")
 def register():
     if current_user.is_authenticated:
         return redirect(url_for('home'))
     return render_template("register.html")
 
+# Funzione che valida le foto (tutte le foto del sito possono essere solo in
+# formato jpg, jpeg, png e webp) e se sono corrette ne modifica il nome per
+# renderlo sicuro ed univico, le salva nel file-system e poi restituisce il
+# path con cui tali foto sono salvate nel file-system
 def check_and_save_photo(photo, path):
     estensioni_consentite={"jpg", "jpeg", "png", "webp"}
     if not photo or ('.' not in photo.filename) or (photo.filename.rsplit('.')[-1] not in estensioni_consentite):
@@ -90,6 +103,10 @@ def check_and_save_photo(photo, path):
     photo.save("static/"+path_db)
     return path_db
 
+# Funzione che NON serve ad alcuna scopo visivo, serve solo a prendere i dati
+# inseriti in fase di registrazione, validarli, e poi, se tutto è avvenuto
+# correttamente, inserire l'utente nel database per creare l'utente
+# Tutti gli utenti che si registrano sono SEMPRE e solo AVVENTURIERI
 @app.route("/create_account", methods=["POST"])
 def create_account():
     name=request.form.get("name")
@@ -115,12 +132,16 @@ def create_account():
     flash('Registration successful! Please log in', 'success')
     return redirect(url_for('login'))
 
+# Ruote che mostra la grafica della pagina di login e basta
 @app.route("/login")
 def login():
     if current_user.is_authenticated:
         return redirect(url_for('home')) 
     return render_template("login.html")
 
+# Funzione che NON serve ad alcuna scopo visivo, serve solo a prendere i dati
+# inseriti in fase di login, validarli, e poi, se tutto è avvenuto
+# correttamente, loggare e creare un utente per mezzo di Flask-login
 @app.route("/validation", methods=["POST"])
 def validation():
     username=request.form.get("username")
@@ -140,6 +161,8 @@ def validation():
         flash("Welcome back! "+db_user["name"]+" "+db_user["surname"]+"!", "success")
     return redirect(url_for("profile"))
 
+# Funzione che usa Flask-login per terminare la sessione corrente 
+# dell'utente e fargli fare logout
 @app.route("/logout")
 @login_required
 def logout():
@@ -147,6 +170,7 @@ def logout():
     logout_user()
     return redirect(url_for("home"))
 
+# Ruote che mostra la grafica della pagina di creazione di quest/sessioni e basta
 @app.route("/quest_create")
 @login_required
 def quest_create():
@@ -155,9 +179,22 @@ def quest_create():
         return redirect(url_for('home'))
     return render_template("quest_create.html", days=DAYS_OF_WEEK, types=TYPES, difficulties=DIFFICULTY, locations=LOCATIONS)
 
+# Converte data ed ora in un valore in minuti "assoluto" calcolato
+# rispetto all'inizio della settima. Usato per verificare gli overlap
 def conversione_minuti_assoluti(day, hour, minute):
     return int((60*24)*int(day)+int(hour)*60+int(minute))
 
+# Controlla l'overlap tra la sessione che viene passata frammentata nelle 
+# varie parti (cioè la sessione divisa in giorno, ora, minuti, luogo e durata)
+# e la lista di altre sessioni che le vengono passate
+# Funzione che viene usata sia per verificare le sovrapposizioni in fase di:
+# - creazione di una nuova sessione da parte del master (in tal caso la location
+# assume il valore specifico della sessione siccome in fase di creazione due
+# sessioni sono sovrapposte solo se avvengono nello stesso luogo e si sovrappongono
+# anche temporalmente)
+# - prenotazione di un avventuriero ad una sessione (in tal caso la location
+# assume il valore generico all siccome un avventuriero può partecipari solo
+# a sessioni che non si sovrappongono temporalmente)
 def check_overlap(day, hour, minute, duration, location, sessions):
     day=DAYS_OF_WEEK.index(day)
     hour=int(hour)
@@ -169,11 +206,18 @@ def check_overlap(day, hour, minute, duration, location, sessions):
         if location==session["location"] or location=="all":
             saved={"start": conversione_minuti_assoluti(session["day"], session["hour"], session["minute"])}
             saved["end"]=saved["start"]+int(quest["duration"])
+            # condizione che se soddisfatta indica una sovrapposizione temporale
             if (max(saved["start"], current["start"]))<min(saved["end"], current["end"]):
                 flash("The session of ["+str(DAYS_OF_WEEK[day])+" h"+str(hour)+":"+str(minute)+"] conflicts with the quest ["+quest["title"] +"]", 'danger')
                 return True
     return False
 
+# Funzione per la validazione dei campi associati ad una sessione e creazione
+# della sessione stessa. Parametro flag_mod(idifica) serve a dire che se l'
+# operazione è di modifica della sessione allora non viene mostrato a video un
+# messaggio flash che potrebbe essere fuorviante. La modifica della sessione consiste
+# infatti nella creazione della nuova sessione e nel cancellare quella presente
+# precedentemente e che si intendeva modificare
 def validate_and_create_session(quest_id, location, day, hour, minute, duration, exist_sessions, flag_mod=False):
     if not location or location not in LOCATIONS:
         flash("The location must be chosen from the available options", "danger")
@@ -189,11 +233,16 @@ def validate_and_create_session(quest_id, location, day, hour, minute, duration,
         return False
     if check_overlap(day, hour, minute, duration, location, exist_sessions)==True:
         return False
+    # Se la sessione ha i parametri corretti e non si sovrappone ad altre sessioni viene
+    # creata corretamente e come segno di ciò viene restituito True alla funzione chiamante
     session_dao.create_session(quest_id, location, DAYS_OF_WEEK.index(day), int(hour), int(minute))
     if flag_mod==False:
         flash("The session of ["+location+":"+day+" h"+str(hour)+":"+str(minute)+"] is created correctly", 'success')
     return True
 
+# Funzione che NON serve ad alcuna scopo visivo, serve solo a prendere i dati
+# inseriti in fase di creazione della quest/sessione, validare i dati ricevuti
+# e, se tutto è corretto, inserire nel database quest e sessioni create per quella quest
 @app.route("/quest_check_and_save", methods=["POST"])
 @login_required
 def quest_check_and_save():
@@ -232,6 +281,7 @@ def quest_check_and_save():
         flash("The illustration is mandatory. Only jpg, jpeg, png, and webp are allowed", 'danger')
         return redirect(url_for('quest_create'))
     
+    # E' POSSIBILE CREARE UNA QUEST ANCHE SE NON HA SESSIONI INSERITE VALIDE
     quest_id=quests_dao.create_quest(title, duration, type, difficulty, description, path_photo)
     flash("The quest was created correctly", 'success')
     
@@ -245,6 +295,7 @@ def quest_check_and_save():
         flash("All the entered sessions overlap with other existing sessions so no sessions for quest ["+title+"] was created", "danger")  
     return redirect(url_for('profile'))
 
+# La stringa passata viene divisa in quattro parti di uguale numeri di caratteri
 def split_title(title):
     base_size=len(title)//4
     remainder=len(title)%4
@@ -256,28 +307,47 @@ def split_title(title):
         start=start+size
     return parts
 
+# Funzione che serve a prendere dal database e mostrare a video tutti i
+# dati relativi ad una certa quest (e relative sessioni) con un certo quest_id
 @app.route("/quest/<int:quest_id>")
 def quest_detail(quest_id):
     quest_db=quests_dao.get_quest_by_id(quest_id)
     if not quest_db:
         flash("Quest not found", "danger")
         return redirect(url_for('home'))
+    # Devo convertire quanto ottenuto dal database in un dizionario siccome
+    # avendo usato "conn.row_factory=sqlite3.Row" i dati restituti dal database
+    # sarebbero altrimenti immutabili, sarebbe al massimo possibile un elemento
+    # al fondo della lista ma NON modificare un elemento già esistente
     sessions_db=[dict(row) for row in session_dao.get_sessions_of_quest(quest_id)]
     for session in sessions_db:
+        # Per ogni sessione verifico se è possibile cancellare tale sessione, cioè
+        # se la differenza in ore tra data/ora fittizia e data/ora di inzio della
+        # sessione è maggiore ad 8 ore, se la sessione è già passata (cioè se la 
+        # data/ora di inzio della sessione è inferiore alla data/ora fittizia del sistema)
+        # e converto il giorno, salvato nel database come numero, in stringa
         session["can_cancel"]=can_cancel(session["day"], session["hour"], session["minute"])
         session["is_past"]=not can_cancel(session["day"], session["hour"], session["minute"], 0)
         session["day"]=DAYS_OF_WEEK[session["day"]]
+        
+        # Prendo tutte le prenotazioni attive relative alla sessione attualmente
+        # considerata nel ciclo for e per ciascuna sessione calcolo quanti solo i
+        # i posti ancora disponibili per ogni ruolo (warrior, mage e healer)
         reservations_session=reservation_dao.get_reservations_for_session(session["id"])
         for role in ROLES:
             session[role]=LIMITS[role]
             for reservation in reservations_session:
                 if reservation["role"]==role:
                     session[role]-=reservation["total_people"]
+    # Se l'utente è loggato prendo la lista di id delle sessioni a cui è prenotato
+    # per sapere se l'utente corretente è già iscritto a qualcuna delle sessioni
+    # (e se quindi può cancellarsi o la deve visualizzare come locked)
     reservations_user_db=[]
     if current_user.is_authenticated:
         reservations_user_db=[reservation["session_id"] for reservation in reservation_dao.get_reservations_of_user(current_user.id)]
     return render_template('quest_detail.html', quest=quest_db, titolo=split_title(quest_db["title"]), sessions=sessions_db, roles=ROLES, reservations_user=reservations_user_db)
 
+# Funzione che riceve i dati dal modal presente in quest_detail
 @app.route("/book_session", methods=["POST"])
 @login_required
 def book_session():

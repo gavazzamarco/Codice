@@ -2,11 +2,17 @@
 {% block title %} Register {% endblock %}
 {% block register_active %} active {% endblock %}
 {% block content %}
+<!-- logreg-card: classe css personalizzata che applica padding ed il distanziamento 
+ (tramite margin) da header e footer che altrimenti le sarebbero attaccate -->
 <section class="col-6 logreg-card border-multicolor mx-auto">
+    <!-- La form ha come classe container fluid siccome dentro uso una row ed una
+     successiva divisione in colonne per distribuire equamente lo spazio tra le form -->
     <form action="{{ url_for('create_account') }}" method="POST" enctype="multipart/form-data" class="container-fluid">
         <h1 class="text-center text-size-33 mb-4 mt-4 pb-2">
             <span class="color-red">The</span> <span class="color-yellow">adve</span><span class="color-green">nture</span> <span class="color-blue">begin</span>
         </h1>
+        <!-- TUTTE LE FORM HANNO L'ATTRIBUTO "REQUIRED" 
+         ad eccessione dell'immagine profilo e bio che sono OPZIONALI -->
         <div class="row mb-4">
             <div class="col-6">
                 <label for="name" class="logreg-label">Name*</label>
@@ -28,6 +34,9 @@
         
         <label class="logreg-label" for="bio">Biography (optional)</label>
         <textarea id="bio" name="bio" class="form-control text-serif-bold mb-4" rows="4" placeholder="Share your past story and let others know about your achievements"></textarea>
+        
+        <!-- Bottoni per pulire i campi delle form o inviare il contenuto
+         delle form al backend quando tutti i campi richiesti sono completi -->
         <div class="d-flex my-4 pt-3">
             <button class="w-50 button-flat cancel m-1" type="reset">Cancel</button>
             <button class="w-50 button-flat approve m-1" type="submit">Create</button>

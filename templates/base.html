@@ -8,13 +8,22 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles/styles.css') }}">
 </head>
 <body class="min-vh-100">
+    <!-- Sticky top [bootstrap]: Position an element at the top of the viewport, from edge to edge, but only after you scroll past it. -->
     <header class="sticky-top">
+        <!-- justify-content-between [bootstrap]: siccome voglio avere gli elementi al lati opposti dello schermo -->
+        <!-- padding-navbar: classe css personalizzata per padding personalizzata della navbar -->
         <nav class="d-flex flex-wrap justify-content-between align-items-center padding-navbar">
+            <!-- header-title: classe css personalizzata per definire dimensione e stile
+             e funge da link per tornare alla sezione home del sito -->
             <a href="{{ url_for('home') }}" class="d-flex align-items-center text-decoration-none header-title gap-2">
+                <!-- header-logo: classe css personalizzata per definirne dimensioni e forma -->
                 <img src="{{ url_for('static', filename='images/logo-header.jpg') }}" class="header-logo" alt="Logo Konosuba">
                 <span class="color-red">Ko</span> <span class="color-yellow">no</span> <span class="color-green">su</span> <span class="color-blue">ba</span>
             </a>
+            <!-- classi bootstrap ottenute per copia-incolla dal sito -->
             <ul class="nav nav-pills">
+                <!-- usate classi separate per modificare lo stile pre-definito di bootstrap
+                 sia per nav-item che nav-link definendo proprietà sia per hover, sia per active -->
                 <li class="nav-item header-nav-item {% block home_active %}{% endblock %}">
                     <a href="{{ url_for('home') }}" class="nav-link header-nav-link">Home</a>
                 </li>
@@ -25,6 +34,7 @@
                 <li class="nav-item header-nav-item {% block register_active %}{% endblock %}">
                     <a href="{{ url_for('register') }}" class="nav-link header-nav-link">Register</a>
                 </li>
+                <!-- potevo metterli entrambi insieme e sostituire il tutto con un else -->
                 {% endif %}
                 {% if current_user.is_authenticated %}
                 <li class="nav-item header-nav-item {% block profile_active %}{% endblock %}">
@@ -36,10 +46,16 @@
                 {% endif %}
             </ul>
         </nav>
+        <!-- d-flex siccome mi serviva avere che i div NON avessero un comportamento
+         in block ma si posizionassero gli unici vicino agli altri sulla stessa riga -->
         <div class="line-multicolor w-100 d-flex">
             <div class="background-red w-25 h-100"></div> <div class="background-yellow w-25 h-100"></div> <div class="background-green w-25 h-100"></div> <div class="background-blue w-25 h-100"></div>
         </div>
     </header>
+    <!-- In classe avevamo usato container-fluid he avrebbe però preso tutto la larghezza
+     dello schermo. Siccome era una classe bootstrap che conoscevo e non mi piaceva
+     il layout attuale ho provato a modificare la posizione dei messaggi flash, mettendoli
+     con posizione fissa appena sotto l'header e con z-index se no veniva coperto dal resto -->
     <div class="flash-messages d-flex flex-wrap">
         {% with messages = get_flashed_messages(with_categories=true) %}
         {% if messages %}
@@ -56,28 +72,44 @@
         {% block content %}
         {% endblock %}
     </main>
+    <!-- bottone di creazione per le quest che compare solo al master, messo in basso
+     a destra e con proprietà di basi che sono quelle di common-button e button-yellow
+     ma alla quale ho poi applicato la classe quest-create per modificare il colore
+     del background, e renderlo nero, e poi ovviamente per la posizione fixed -->
+    <!-- In più, analogamente a quanto visto in classe per active per i link, ho
+     messo un blocco jinja per fare in modo che il bottone scompaia quando il master
+     si trova nella pagina di create perché tanto non avrebbe senso tenerlo lì -->
     {% if current_user.is_authenticated and current_user.role=='master' %}
     <a href="{{ url_for('quest_create') }}" class="common-button button-yellow quest-create-button border-multicolor {% block visibility %}{% endblock %}">
         <span class="color-red">NE</span><span class="color-yellow">W Q</span><span class="color-green">UE</span><span class="color-blue">ST</span>
     </a>
     {% endif %}
     <footer>
+        <!-- Solito contenitore per linea multicolor che uso come bordo ma in questo
+         caso con colori "invertiti" siccome ho usato flex-row-reverse -->
         <div class="line-multicolor w-100 d-flex flex-row-reverse">
             <div class="background-red w-25 h-100"></div> <div class="background-yellow w-25 h-100"></div> <div class="background-green w-25 h-100"></div> <div class="background-blue w-25 h-100"></div>
         </div>
+        <!-- Ho usato container fluid siccome uso dentro delle classi col che occupano
+         l'intera larghezza dello schermo e senza di essa avrei avuto una lunga ma sottile
+         linea bianca a destra dello schermo con una barra orizziontale che compariva sotto -->
         <div class="container-fluid">
             <div class="row justify-content-center">
                 <div class="col-5 d-flex justify-content-center align-items-center mt-3 mb-3">
+                    <!-- Immagine che è di fatto un link alla sezione home -->
                     <a href="{{ url_for('home') }}" class="text-decoration-none">
                         <img src="{{ url_for('static', filename='images/logo-footer.png') }}" class="footer-logo" alt="Logo Konosuba">
                     </a>
                 </div>
                 <div class="col-5 text-center mt-4 mb-4 footer-text">
+                    <!-- footer-title: classe css personalizzata per definire dimensione e
+                     colore del titolo del footer per termini-condizioni -->
                     <h4 class="footer-title">Guild Terms and Conditions:</h4>
                     <span class="color-red">Adventurers browsing this site </span><span class="color-yellow">accept the risk of spontaneous </span><span class="color-green">explosions, giant toad attacks </span><span class="color-blue">and the total absence of Eris rewards</span>
                 </div>
             </div>
         </div>
     </footer>
+    <!-- Serve per tutte quelle classi bootstrap che fanno uso "nascosto" di javascript -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" crossorigin="anonymous"></script>
 </body>

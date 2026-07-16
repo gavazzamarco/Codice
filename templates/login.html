@@ -2,16 +2,22 @@
 {% block title %} Login {% endblock %}
 {% block login_active %} active {% endblock %}
 {% block content %}
+<!-- logreg-card: classe css personalizzata che applica padding ed il distanziamento 
+ (tramite margin) da header e footer che altrimenti le sarebbero attaccate -->
 <section class="col-5 logreg-card border-multicolor mx-auto">
     <form action="{{ url_for('validation') }}" method="POST">
         <h1 class="text-center text-size-33">
             <span class="color-red">Wel</span><span class="color-yellow">come</span> <span class="color-green">ba</span><span class="color-blue">ck</span>
         </h1>
+        <!-- TUTTE LE FORM HANNO L'ATTRIBUTO "REQUIRED" -->
         <label class="logreg-label" for="username">Username*</label>
         <input type="text" id="username" name="username" class="form-control text-serif-bold mb-4" placeholder="kazumasatou" required>
         
         <label class="logreg-label" for="password">Password*</label>
         <input type="password" id="password" name="password" class="form-control text-serif-bold mb-4" required>
+        
+        <!-- Bottoni per pulire i campi delle form o inviare il contenuto
+         delle form al backend quando tutti i campi richiesti sono completi -->
         <div class="d-flex my-4 pt-3">
             <button class="w-50 button-flat cancel m-1" type="reset">Cancel</button>
             <button class="w-50 button-flat approve m-1" type="submit">Login</button>

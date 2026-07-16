@@ -2,13 +2,23 @@
 {% block title %} Create Quest {% endblock %}
 {% block visibility %} d-none {% endblock %}
 {% block content %}
+<!-- Ho usato container fluid siccome uso dentro una row e delle classi col che occupano l'intera 
+ larghezza dello schermo (cioè tutte le 12 colonne) e senza di essa avrei avuto una lunga 
+ ma sottile linea bianca a destra dello schermo con una barra orizziontale che compariva sotto -->
 <section class="container-fluid create-container">
     <form action="{{ url_for('quest_check_and_save') }}" method="POST" enctype="multipart/form-data" class="row align-items-start justify-content-center">
+        <!-- Colonna di sinistra dove c'è la form per la quest -->
         <div class="col-6 me-2">
+            <!-- Siccome dentro questa "colonna col-6" creo un'altra row con elementi 
+             che occupano tutte e 12 le colonne, allora ho bisogno di container-fluid -->
+             <!-- Volendo avrei potuto togliere questo container e il risultato non 
+              sarebbe stato esattamente identico ma comunque molto simile -->
             <div class="logreg-card border-multicolor container-fluid">
+                <!-- Titolo della sezione di quest-create -->
                 <h1 class="create-section-title text-center">
                     <span class="color-red">Que</span><span class="color-yellow">st</span> <span class="color-green">Crea</span><span class="color-blue">tion</span>
                 </h1>
+                <!-- TUTTE LE FORM HANNO L'ATTRIBUTO "REQUIRED" -->
                 <label class="logreg-label" for="title">Title*</label>
                 <input type="text" id="title" name="title" class="form-control text-serif-bold mb-4" placeholder="Winter Shogun Incident" required>
                 
@@ -16,6 +26,7 @@
                 <textarea id="description" name="description" class="form-control text-serif-bold mb-4" rows="4" placeholder="What heroic deeds are the adventurers called upon to perform?" required></textarea>
                 <div class="row">
                     <div class="col-6">
+                        <!-- La durata deve essere un numero intero maggiore di 0 -->
                         <label class="logreg-label" for="duration">Duration*</label>
                         <input class="form-control text-serif-bold mb-4" type="number" id="duration" name="duration" placeholder="Expressed in minutes" min="1" required>
                     </div>
@@ -44,10 +55,18 @@
                 </div>
             </div>
         </div>
+
+        <!-- Colonna di destra dove ci sono le form per le sessioni -->
         <div class="col-5 logreg-card mb-4 border-multicolor ms-2">
+            <!-- Titolo della sezione di creazione delle sessioni -->
             <h1 class="create-section-title text-center">
                 <span class="color-red">Ses</span><span class="color-yellow">sion</span> <span class="color-green">Crea</span><span class="color-blue">tion</span>
             </h1>
+            <!-- Siccome dentro questa "colonna col-5" creo un'altra row con elementi 
+             che occupano tutte e 12 le colonne, allora ho bisogno di container-fluid -->
+            <!-- Container ESSENZIALE siccome è quello che viene usato come
+             riferimento da js per capire dove andare ad inserire la form relativa alla nuova
+             sessione nel momento in cui si preme sul bottone di add-session -->
             <div class="container-fluid" id="session-container">
                 <div class="dark-box-grey-border row d-flex justify-content-center p-2">
                     <div class="col-4">
@@ -60,16 +79,28 @@
                         </select>
                     </div>
                     <div class="col-3">
+                        <!-- L'ora deve essere un numero intero compreso tra 0 e 23 -->
                         <label class="logreg-label" for="hour">Hour*</label>
                         <input type="number" id="hour" name="hour" class="form-control text-serif-bold mb-4" placeholder="0-23" min="0" max="23" required>
                     </div>
                     <div class="col-3">
+                        <!-- L'ora deve essere un numero intero compreso tra 0 e 59 -->
                         <label class="logreg-label" for="minute">Minute*</label>
                         <input type="number" id="minute" name="minute" class="form-control text-serif-bold mb-4" placeholder="0-59" min="0" max="59" required>
                     </div>
+
+                    <!-- Bottone che se premuto attiva una funzione javascript che 
+                     consente di cancellare l'intero contenitore al cui interno è
+                     presente la form della sessione corrente -->
                     <div class="col-2 d-flex justify-content-end align-items-center my-3">
                         <button type="button" class="create-button-delete">X</button>
                     </div>
+
+                    <!-- Anche se non l'ho messo all'interno di una nuova row va comunque
+                     nella "riga" sotto alle form precedenti siccome tutte e 12 le 
+                     colonne (ma anche se non fossero state tutte, non ve ne sarebbero
+                     comunque state 9 disponibili) della riga superiore erano occupate
+                     e quindi per forza di cose il luogo va nella "riga" sottostante -->
                     <div class="col-9">
                         <label class="logreg-label" for="location">Location*</label>
                         <select id="location" name="location" class="form-control text-serif-bold mb-4" required>
@@ -81,9 +112,15 @@
                     </div>
                 </div>
             </div>
+
+            <!-- Bottone che se premuto consente di far comparire le form necessarie all'
+             inserimento di una nuova sessione per la quest in fase di creazione -->
             <div class="d-flex justify-content-center mt-2">
                 <button type="button" id="add-session" class="common-button button-blue text-size-17">Add a new session</button>
             </div>
+
+            <!-- Bottoni per pulire i campi delle form o inviare il contenuto
+             delle form al backend quando tutti i campi richiesti sono completi -->
             <div class="d-flex m-4 pt-4">
                 <button class="w-50 button-flat cancel me-1" type="reset">Clear</button>
                 <button class="w-50 button-flat approve ms-1" type="submit">Create</button>
@@ -91,5 +128,8 @@
         </div>
     </form>
 </section>
+
+<!-- File javascript che permette di aggiungere/cancellare il contenitore
+ contenente i campi necessari alla crezione di una sessione -->
 <script src="{{ url_for('static', filename='js/create.js') }}"></script>
 {% endblock %}
