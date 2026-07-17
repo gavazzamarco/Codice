@@ -290,6 +290,9 @@ def quest_check_and_save():
     for index in range(min(len(days), len(starts_hours), len(starts_minutes), len(locations))):
         if validate_and_create_session(quest_id, locations[index], days[index], starts_hours[index], starts_minutes[index], duration, exist_sessions):
             valid_sessions.append((DAYS_OF_WEEK.index(days[index]), int(starts_hours[index]), int(starts_minutes[index]), locations[index]))
+            # Se la sessione viene creata correttamente la vado ad aggiungere alla lista 
+            # delle sessioni già esistenti per evitare che in fase di creazione della quest
+            # sia possibile creare due sessioni che si sovrappongono come tempo e luogo
             exist_sessions.append({"quest_id": quest_id, "location": locations[index], "day": DAYS_OF_WEEK.index(days[index]), "hour": int(starts_hours[index]), "minute": int(starts_minutes[index]) })
     if len(valid_sessions)==0:
         flash("All the entered sessions overlap with other existing sessions so no sessions for quest ["+title+"] was created", "danger")  
@@ -351,30 +354,43 @@ def quest_detail(quest_id):
 @app.route("/book_session", methods=["POST"])
 @login_required
 def book_session():
+    # Soglio gli avventurieri possono effettuare prenotazioni
     if current_user.role!="adventurer":
         flash("To book a spot you must be logged in as an adventurer", "danger")
         return redirect(url_for('home'))
+    # Prendo i campi inviati dal modal
     session_id=request.form.get("session_id")
     role=request.form.get("role")
     companions=[comp.strip() for comp in request.form.getlist("companion") if comp.strip()]
     session=session_dao.get_session_by_id(session_id)
-    
+
+    # Questo controllo sulla sessione ha come unica utilità quella di far sì
+    # che nel controllo if successivo, NON si verifichino errori strani dovuti
+    # al fatto che provo ad accedere ai campi di un oggetto nullo (che causerebbe errore)
     if not session:
         flash("The selected session does not exist", "danger")
         return redirect(url_for('home')) 
+    # NON è possibile prenotarsi ad una sessione che è già iniziata
     if not can_cancel(session["day"], session["hour"], session["minute"], 0):
         flash("You cannot join a session that has already passed", "danger")
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
     if role not in ROLES:
         flash("The role must be selected from the available options", "danger")
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
+    # E' possibile portare al massimo un compagno
     if len(companions)>1:
         flash("You are allowed to bring a maximum of one additional companions", "danger")
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
+    # Un utente può al massimo prenotarsi a 3 sessioni nella stessa settimana
     reservations_user=reservation_dao.get_reservations_of_user(current_user.id)
     if len(reservations_user)>=3:
         flash("It is not possible to book more than 3 sessions per week", "danger")
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
+    
+    # Prendo tutte le prenotazioni fatte per la sessione di interesse e verifico
+    # quanti sono i posti rimasti liberi per ogni ruolo. Un utente può infatti
+    # prenotarsi ad una sessione con un certo ruolo solo se vi sono ancora posti
+    # disponibili per quel ruolo
     reservations_session=reservation_dao.get_reservations_for_session(session_id)
     count=0
     for reservation in reservations_session:
@@ -383,17 +399,23 @@ def book_session():
     if (LIMITS[role]-(count+(len(companions)+1)))<0:
         flash("You have booked more seats than are available for the category "+role, "danger")
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
+    
+    # Poi, un avventueriero può solo prenotare sessioni che NON si sovrappongono
+    # temporalmente con altre sessioni alle quali è già iscritto
     quest=quests_dao.get_quest_by_id(session["quest_id"])
     sessions_booked=[session_dao.get_session_by_id(reservation_db["session_id"]) for reservation_db in reservations_user]
     if check_overlap(DAYS_OF_WEEK[session["day"]], session["hour"], session["minute"], quest["duration"], "all", sessions_booked)==True:
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
     
+    # Se tutto va bene creo la prenotazione ed aggiungo gli eventuali compagni di prenotazione alla tabella apposita
     reservation_id=reservation_dao.create_reservation(current_user.id, session_id, role, int(len(companions))+1)
     for companion in companions:
         reservation_dao.add_companions(reservation_id, companion)
     flash("The booking was made successfully", "success")
     return redirect(url_for('profile'))
 
+# Profilo con una route comune che serve a smistare le info che l'utente può vedere
+# in base al suo ruolo
 @app.route("/profile")
 @login_required
 def profile():
@@ -405,17 +427,26 @@ def profile():
         return redirect(url_for('admin'))
     return redirect(url_for('home'))
 
+# Restituisce un valore booleano in base alla differenza tra istante temporale in cui 
+# inizia la sessione considerata ed istante attuale della piattaforma (il valore simulato) 
+# confrontandolo con un valore di soglia (che di default corrisponde ad 8 ore)
 def can_cancel(day, hour, minute, SOGLIA=8*60):
     current_simulated=conversione_minuti_assoluti(SIMULATE_DAY, SIMULATE_HOUR, SIMULATE_MIN)
     session=conversione_minuti_assoluti(day, hour, minute)
     return (session-current_simulated)>SOGLIA
 
+# Serve a re-indirizzare solo la parte grafica associata al profilo dell'avventuriero
 @app.route("/profile_adventurer")
 @login_required
 def profile_adventurer():
     if current_user.role!="adventurer":
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for("home"))
+    # Prendo tutte le informazioni dettagliate relative a sessioni (e relative quests)
+    # a cui è iscritto l'utente corrente. Poi alle info ottenute dal database aggiungo
+    # delle info aggiuntive come il fatto se la sessione sia inziata in un momento
+    # appartenente al passato, se sia possibile cancellare tale sessione e poi
+    # conversione del giorno da numero (com'è salvato nel database) ad intero
     user_quests_dict=reservation_dao.get_detailed_adventurer_quests(current_user.id)
     for quest in user_quests_dict:
         for session in quest["sessions"]:
@@ -424,44 +455,63 @@ def profile_adventurer():
             session["day"]=DAYS_OF_WEEK[session["day"]]
     return render_template("profile_adventurer.html", quests=user_quests_dict)
 
+# Gestisce la cancellazione della prenotazione ad una certa sessione (la 
+# cancellazione avviene schiacciando un bottone che chiama questa route
+# passando come argomento della funzione l'id della sessione da cancellare)
 @app.route("/cancel_reservation/<int:session_id>")
 @login_required
 def cancel_reservation(session_id):
     if current_user.role!="adventurer":
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for("home"))
+    
+    # Questo controllo sulla sessione ha come unica utilità quella di far sì
+    # che nel controllo if successivo, NON si verifichino errori strani dovuti
+    # al fatto che provo ad accedere ai campi di un oggetto nullo (che causerebbe errore) 
     session=session_dao.get_session_by_id(session_id)
     if not session:
         flash("The selected session does not exist", "danger")
         return redirect(url_for('home'))
+    
+    # L'utente può cancellare una sessione solo se vi ha preso parte
+    # Più che altro serve a non avere messaggi flash ingannevoli
     reservation=reservation_dao.get_reservation_by_session_for_user(current_user.id, session_id)
     if not reservation:
         flash("The selected reservation does not exist", "danger")
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
+    # L'utente può cancellare la prenotazione ad una sessione solo se questa
+    # inizia nel futuro, a più di 8 ore di distanza dalla data/ora attuale simulata
     if can_cancel(session["day"], session["hour"], session["minute"])==False:
         flash("You cannot modify or cancel a booking less than 8 hours before the start of the session", "danger")
         return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
+    
+    # La prenotazione viene cancellata tramite delete dalla tabella delle prenotazioni
     reservation_dao.delete_reservation(reservation["id"])
     flash("The partecipation was cancelled successfully", "success")
     return redirect(url_for('quest_detail', quest_id=session["quest_id"]))
 
+# Serve a re-indirizzare solo la parte grafica associata al profilo del master
 @app.route("/profile_master")
 @login_required
 def profile_master():
     if current_user.role!="master":
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for("home"))
+    # Prento tutte le info dettagliate relative a quest e sessioni ad esse legate
     all_detailed_quests=quests_dao.get_all_info_of_all_quests()
+    # Splitto il titolo solo per decisiona visiva ed estetica ma NON aggiunge altro
     for quest in all_detailed_quests:
         quest["title_split"]=split_title(quest["title"])
     return render_template("profile_master.html", quests=all_detailed_quests, days=DAYS_OF_WEEK, locations=LOCATIONS)
 
+# Funzione che permette di cancellare (tramite delete) una sessione dal database
 @app.route("/cancel_session/<int:session_id>")
 @login_required
 def cancel_session(session_id):
     if current_user.role!="master":
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for("home"))
+    # E' possibile cancellare una sessione solo se NON vi sono ancora persone iscritte
     if reservation_dao.get_reservations_for_session(session_id):
         flash("You cannot cancel this session; there are already people booked", "danger")
         return redirect(url_for('profile'))
@@ -469,16 +519,21 @@ def cancel_session(session_id):
     flash("The session was cancelled successfully", "success")
     return redirect(url_for('profile'))
 
+# Modifica della sessione che è di fatto una creazione della nuova sessione
+# e se questa nuova sessione è stata creata correttamente, allora provvedo
+# a cancellare la vecchia sessione (cioè quella che si voleva modificare di fatto)
 @app.route("/modify_session/<int:session_id>", methods=["POST"])
 @login_required
 def modify_session(session_id):
     if current_user.role!="master":
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for("home"))
+    # Ovviamente per essere modificata una sessione deve esistere
     session=session_dao.get_session_by_id(session_id)
     if not session:
         flash("The selected session does not exist", "danger")
         return redirect(url_for('profile'))
+    # Una sessione può essere modificata solo se NON vi sono prenotazioni attive
     if reservation_dao.get_reservations_for_session(session_id):
         flash("You cannot modify this session; there are already people booked", "danger")
         return redirect(url_for('profile'))
@@ -486,7 +541,9 @@ def modify_session(session_id):
     day=request.form.get("day")
     hour=request.form.get("hour")
     minute=request.form.get("minute")
-    
+
+    # Devo sempre verificare che la nuova sessione che sto andando a creare NON entri 
+    # in sovrapposizione (temporale e di luogo) con le altre sessioni già esistenti
     quest=quests_dao.get_quest_by_id(session["quest_id"])
     exist_sessions=[ses for ses in session_dao.get_all_session() if ses["id"]!=session_id]
     if validate_and_create_session(quest["id"], location, day, hour, minute, int(quest["duration"]), exist_sessions, True)==False:
@@ -502,6 +559,9 @@ def create_session(quest_id):
     if current_user.role!="master":
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for("home"))
+    # Il principale motivo di questo controllo è quello di evitare di creare
+    # sessioni per quest che NON esistono e quindi evitare di andare ad
+    # appensantire inutilmente le informazioni contenute nel database
     quest=quests_dao.get_quest_by_id(quest_id)
     if not quest:
         flash("The selected quest does not exist", "danger")
@@ -512,6 +572,9 @@ def create_session(quest_id):
     minute=request.form.get("minute")
     if validate_and_create_session(quest_id, location, day, hour, minute, int(quest["duration"]), session_dao.get_all_session())==False:
         return redirect(url_for('profile'))
+    # Non metto particolari messaggi flash siccome sono già presenti all'interno della
+    # funzione "validate_and_create_session" i messaggi flash necessari a capire se
+    # la creazione della nuova sessione è avvenuta correttamente o meno
     return redirect(url_for('profile'))
 
 @app.route("/admin")
@@ -520,9 +583,14 @@ def admin():
     if current_user.role!="admin":
         flash("You do not have permission to access this page", "danger")
         return redirect(url_for("home"))
+    # Recupero tutte le informazioni necessarie che dovrò visualizzare nella admin-page
+    # Contiene tutte le info degli avventurieri, come nome, cognome, username, bio,
+    # foto profilo e ruolo + il numero totale si sessioni a cui ha preso parte
     adventurers_db=users_dao.get_adventures_with_number_of_participation()
     all_detailed_quests=quests_dao.get_all_info_of_all_quests()
     general_infos=quests_dao.get_admin_stats()
+
+    # Funzione che serve solo a splittare il titolo ma è dovuto ad una scelta solo grafica
     for session in general_infos["popular_sessions"]:
         session["title"]=split_title(session["title"])
     return render_template("admin.html", users=adventurers_db, quests=all_detailed_quests, infos=general_infos)
