@@ -1,7 +1,12 @@
+import os
 import sqlite3
 
-DB_PATH="database/Konosuba.db"
+# Calcola la cartella in cui si trova il file DAO corrente (esame/database/)
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
+# Unisce la cartella al nome del file del database
+DB_PATH = os.path.join(BASE_DIR, "Konosuba.db")
 
+# Creazione della sessione
 def create_session(quest_id, location, day, hour, minute):
     conn=sqlite3.connect(DB_PATH)
     cursor=conn.cursor()
@@ -11,6 +16,9 @@ def create_session(quest_id, location, day, hour, minute):
     cursor.close()
     conn.close()
 
+# Ottengo tutte sessioni (e relative informazioni contenute nella tabella
+# sessions (come session_id, quest_id, location, day, hour, minute))
+# presenti nel database ed ordinate in base a data/ora di partenza crescente
 def get_all_session():
     conn=sqlite3.connect(DB_PATH)
     conn.row_factory=sqlite3.Row
@@ -23,6 +31,10 @@ def get_all_session():
     conn.close()
     return all_session
 
+# Ottengo tutte sessioni (e relative informazioni contenute nella tabella
+# sessions (come session_id, quest_id, location, day, hour, minute))
+# relative ad una certa sessione, quindi con uno specifico quest_id,
+#  ed ordinate in base a data/ora di partenza crescente
 def get_sessions_of_quest(quest_id):
     conn=sqlite3.connect(DB_PATH)
     conn.row_factory=sqlite3.Row
@@ -35,6 +47,8 @@ def get_sessions_of_quest(quest_id):
     conn.close()
     return sessions
 
+# Ottengo le info di una specifica sessione (e relative informazioni contenute 
+# nella tabella sessions (come session_id, quest_id, location, day, hour, minute))
 def get_session_by_id(session_id):
     conn=sqlite3.connect(DB_PATH)
     conn.row_factory=sqlite3.Row
@@ -47,6 +61,7 @@ def get_session_by_id(session_id):
     conn.close()
     return session
 
+# Cancello, tramite delete, una certa sessione con uno specifico database
 def delete_session(session_id):
     conn=sqlite3.connect(DB_PATH)
     cursor=conn.cursor()

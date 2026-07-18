@@ -5,6 +5,8 @@ from models import User
 from werkzeug.security import generate_password_hash, check_password_hash
 from werkzeug.utils import secure_filename
 from datetime import datetime
+import os
+BASE_DIR = os.path.dirname(os.path.abspath(__file__))
 
 SIMULATE_DAY=2
 SIMULATE_HOUR=14
@@ -98,9 +100,13 @@ def check_and_save_photo(photo, path):
     estensioni_consentite={"jpg", "jpeg", "png", "webp"}
     if not photo or ('.' not in photo.filename) or (photo.filename.rsplit('.')[-1] not in estensioni_consentite):
         return ""
-    secs=str(int(datetime.now().timestamp()))
-    path_db=path+secs+"_"+secure_filename(photo.filename)
-    photo.save("static/"+path_db)
+    secs = str(int(datetime.now().timestamp()))
+    path_db = path + secs + "_" + secure_filename(photo.filename)
+    # Costruisci il percorso assoluto per il salvataggio fisicco
+    absolute_save_path = os.path.join(BASE_DIR, "static", path_db)
+    # Assicurati che la cartella di destinazione esista (opzionale ma sicuro)
+    os.makedirs(os.path.dirname(absolute_save_path), exist_ok=True)
+    photo.save(absolute_save_path)
     return path_db
 
 # Funzione che NON serve ad alcuna scopo visivo, serve solo a prendere i dati
