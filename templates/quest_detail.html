@@ -1,41 +1,22 @@
 {% extends 'base.html' %}
 {% block title %} Quest detail {% endblock %}
 {% block content %}
-<!-- Ho usato container fluid siccome uso dentro delle classi col che occupano l'intera 
- larghezza dello schermo (cioè tutte le 12 colonne) e senza di essa avrei avuto una lunga 
- ma sottile linea bianca a destra dello schermo con una barra orizziontale che compariva sotto -->
 <section class="container-fluid">
-    <!-- titolo generale della pagina: ho dovuto usare nel backend una funzione di
-     title split in maniera tale poter dividere il titolo della quest in 4 sezioni di
-     circa uguale lunghezza e fare in modo che venisse visualizzata "multicolor" -->
     <h1 class="page-title text-center mt-4 pt-4">
         <span class="color-red">{{ titolo[0] }}</span><span class="color-yellow">{{ titolo[1] }}</span><span class="color-green">{{ titolo[2] }}</span><span class="color-blue">{{ titolo[3] }}</span>
     </h1>
     <div class="row">
-        <!-- sezione di sinistra della pagina dove ci sono la foto illustrativa
-         della quest e la descrizione tesuale della quest -->
         <div class="col-8">
-            <!-- contenitore dell'immagine che di fatto serve ad applicare il
-             bordo smussato e di colore verde -->
             <div class="detail-container">
                 <img src="{{ url_for('static', filename=quest.illustration) }}" class="img-fluid w-100" alt="Image of {{quest.title}}">
             </div>
-            <!-- contenitore che serve di fatto ad applicare il
-             bordo smussato e di colore azzurro -->
             <section class="detail-container detail-description-container">
                 <h2 class="title-big-yellow text-center mt-4 pt-2">Quest Description</h2>
                 <p class="text-small-white text-center px-4">{{ quest.description }}</p>
             </section>
         </div>
-
-        <!-- Sezione di destra dove ci sono le info della quest, come difficoltà,
-         tipo e durata e sotto invece le sessioni disponibili per tale quest -->
         <div class="col-4">
-            <!-- contenitore che serve di fatto ad applicare il bordo smussato e di colore 
-             giallo, più dimensione e spaziatura del testo -->
             <section class="detail-container detail-info-container detail-info px-4 pb-4 text-center">
-                <!-- Ogni scritta ha tra le varie classi una che ne definisce un 
-                 bordo inferiore colorato -->
                 <h2 class="title-big-yellow mt-3 pb-3 mb-0 border-bottom-red">Quest Info</h2>
                 <p class="border-bottom-green m-0 p-0 py-2">
                     <span class="color-red">Duration: {{ quest.duration }} min</span>
@@ -47,57 +28,29 @@
                     <span class="color-blue">Difficulty: {{ quest.difficulty }}</span>
                 </p>
             </section>
-
-            <!-- Sezione che contiene le sessioni. Il contenitore serve ad applicare 
-             i bordi smussati e di colore rosso. Inoltre, tale contenitore ha la prorietà
-             container-fluid siccome ogni sessione è di fatto una row che occupa tutto
-             la larghezza del contenitore attuale -->
             <section class="detail-container detail-session-container container-fluid pb-4 mb-4">
                 <h2 class="title-big-yellow text-center mt-4 pb-1 mb-0">Sessions</h2>
-                <!-- Scritte personalizzate per utenti loggati ma che NON sono avventurieri -->
-                <!-- Master e Admin NON posso prenotarsi alle sessioni e vedono quindi scritte apposite -->
                 {% if current_user.is_authenticated %}
                 {% if current_user.role=='master' %}
                 <p class="text-small-white text-center mt-0 mb-0 p-4 pt-2">The Guild Master cannot book any sessions</p>
                 {% elif current_user.role=='admin' %}
                 <p class="text-small-white text-center mt-0 mb-0 p-4 pt-2">The Guild Council administrator cannot book any sessions</p>
                 {% else %}
-                <!-- Se l'utente è loggato ed è un avventuriero allora vede tutte
-                 le sessioni che solo legate alla specifica quest -->
                 {% if sessions %}
                 {% for session in sessions %}
-                <!-- linea multicolor che divide tra loro le varie sessioni -->
                 <div class="line-multicolor w-100 d-flex mt-3 px-2">
                     <div class="background-red w-25 h-100"></div> <div class="background-yellow w-25 h-100"></div> <div class="background-green w-25 h-100"></div> <div class="background-blue w-25 h-100"></div>
                 </div>
-                <!-- Per ogni sessione viene creata un'apposita riga -->
                 <div class="row">
-                    <!-- 9/12 dello spazio di tale riga viene usato per mostrare
-                     data e ora della sessione ed i posti rimasti ancora liberi -->
-                    <!-- All'interno di questi 9/12 di spazio vado a creare un'altra
-                     riga, usata per ripartire in modo simmetrico lo spazio dato ad
-                     ogni ruolo, quindi tale colonna ha anche l'attributo container-fluid -->
                     <div class="col-9 container-fluid ms-2 me-2">
-                        <!-- Data ed ora della sessione. Siccome data ed ora vengono salvate
-                         nel database cone interi, quando queste avevano una sola cifra ho 
-                         cercato un modo per far comparire un'altro 0 davanti ed avere una
-                         "formattazione" uniforme. Ho quindi usato un'espressione jinja
-                         tale che se il numero è ad una sola cifra, cioè minore di 10, allora
-                         prima ed attaccato ad esso faccio comparire uno 0 -->
                         <div class="text-center text-size-17 color-green mb-1 mt-3">
                             {{ session.day }} at {% if session.hour < 10 %}0{% endif %}{{ session.hour }}:{% if session.minute < 10 %}0{% endif %}{{ session.minute }}
                         </div>
-                        <!-- Questa classe di display flex di fatto è inutile o meglio
-                         serve solo a fare in modo che il badge occupi il minimo spazio
-                         indispensabile ma si poteva ottenere lo stesso risultato togliendo
-                         il contenitore esterno ed usando invece un d-inline-flex -->
                         <div class="d-flex justify-content-center mb-2">
                             <p class="common-badge badge-yellow text-center m-0">
                                 <span class="text-size-14 px-2">{{ session.location }}</span>
                             </p>
                         </div>
-                        <!-- Riga usata solo per ripartire in modo equo lo spazio 
-                         associato al numero di posti disponibili per ogni ruolo -->
                         <div class="row text-center">
                             <div class="col-4 text-size-15 color-blue">
                                 <div>{{ session.Warrior }}</div>
@@ -113,27 +66,14 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Anche se lo spazio disponibile sarebbe stato di 3/12, ho usato
-                     solo una colonna che occupa solo 2/12 siccome se no avevo dei problemi
-                     di layout a causa dei margini applicati ai contenitori più esterni
-                     che facevano andare il pulsante la riga sotto o facevano comparire
-                     la riga bianca a lato dello schermo -->
                     <div class="col-2 d-flex justify-content-center align-items-center">
                     {% if session.id in reservations_user %}
-                    <!-- Se l'utente è iscritto ad una sessione quella appare come:
-                     -locked: se è già passata o mancano meno di 8 ore all'inizio
-                     -cancel: bottone che permette di cancellare la sessione se questa
-                        è nel futuro ed inizia a più di 8 ore di distanza dal momento attuale -->
                         {% if session.can_cancel %}
                         <a href="{{ url_for('cancel_reservation', session_id=session.id) }}" class="common-button button-yellow text-size-15 py-2">CANCEL</a>
                         {% else %}
                         <span class="profile-locked text-size-14 m-0 p-2">LOCKED</span>
                         {% endif %}
                     {% else %}
-                        <!-- Altrimenti, se la sessione NON è tra quelle a cui l'utente
-                         è iscritto, la sessione appare come:
-                         -endend: se è l'ora di inizio è già passata
-                         -join: se l'ora di inizio è futura e l'utente può quindi ancora iscriversi -->
                         {% if session.is_past %}
                         <span class="profile-locked text-size-14 m-0 p-2 badge-pink">ENDED</span>
                         {% else %}
@@ -142,38 +82,20 @@
                     {% endif %}
                 </div>
                 </div>
-                <!-- Modal di Bootstrap usato per far permette ad un utente di
-                 prenotarsi ad una delle sessioni della quest corrente. Il modal
-                 fa riferimento alla specifica sessione per cui è stato premuto il
-                 bottone "JOIN". Per fare ciò ho quindi dovuto mettere il modal dentro
-                 il ciclo for di scansione delle sessioni e di fatto vado a creare, per
-                 ogni quest, tanti modal quante sono le sessioni di quella quest -->
                 <div class="modal fade" id="bookDate-{{ session.id }}" tabindex="-1" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-lg rounded border-multicolor">
-                        <!-- Form siccome devo inviare al backend le info come il session_id
-                         il ruolo scelto dall'utente e l'eventuale accompagnatore -->
                         <form action="{{ url_for('book_session') }}" method="POST" class="modal-content profile-card-body">
                             <div class="d-flex justify-content-end mt-3 me-3 mb-0">
                                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                             </div>
-                            <!-- Informazioni di recap sulla prenotazione. Cioè viene 
-                             mostrato titolo della quest e data/ora della sessione scelta
-                             e numero di posti disponibili per ogni categoria -->
-                            <!-- Titolo della quest -->
-                             <h1 class="text-center text-size-43 mb-2 mt-0 px-2">
+                            <h1 class="text-center text-size-43 mb-2 mt-0 px-2">
                                 <span class="color-red">{{ titolo[0] }}</span><span class="color-yellow">{{ titolo[1] }}</span><span class="color-green">{{ titolo[2] }}</span><span class="color-blue">{{ titolo[3] }}</span>
                             </h1>
-                            <!-- Linea gialla divisoria tra titolo della quest e
-                             data/ora e posti disponibili della sessione scelta -->
                             <div class="line-tiny background-yellow mt-4 mb-4 mx-2"></div>
-                            <!-- container-fluid [bootstrap]: siccome, come sempre, per dividere
-                             equamente lo spazio tra le 3 categorie ho usato una row e poi ho 
-                             assegnato ad ogni categoria uno spazio pari a 4/12 della riga -->
                             <div class="m-3 mt-0 container-fluid">
                                 <h2 class="text-size-28 text-center color-green mb-1 mt-3">
                                     {{ session.day }} at {% if session.hour < 10 %}0{% endif %}{{ session.hour }}:{% if session.minute < 10 %}0{% endif %}{{ session.minute }}
                                 </h2>
-                                <!-- Posti ancora disponibili per la sessione scelta dall'utente -->
                                 <div class="row text-center mt-3">
                                     <div class="col-4 text-size-19 color-blue">
                                         <div class="text-size-21">{{ session.Warrior }}</div>
@@ -189,18 +111,9 @@
                                     </div>
                                 </div>
                             </div>
-
-                            <!-- Sezione di form vera e propria dove l'uente sceglie la
-                             categoria con la quale vuole partecipare a tale sessione e 
-                             l'eventuale accompagnatore da portare -->
                             <div class="line-tiny background-green mt-4 mb-4 mx-2"></div>
                             <div class="modal-body px-4 mx-4">
-                                <!-- Input "hidden" siccome tanto una volta che schiacciato
-                                 su una sessione, il session_id è quello e l'utente NON
-                                 deve quindi avere modo di poterlo cambiare -->
                                 <input type="hidden" name="session_id" value="{{ session.id }}">
-                                
-                                <!-- L'utente deve scegliere il ruolo con cui prendere parte alla sessione -->
                                 <label for="role-{{ session.id }}" class="logreg-label detail-modal-label">Role* (yours and that of any companions)</label>
                                 <select name="role" id="role-{{ session.id }}" class="form-control text-serif-bold mb-4" required>
                                     <option value="">Select a Role</option>
@@ -208,34 +121,11 @@
                                     <option value="{{ role }}">{{ role }}</option>
                                     {% endfor %}
                                 </select>
-
-                                <!-- Contenitore vuoto siccome di default NON è presente
-                                 la form in cui l'utente può inserire lo username del
-                                 compagno di avventura ma questo compare solo quando si
-                                 schiaccia sul bottone "add companion" -->
                                 <div id="companion-container-{{ session.id }}"></div>
-                                
-                                <!-- Bottone che se schiacciato, tramite js, fa comparire
-                                 la form in cui l'utente può inserire lo username del
-                                 compagno che vuole portare con sè in quella sessione -->
                                 <div class="d-flex justify-content-center my-4 pt-4 pb-0">
-                                    <!-- data-session-id="{{ session.id }}: valore ha il solo scopo
-                                     di inviare a js l'id della sessione (siccome il contenitore sopra
-                                     è ha un id che varia con la sessione siccome definito come:
-                                                companion-container-{{ session.id }})
-                                     e aiutare js ad individuare quindi il container nel quale
-                                     fare comparire la form per inserire il compango.
-                                     Siccome il modal è dentro il form vengono infatti creati tanti
-                                     modal quante sono le sessioni e a java serve qualcosa per individuare
-                                     il contenitore corretto in cui far comparire la form. Se tutti
-                                     i contenitori avessero lo stesso id solo il bottone "add companion"
-                                     della prima sessione della prima quest farebbe comparire la form
-                                     siccome in caso di elementi multipli con lo stesso id viene 
-                                     considerato solo il primo che si incontra nel DOM -->
                                     <button type="button" class="common-button button-blue text-size-19 detail-add-companion" data-session-id="{{ session.id }}">Add a companion</button>
                                 </div>
                             </div>
-                            <!-- Bottoni per pulire i campi o inviare al backend i campi della form -->
                             <div class="d-flex justify-content-center mb-4 gap-3">
                                 <button class="button-flat cancel detail-modal-button text-center" type="reset">Clear</button>
                                 <button class="button-flat approve detail-modal-button text-center" type="submit">Book</button>
@@ -245,14 +135,10 @@
                 </div>
                 {% endfor %}
                 {% else %}
-                <!-- Caso in cui l'utente è loggato ma NON sono ancora
-                 state create delle sessioni per la quest considerata -->
                 <p class="text-small-white text-center mt-0 mb-0 p-4 pt-2">No sessions are currently available for this quest</p>
                 {% endif %}
                 {% endif %}
                 {% else %}
-                <!-- Se l'utente NON è loggato NON vede le sessioni e gli compare una scritta
-                 di spiegazion ed i bottoni per potersi loggare/registare al sito -->
                 <p class="text-small-white text-center mt-0 mb-0 p-4">Only registered adventurers can book sessions</p>
                 <div class="d-flex justify-content-center m-4 mt-2">
                     <a href="{{ url_for('register') }}" class="button-flat cancel m-1 detail-modal-button text-center text-decoration-none">Register</a>
@@ -263,7 +149,5 @@
         </div>
     </div>
 </section>
-<!-- File js usato per gestire la comparsa della form in cui inserire
- lo username del compagno scelto per una certa sessione -->
 <script src="{{ url_for('static', filename='js/booking.js') }}"></script>
 {% endblock %}

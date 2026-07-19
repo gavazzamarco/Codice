@@ -2,13 +2,7 @@
 {% block title %} Profile {% endblock %}
 {% block profile_active %} active {% endblock %}
 {% block content %}
-<!-- profile-user-container: classe css personalizzata usata per definire lo sfondo scuro
- della card e padding e margini personalizzati (e maggiori a quelli ottenibili solo tramite bootstrap) -->
-<!-- Uso una flexbox così gli elementi si dispongono gli uni accanto agli altri --> 
 <section class="col-9 d-flex profile-user-container border-multicolor pt-4 mb-4 mx-auto">
-    <!-- Contenitore per la sola immagine profilo siccome voglio avere sul lato
-     sinistro solo l'immagine profilo e tutto il resto alla sua destra e siccome il
-     contenitore esterno è una flex-box ho dovuto fare così -->
     <div class="h-100">
         {% if current_user.profile_img %}
         <img src="{{ url_for('static', filename=current_user.profile_img) }}" class="profile-user-img border-multicolor object-fit-cover" alt="Profile photo of {{ current_user.username }}">
@@ -16,62 +10,33 @@
         <img src="{{ url_for('static', filename='images/no_profile_img.png') }}" class="profile-user-img border-multicolor object-fit-cover" alt="Default profile image">
         {% endif %}
     </div>
-    <!-- Contenitore per nome-cognome, username, ruolo e descrizione dell'utente -->
     <div class="h-100">
-        <!-- Usando questo div con proprietà di una flexbox faccio si che nome-cognome
-         username e ruolo dell'utente siano sulla stessa "riga" -->
         <div class="d-flex align-items-center mt-2">
-            <!-- Questo div mi serve il contanitore più esterno è una flexbox ma voglio 
-             avere nome e cognome sulla stessa colonna ma su due righe differenti -->
             <div class="me-4">
-                <!-- p: elemento html con comportamento display-block -->
                 <p class="text-size-21 mb-0"><span class="color-green">{{ current_user.name }}</span> <span class="color-blue">{{ current_user.surname }}</span></p>
                 <p class="text-size-18 mt-0 fst-italic"><span class="color-red">{{ current_user.username }}</span></p>
             </div>
-            <!-- In questo modo il badge si trova sulla stessa riga di nome-cognome
-             e username dell'utente ma di fianco ad essi -->
             <div class="common-badge badge-yellow text-uppercase text-serif-bold ms-4">
                 {{ current_user.role }}
             </div>
         </div>
-        <!-- Siccome il contenitore immediatamente più esterno in questo caso NON è
-         una flexbox, allora siccome div è un elemento html con comportamento 
-         display-block, la bio va una riga sotto a quella occupata da nome-cognome, username e ruolo -->
         {% if current_user.bio %}
         <div class="text-small-white profile-description py-3 px-4 mt-3 ms-3">{{ current_user.bio }}</div>
         {% endif %}
     </div>
 </section>
-
-<!-- Sezione in cui vengono mostrate le info relative a quest e sessioni create dall'utente -->
-<!-- Devo usare container fluid solo perché sotto ho, inutilmente, usato una row -->
 <section class="container-fluid padding-bottom-80 pt-4">
     <h1 class="text-center page-title">
         <span class="color-red">CREA</span><span class="color-yellow">TED</span> <span class="color-green">QUE</span><span class="color-blue">STS</span>
     </h1>
     {% if quests %}
-    <!-- row INUTILE messa solo perché in realtà ho più col-9 che vengono generate di
-     fila e dunque usata solo per prevenire qualche sorta di errore. Inoltre, viene
-     generata un'UNICA row per tutte le quest (a differenza di quanto fatto nella home);
-     il risultato in ogni caso sarebbe stato lo stesso -->
     <div class="row justify-content-center">
         {% for quest in quests %}
-        <!-- Contenitore di quest+relative sessioni relalizzato mediante una card bootstrap 
-         (quella con immagine nella parte alta e testo nel corpo della card) -->
         <div class="col-9 margin-bottom-50 card quest-container p-0">
-            <!-- La struttura logica è esattamente la stessa di quella della 
-             sezione home, siccome è di fatto un copia-incolla  -->
-            <!-- La posizione relative serve solo perchè, appunto, nella foto voglio
-             mettere le scritte nella parte bassa dell'immagine (e non in alto come
-             presente nella versione predefinita di bootstrap) e per farlo mi seriva 
-             un riferimento per il piazzamento siccome le scritte usano position-absolute -->
             <section class="position-relative border-bottom">
                 <img src="{{ url_for('static', filename=quest.illustration) }}" class="card-img object-fit-cover quest-card-image" alt="Illustration of quest {{quest.title }}">
                 <div class="card-img-overlay">
                     <div class="quest-card-text w-100 d-flex justify-content-between">
-                        <!-- La combo "justify-content-between" e "flex-grow-1" è
-                         ridondante ed inutile, avrei potuto tenere solo uno dei
-                         due ed eliminare l'altro ed il risultato sarebbe stato lo stesso -->
                         <div class="flex-grow-1 me-2">
                             <h2 class="card-title title-big-yellow">{{ quest.title }}</h2>
                             <div class="d-flex flex-wrap">
@@ -86,60 +51,23 @@
                     </div>
                 </div>
             </section>
-            <!-- Corpo della card in cui sono presenti tutti le sessioni relative
-             alla quest presentata con nell'immagine sovrastante -->
             <section class="card-body profile-card-body pb-4">
-                <!-- Contenitore flex-box siccome voglio avere il titolo ed il bottone 
-                 per aggiungere una nuova sessione entrambi sulla stessa riga -->
                 <div class="d-flex align-items-center justify-content-center gap-3">
                     <h2 class="text-center text-size-40 mt-3 mb-4 pb-3 me-1">
                         <span class="color-red">Avail</span><span class="color-yellow">able</span> <span class="color-green">Sess</span><span class="color-blue">ions</span>
                     </h2>
                     <button class="common-button button-blue text-center ms-4 mb-3" data-bs-toggle="modal" data-bs-target="#create-{{ quest.id }}">New Session</button>
                 </div>
-                <!-- Stampo tutte le sessioni legate alla quest corrente -->
                 {% if quest.sessions %}
-                <!-- row IMPORTANTE per il layout. Usata siccome ho più card, ciascuna
-                 delle quali occupa col-5 e che vanno a disporsi per quanto possibile una 
-                 accanto all'altra e quando lo spazio non è più sufficiente, sulla riga sotto -->
                 <div class="row justify-content-center pb-4">
                     {% for session in quest.sessions %}
-                    <!-- Ogni sessione, all'interno della row definita nella spazio riservato
-                     alla quest (cioè il col-10 della colonna più), occupa uno spazio
-                     pari a 5/12 di colonne, quindi vi sono al massimo due sessioni per riga -->
-                    <!-- Ho usato una d-flex column solo perché volevo fare in modo che tutte 
-                     le sessioni sulla stessa riga avessero la stessa altezza. Infatti, al fondo
-                     è presente una div vuota ma con classe flex-grow-1 proprio perché così
-                     prende tutto lo spazio rimasto inutilizzato all'interno della riga e lo
-                     riempe con il colore di sfondo (l'altezza della riga è determinata dalla
-                     sessione avente la card più alta all'interno di tale riga) -->
-                    <!-- INUTILE utilizzo di flex-column -->
                     <div class="col-5 mb-4 pb-3 d-flex flex-column">
-                        <!-- Siccome sopra ho usato flex-column, per NON rovinare il layout
-                         iniziale ho dovuto usare una div che contenesse di fatto tutte le
-                         info utili e relative alla sessione. Poi così sotto ho potuto mettere
-                         un altro div allo stesso livello di quello attuale solo per 
-                         riempire tutto lo spazio rimasto vuoto dell'altezza della riga -->
                         <div class="profile-master-session border-multicolor py-4 px-3 h-100 container-fluid">
-                            <!-- Data e ora della sessione attualmente considerata dove ho dovuto
-                             usare la condizione jinja per aggiungere uno 0 davanti a quei numeri
-                             con una sola cifra per "uniformarne" la formattazione -->
                             <div class="profile-session-date text-center">
                                 <span class="color-green">{{ session.day }} at</span> <span class="color-blue">{% if session.hour < 10 %}0{% endif %}{{ session.hour }}:</span><span class="color-yellow">{% if session.minute < 10 %}0{% endif %}{{ session.minute }}</span>
-                                
-                                <!-- La classe d-inline-flex è molto importante per far si che
-                                 il badge prenda solo lo spazio immediatamente necessario siccome
-                                 se no, di default, p ha un comportamento d-block e quindi anche
-                                 se il badge ha dei padding/margini predefiniti, il badge tenderebbe
-                                 ad occupare comunque TUTTO lo spazio disponibile all'interno della riga  -->
                                 <p class="common-badge badge-yellow text-size-14 mt-2 d-inline-flex">Location: {{ session.location }}</p>
                             </div>
-
-                            <!-- sottile linea verde di separazione -->
                             <div class="line-tiny background-green mt-3 mb-3"></div>
-
-                            <!-- Info relative ai posti rimasti liberi per ciascuna categoria per la 
-                             sessione corrente + info sul/suoi ruoli più richiesti per tale sessione -->
                             <div class="row px-4 text-center">
                                 <div class="col-4 text-size-15 color-blue">
                                     <div>{{ session.Warrior }}</div>
@@ -163,38 +91,17 @@
                                     {% endif %}
                                 </div>
                             </div>
-
-                            <!-- sottile linea gialla di separazione -->
                             <div class="line-tiny background-yellow mt-2 mb-4"></div>
-                            
-                            <!-- Lista di tutti gli avventurieri iscritti a quella sessione
-                             con badge relativo al ruolo scelto per parteciparvi -->
                             <div class="profile-companion-container m-3 p-3">
-                                <!-- profile-companion-title: classe css personalizzata ed
-                                 apposita per il titolo della sezione relativa ai partcepanti
-                                 che applica font-size e colori personalizzati -->
-                                <h3 class="profile-companion-title text-center mb-1">Adventurers [ {{session.total_booked }} ]</h3>
-                                <!-- In questo caso ho una lista NON ordinata, usata per
-                                 tenere traccia degli utenti che hanno effettuato la
-                                 prenotazione, con all'interno un'altra lista NON ordinata
-                                 per tenere traccia degli eventuali accompagnatori che
-                                 ciascun utente registrato ha inserito nella prenotazione -->
-                                <!-- CREO UNA NUOVA ul PER OGNI AVVENTURIERO, se la metto 
-                                 fuori il layout si rompe non so perché, più che altro ho la 
-                                 lista attaccata al bordo di sinistra e non so come staccarla -->
                                 {% for adventurer in session.adventurers %}
                                 <ul class="mt-3 d-flex align-items-center justify-content-start">
                                     <li>
-                                        <!-- Per ogni avventuriero iscritto ne visualizzo
-                                         username e ruolo selezionato per tale sessione -->
                                         <div class="d-flex align-items-center">
                                             <span class="profile-companion-text ms-2">{{ adventurer.username }} </span>
                                             <span class="common-badge ms-3 {% if adventurer.role=='Warrior' %}badge-blue{% elif adventurer.role=='Mage' %}badge-green{% else %}badge-red{% endif %}">
                                                 {{ adventurer.role }}
                                             </span>
                                         </div>
-                                        <!-- Ogni avventuriero ha eventualmente una sotto
-                                         lista per mostrare il compagno aggiunto durante la prenotazione -->
                                         {% if adventurer.companions %}
                                             <ul>
                                             {% for companion in adventurer.companions %}
@@ -206,47 +113,22 @@
                                 </ul>
                                 {% endfor %}
                             </div>
-                            <!-- Se NON ci sono prenotazioni per la sessione corrente
-                             il master può allora anche cancellarla o modificarla -->
                             {% if session.total_booked==0 %}
                             <div class="line-tiny background-blue mt-4 mb-4"></div>
                             <div class="d-flex m-2">
                                 <a href="{{ url_for('cancel_session', session_id=session.id) }}" class="w-50 button-flat cancel m-1 text-center text-decoration-none">Cancel</a>
-                                
-                                <!-- Bottone che apre il modal di modifica -->
                                 <button class="w-50 button-flat approve m-1 text-center" data-bs-toggle="modal" data-bs-target="#modify-{{ session.id }}">Modify</button>
                             </div>
                             {% endif %}
                         </div>
-
-                        <!-- Anzi, questa classe è completamente inutile, non serve a niente
-                         e se facesse qualcosa sarebbe pure sbagliato siccome allungherebbe
-                         la card NON con il colore nero ma con il colore grigio scuro
-                         dello sfondo, il che sarebbe solo sbagliato -->
                         <div class="flex-grow-1"></div>
                     </div>
-
-                    <!-- Modal di Bootstrap per la modifica della sessione -->
-                    <!-- Viene creato un modal per ogni sessione quindi nel DOM
-                     ci saranno tanti modali quante sono le sessioni -->
-                    <!-- Se NON avessi messo il {{ session.id }} nell'id del modal
-                     sarebbe comunque comparso un modal ogni qualvolta schiacciavo sul
-                     pulsante di "modify" ma quel modal avrebbe modificato e riportato
-                     solo le info della primissima sessione della prima quest siccome
-                     quando vi sono più elementi con lo stesso id, viene preso e
-                     considerato solo il primo del DOM -->
                     <div class="modal fade" id="modify-{{ session.id }}" tabindex="-1" aria-hidden="true">
                         <div class="modal-dialog modal-dialog-centered modal-lg  modal-lg rounded">
-                            <!-- Form siccome dovrò inviare i dati "modificati" al backend -->
                             <form action="{{ url_for('modify_session', session_id=session.id) }}" method="POST" class="modal-content background-grey border-multicolor">
-                                <!-- Bottone presente di dafault nel copia-incolla da 
-                                 bootstrap e necessario a chiudere il modal -->
                                 <div class="d-flex justify-content-end mt-3 me-3 mb-0">
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                                 </div>
-
-                                <!-- Info della sessione che si sta andando a modificare 
-                                 come titolo, data ed ora -->
                                 <h1 class="text-center text-size-43 mb-2 mt-0">
                                     <span class="color-red">{{ quest.title_split[0] }}</span><span class="color-yellow">{{ quest.title_split[1] }}</span><span class="color-green">{{ quest.title_split[2] }}</span><span class="color-blue">{{ quest.title_split[3] }}</span>
                                 </h1>
@@ -254,15 +136,8 @@
                                     <h2 class="title-big-yellow text-size-28">{{ session.day }} at {% if session.hour < 10 %}0{% endif %}{{ session.hour }}:{% if session.minute < 10 %}0{% endif %}{{ session.minute }}</h2>
                                     <p class="common-badge badge-yellow text-size-14 mt-2 d-inline-block">Location: {{ session.location }}</p>
                                 </div>
-
-                                <!-- Corpo del modal dove sono di fatto presenti le form
-                                 per modificare la sessione con i nuovi valori desiderati
-                                 Inserito all'interno del ciclo for delle SESSIONI -->
-                                <!-- container-fluid solo perché all'interno uso una row per
-                                 dividere equamente lo spazio tra le form -->
                                 <div class="modal-body container-fluid">
                                     <div class="row">
-                                        <!-- TUTTE LE FORM HANNO L'ATTRIBUTO REQUIRED -->
                                         <div class="mb-3 px-3">
                                             <label for="location-{{ session.id }}" class="logreg-label detail-modal-label">Location</label>
                                             <select id="location-{{ session.id }}" name="location" class="form-control text-serif-bold mb-4" required>
@@ -282,10 +157,6 @@
                                             </select>
                                         </div>
                                         <div class="col-3">
-                                            <!-- Anche qui sono presenti gli attributi
-                                             min e max sugli interi così da fare già un
-                                             controllo preliminare da frontend sulla validità
-                                             dei dati che verranno passati al backend -->
                                             <label for="hour-{{ session.id }}" class="logreg-label detail-modal-label">Hour*</label>
                                             <input type="number" id="hour-{{ session.id }}" name="hour" class="form-control text-serif-bold mb-4" placeholder="0-23" min="0" max="23" required>
                                         </div>
@@ -296,9 +167,7 @@
                                     </div>
                                 </div>
                                 <div class="d-flex justify-content-center mb-4 mt-3">
-                                    <!-- Bottone per ripulire i campi di tutte le form -->
                                     <button class="button-flat cancel m-1 detail-modal-button text-center" type="reset">Clear</button>
-                                    <!-- bottone per confermare le modifiche e inviare i dati al backend -->
                                     <button class="button-flat approve m-1 detail-modal-button text-center" type="submit">Modify</button>
                                 </div>
                             </form>
@@ -307,45 +176,23 @@
                     {% endfor %}
                 </div>
                 {% else %}
-                <!-- Se una quest NON ha sessione attive al momento allora compare
-                 un blocco di testo a "notificare" la situazione -->
                 <p class="text-small-white text-center mt-0 mb-0 p-4 pt-2">No sessions are currently available for this quest</p>
                 {% endif %}
             </section>
-
-            <!-- Modal per la creazione di una nuova sessione per una certa quest
-             Inserito solo all'interno del ciclo for delle SESSIONI -->
-            <!-- Viene creato un modal per ogni quest quindi nel DOM
-             ci saranno tanti modali quante sono le quest attualmente presenti -->
-            <!-- Se NON avessi messo il {{ quest.id }} nell'id del modal
-             sarebbe comunque comparso un modal ogni qualvolta schiacciavo sul
-             pulsante di "add session" ma quel modal avrebbe modificato e riportato
-             solo le info della primissima quest siccome quando vi sono più elementi con 
-             lo stesso id, viene preso e considerato solo il primo del DOM -->
             <div class="modal fade" id="create-{{ quest.id }}" tabindex="-1" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered modal-lg modal-lg rounded ">
                     <form action="{{ url_for('create_session', quest_id=quest.id) }}" method="POST" class="modal-content background-grey border-multicolor">
                         <div class="d-flex justify-content-end mt-3 me-3 mb-0">
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
-                        <!-- Viene riportato solo il titolo relativo alla quest
-                         per la quale si sta creando la nuova sessione -->
                         <h1 class="text-center text-size-43 mb-2 mt-0">
                             <span class="color-red">{{ quest.title_split[0] }}</span><span class="color-yellow">{{ quest.title_split[1] }}</span><span class="color-green">{{ quest.title_split[2] }}</span><span class="color-blue">{{ quest.title_split[3] }}</span>
                         </h1>
-                        <!-- Sotto-titolo del modal (specifica che serve a creare 
-                         una sessione alla quest il cui titolo è stato riportato sopra) -->
                         <div class="text-center text-size-17 color-green mb-1 mt-3">
                             <h2 class="title-big-yellow text-size-28">Add New Session</h2>
                         </div>
-
-                        <!-- Corpo del modal dove sono di fatto presenti le form
-                         necessarie per inserire i dari per creare una nuova sessione -->
-                        <!-- container-fluid: siccome all'interno del corpo del modal uso una 
-                         row sempre per poter distribuire equamente lo spazio tra le varie form -->
                         <div class="modal-body container-fluid">
                             <div class="row">
-                                <!-- TUTTE LE FORM HANNO L'ATTRIBUTO REQUIRED -->
                                 <div class="mb-3 px-3">
                                     <label for="location-{{ quest.id }}" class="logreg-label detail-modal-label">Location*</label>
                                     <select id="location-{{ quest.id }}" name="location" class="form-control text-serif-bold mb-4" required>
@@ -375,11 +222,7 @@
                             </div>
                         </div>
                         <div class="d-flex justify-content-center mb-4 mt-3">
-                            <!-- Bottone per ripulire i campi delle varie form -->
                             <button class="button-flat cancel m-1 detail-modal-button text-center" type="reset">Cancel</button>
-
-                            <!-- Bottone per confermare i dati inseriti nella form ed inviarli 
-                             al backend per la creazione nel database di una nuova sessione -->
                             <button class="button-flat approve m-1 detail-modal-button text-center" type="submit">Create</button>
                         </div>
                     </form>
@@ -389,14 +232,7 @@
         {% endfor %}
     </div>
     {% else %}
-    <!-- Se non sono presenti quest (e quindi tanto meno le relative sessioni)
-     viene visualizzato questo messaggio per invogliare a creare il master
-     a creare la prima quest. Il bottone porta in fatti il master al fine
-     html usato per la creazione delle quest (ed eventuali sessioni) -->
     <div class="col-9 card position-relative quest-container p-0 mx-auto">
-        <!-- La struttura è circa la stessa della card di presentazione
-         della quest nella sezione home, cambiano principalmente le classi
-         personalizzate per posizionare il testo rispetto all'immagine -->
         <img src="{{ url_for('static', filename='images/no_quests.png') }}" class="card-img object-fit-cover" alt="No quest created">
         <div class="card-img-overlay">
             <div class="home-noquest-container w-100 d-flex flex-column align-items-center text-center">

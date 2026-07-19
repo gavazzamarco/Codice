@@ -1,21 +1,9 @@
-<!-- SBAGLIATO QUESTO FILE, DEL TUTTO ASSENTE IL REFACTOR -->
 {% extends 'base.html' %}
 {% block title %} Profile {% endblock %}
 {% block profile_active %} active {% endblock %}
 {% block content %}
-<!-- Ho lasciato questo contenitore esterno quando avrei potuto cancellarlo e 
- mettere nella div sotto semplicemente la classe "mx-auto" (come fatto in tutti 
- gli altri casi) ed avrei ottenuto esattamente lo stesso risultato -->
 <section class="d-flex justify-content-center pt-4 mb-3">
-    <!-- profile-user-container: classe css personalizzata che applica uno sfondo
-     scuro alla sezione di info generali dell'utente e margin/padding personalizzati -->
     <div class="col-9 d-flex profile-user-container border-multicolor">
-        <!-- Siccome ho un d-flex, gli elementi che hanno anche una proprietà di
-         d-block, come i div, NON occupano l'intera riga ma occupano il minimo
-         spazio disponibile. Tuttavia occupano l'intera altezza di quella riga -->
-        <!-- Questo primo contenitore serve solo per contenere l'immagine e fare
-         in modo che questa occupi tutta, da sola, la prima parte della riga
-         (che è infatti proprio il risultato che volevo ottenere) -->
         <div class="h-100">
             {% if current_user.profile_img %}
             <img src="{{ url_for('static', filename=current_user.profile_img) }}" class="profile-user-img border-multicolor object-fit-cover" alt="Profile photo of {{ current_user.username }}">
@@ -23,24 +11,9 @@
             <img src="{{ url_for('static', filename='images/no_profile_img.png') }}" class="profile-user-img border-multicolor object-fit-cover" alt="Default profile image">
             {% endif %}
         </div>
-        <!-- Contenitore che, per via della proprietà di d-flex del contenitore 
-         immediatamente più esterno, si pone sulla stessa riga ed immediatamente dopo
-         all'immagine -->
         <div class="h-100">
-            <!-- Invece, in questo caso, siccome il contenitore esterno è un 
-             contenitore normale, gli elementi div hanno proprietà d-block ed
-             occupano quindi l'intero spazio rimasto disponibili all'interno della
-             riga. Due div contingui, come in questo caso, si posizionano quindi
-             su due righe diverse (una sotto l'altra) -->
-
-            <!-- Contenitore per tutti quegli elementi che voglio sulla stessa
-             macro-riga, ossia name-cognome, username e ruolo -->
             <div class="d-flex align-items-center mt-2">
-                <!-- Sfrutto la proprietà d-flex per fare in modo che i due div sullo 
-                 stesso livello siano sulla stessa riga e direttamente contigui -->
                 <div class="me-4">
-                    <!-- Invece, siccome questo div NON ha proprietà d-flex allora
-                     gli elementi con proprietà d-block si posizionano su righe differenti -->
                     <p class="text-size-21 mb-0"><span class="color-green">{{ current_user.name }}</span> <span class="color-blue">{{ current_user.surname }}</span></p>
                     <p class="text-size-18 mt-0 fst-italic"><span class="color-red">{{ current_user.username }}</span></p>
                 </div>
@@ -48,9 +21,6 @@
                     <span>{{ current_user.role }}</span>
                 </div>
             </div>
-            <!-- Siccome il contenitore immediatamente più esterno NON ha la proprietà
-             d-flex (che è quello che voglio), la bio si posiziona su una riga diversa,
-             quella immediatamente sotto, rispetto a quella in cui si trovano name-cognome, username e ruolo -->
             {% if current_user.bio %}
             <div class="text-small-white profile-description py-3 px-4 mt-3 ms-3">
                 <span>{{ current_user.bio }}</span>
@@ -64,17 +34,11 @@
         <span class="color-red">JO</span><span class="color-yellow">IN</span> <span class="color-green">QUE</span><span class="color-blue">STS</span>
     </h1>
     {% if quests %}
-    <!-- container-fluid: siccome uso una row per posizionare le card relative 
-     alle quest (con relative sessioni) a cui ha preso parte l'avventuriero -->
     <div class="container-fluid">
         <div class="row justify-content-center">
             {% for quest in quests %}
-            <!-- Tutta sbagliata questa impostazione, potevo mettere questo div
-             e quello immediatamente successivo tutto in un unico container -->
             <div class="col-5 margin-bottom-50">
                 <div class="card quest-container h-100 d-flex flex-column">
-                    <!-- Struttura simile a quella della card di presentazione della
-                     quest presente nella sezione home -->
                     <div class="position-relative border-bottom">
                         <img src="{{ url_for('static', filename=quest.illustration) }}" class="card-img object-fit-cover quest-card-image" alt="Illustration of quest {{quest.title }}">
                         <div class="card-img-overlay">
@@ -93,11 +57,6 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Flex-grow-1 siccome in questo modo il corpo della card si
-                     allunga per andare ad occupare tutto l'altezza rimasta inutilizzata
-                     all'interno della riga di appartenenza (siccome se ho due card di
-                     diversa altezza all'interno della stessa row allora l'altezza
-                     della riga coincide con la card di altezza maggiore) -->
                     <div class="card-body profile-card-body flex-grow-1">
                         <h2 class="text-center text-size-40 mt-3 mb-4 pb-3">
                             <span class="color-red">Boo</span><span class="color-yellow">ked</span> <span class="color-green">Sess</span><span class="color-blue">ions</span>
@@ -107,30 +66,14 @@
                         <div class="line-multicolor w-100 d-flex">
                             <div class="background-red w-25 h-100"></div> <div class="background-yellow w-25 h-100"></div> <div class="background-green w-25 h-100"></div> <div class="background-blue w-25 h-100"></div>
                         </div>
-                        <!-- Avrei potuto eliminare questo container fluid e metterlo
-                         come attributo del contenitore immediatamente più esterno -->
                         <div class="container-fluid pt-4 mb-4">
                             <div class="row align-items-center">
-                                <!-- All'interno della larghezza della card associata alla
-                                 singola quest, 9/12 sono destinati alle info della sessione
-                                 prenotata, come data/ora, ruolo scelto e compagni ed il
-                                 restante 3/12 è destinato ai bottoni (di cancellazione
-                                 o modifica della prenotazione alla sessione se la sessione
-                                 inizia a più di 8 ore) o il badge di ended/locked (se la
-                                 sessione è già passata o inzia tra meno di 8 ore) -->
                                 <div class="col-9">
-                                    <!-- d-flex siccome voglio mettere sulla stessa riga le info di
-                                     data/ora e ruolo scelto per la sessione prenotata -->
                                     <div class="d-flex align-items-center justify-content-around">
                                         <div class="profile-session-date">
                                             <span class="color-green">{{ session.day }}</span> <span class="color-blue">{% if session.hour < 10 %}0{% endif %}{{ session.hour }}:</span><span class="color-yellow">{% if session.minute < 10 %}0{% endif %}{{ session.minute }}</span>  
                                         </div>
                                         <div class="mb-auto mt-2">
-                                            <!-- Avrei potuto fare qualcosa di simile a quanto fatto
-                                             nella sezione master ed invece di mettere tutti questi if
-                                             uno sotto l'altro avrei potuto metterli direttamente all'
-                                             interno della classe e assegnare al "common-badge" il colore
-                                             diverso e desiderato di volta in volta -->
                                             {% if session.role=='Warrior' %}
                                             <span class="common-badge badge-blue ms-3 text-size-14">{{ session.role }}</span>
                                             {% elif session.role=='Mage' %}
@@ -140,62 +83,26 @@
                                             {% endif %} 
                                         </div>
                                     </div>
-                                    <!-- Siccome il contenitore più esterno NON ha la proprietà
-                                     d-flex, allora il div ha il classico comportamento d-block
-                                     e quindi il badge della location si va a posizionare nella
-                                     riga sotto a quella in cui sono presenti data/ora. Inoltre,
-                                     avrei potuto togliere il contenitore d-flex esterno e usare
-                                     semplicemente un'attributo d-inline-flex all'interno della
-                                     classe associata all'elemento p -->
                                     <div class="d-flex justify-content-center align-items-center text-center text-size-14">
                                         <p class="common-badge badge-yellow mt-2 text-center">Location: {{ session.location }}</p>
                                     </div>
-
-                                    <!-- Se sono presenti dei compagni compare una piccola
-                                     sezione con sfondo grigio chiaro e bordo bianco con
-                                     all'interno la scritta companion e poi il nome del
-                                     compagno scelto dall'utente attuale da portare in quella sessione -->
                                     {% if session.companions %}
                                     <div class="profile-companion-container my-3 mx-4 p-3">
                                         <span class="text-size-17 color-red text-center mb-2">Companion: </span>
-                                        <!-- Qua uso un for per ciclare sui comapgni solo perché inizialmente
-                                         avevo interpretato erroneamente i requisiti e pensavo che ogni avventuriero
-                                         potesso portare con sè fino a due comapgni. Anche se alla fine ho messo
-                                         che un avventuriero può portare con sè un solo compagno, per evitare di
-                                         dover stravolgere tutta la struttura, ho mantenuto la struttura con il for -->
                                         {% for companion in session.companions %}
                                         <span class="profile-companion-text ms-1 pb-2">{{ companion }}</span>
                                         {% endfor %}
                                     </div>
                                     {% endif %}
                                 </div>
-
-                                <!-- Della lunghezza assegnata a ciascuna card (ossia delle col-5)
-                                 3/12 di queste vengono assegnate alla sezione per i bottoni/badge
-                                 a seconda di quanto tempo manchi all'inzio della sessione -->
                                 <div class="col-3">
-                                    <!-- Averi potuto cancellare questa seconda div e mettere tutto all'
-                                     interno della prima ed avrei ottenuto lo stesso identico risultato -->
                                     <div class="d-flex flex-column justify-content-center align-items-center mb-1">
                                         {% if session.is_past %}
-                                        <!-- Se la sessione è già passata, cioè se la data di inizio
-                                         della sessione è nel passato viene, ERRONEAMENTE, viene visualizzato
-                                         ended (ma la sessione potrebbe essere ancora in corso) -->
                                         <span class="profile-locked badge-pink">ENDED</span>
-                                        <!-- Se invece la sessione ha inizio nel futuro e l'ora di inzio è a 
-                                         più di 8 ore di distanza allora l'utente può cancellare la prenotazione
-                                         a tale sessione o modificare la prenotazione -->
                                         {% elif session.can_cancel %}
-                                        <!-- La modifica è una modifica fittizia nel senso che porta l'utente
-                                         alla sezione di dettaglio della quest dove però tanto l'utente può
-                                         cancellare la prenotazione alla sessione anche da lì e poi
-                                         eventualmente prenotarsi ad un'altra sessione dellq stessa quest -->
                                         <a href="{{ url_for('quest_detail', quest_id=quest.id) }}" class="common-button button-yellow text-size-21 mb-3">Modify</a>
                                         <a href="{{ url_for('cancel_reservation', session_id=session.session_id) }}" class="common-button button-blue text-size-21">Cancel</a>
                                         {% else %}
-                                        <!-- Se invece la sessione è nel futuro ma inizia a meno di 8 ore
-                                         dalla data di partenza attuale fittizia, allora la prenotazione
-                                         appare in stato di locked -->
                                         <span class="profile-locked">LOCKED</span>
                                         {% endif %}
                                     </div>
@@ -211,25 +118,16 @@
         </div>
     </div>
     {% else %}
-    <!-- Come in tutto il resto del sito, anche sta parte è fatta male. Avrei
-     potuto tranquillamente togliere il contenitore più esterno e mettere la 
-     classe di padding ed un mx-auto nella classe sotto ed avrei ottenuto lo
-     stesso identico risultato -->
     <div class="d-flex justify-content-center padding-bottom-80">
         <div class="col-9 card position-relative quest-container p-0 m-0">
             <img src="{{ url_for('static', filename='images/sessions.png') }}" class="card-img object-fit-cover" alt="No booked session">
             <div class="card-img-overlay">
-                <!-- classe inutile che avrei potuto tranquillamente fondere
-                 con la classe immediatamente più interna ed avrei ottenuto lo
-                 stesso identico risultato -->
                 <div class="home-noquest-container w-100">
                     <div class="d-flex align-items-center justify-content-center text-center">
                         <h3 class="card-title title-big-yellow home-noquest-title text-center">
                             You haven't booked any sessions yet. Discover all available quests
                         </h3>
                     </div>
-                    <!-- Avrei potuto tranquillamente cancellare questa classe ed usarne
-                     una comune alle due div ed avrei avuto lo stesso risultato -->
                     <div class="d-flex justify-content-center align-items-center">
                         <a href="{{ url_for('home') }}" class="common-button button-blue">Go to Quests</a>
                     </div>

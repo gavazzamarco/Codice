@@ -2,37 +2,19 @@
 {% block title %} Home {% endblock %}
 {% block home_active %} active {% endblock %}
 {% block content %}
-<!-- position-relative [bootstrap]: mi serve solo perché poi la scritta che compare
- come titolo della pagina ha posizione assoluta, mi serve quindi un punto di
- riferimento per tale posizione assoluta che è proprio il contenitore dell'"hero" -->
-<!-- w-100 [bootstrap]: per fare in modo che immagine ed il bordo 
- multicolor possano prendere tutta la larghezza disponibile nello schermo -->
 <section class="position-relative w-100">
-    <!-- img-fluid [bootstrap]: This applies max-width: 100%; and height: auto; to the image so that it scales with the parent width. -->
     <img src="{{ url_for('static', filename='images/quests.png') }}" class="img-fluid" alt="Home image">
-    <!-- home-title-container: classe css personlizzata con posizione assoluta per
-     posizione il titolo NON in basso, come avverebbe se non avessi la posizione assoluta -->
-    <!-- position-absolute: fa uscire l'elemento dal normale flusso del DOM -->
     <div class="home-title-container d-flex justify-content-center w-100">
         <h1 class="home-title border-multicolor text-center">
             <span class="color-red">The</span> <span class="color-yellow">Antechamber</span> <span class="color-green">of</span> <span class="color-blue">Glory</span>
         </h1>
     </div>
-    <!-- solito bordo multicolor -->
     <div class="line-multicolor w-100 d-flex">
         <div class="background-red w-25 h-100"></div> <div class="background-yellow w-25 h-100"></div> <div class="background-green w-25 h-100"></div> <div class="background-blue w-25 h-100"></div>
     </div>
 </section>
-<!-- usato col-10 per definire la larghezza che volevo dare alla sezione filtri -->
-<!-- siccome su sta riga ho solo sta col (colonna) e NON altre, allora NON
- ho messo voltariamente container-fluid, che invece ho sempre messo 
- altrove quando avevo almeno due col (colonne) diverse sulla stessa riga -->
 <section class="col-10 dark-box border-multicolor mx-auto">
-    <!-- Scoperto che posso usare form come un normale elemento html 
-     quindi posso anche attribuirgli classi come "row" -->
     <form action="{{ url_for('home_filter') }}" method="POST" class="row">
-        <!-- .col to .col-auto so that your columns only take up as much space as needed. 
-         Put another way, the column sizes itself based on the contents. -->
         <div class="col">
             <label for="day" class="home-filtri-label color-red ps-1 pb-1">Day</label>
             <select id="day" name="day" class="form-control text-serif-bold">
@@ -70,9 +52,6 @@
                 {% endfor %}
             </select>
         </div>
-        <!-- Avendo col tutte le altre ed il bottone col-auto, il bottone prende il minimo
-         spazio che le serve mentre lo spazio rimanente viene diviso equamente tra le col -->
-        <!-- Per allineare verticalmente i bottoni ho usato una flex con orientazione verticale -->
         <div class="col-auto d-flex flex-column align-items-center justify-content-center">
             <button type="submit" class="common-button button-yellow home-button-search">Search</button>
             {% if giorno or tipo or difficolta or ruolo %}
@@ -81,42 +60,22 @@
         </div>
     </form>
 </section>
-<!-- Ho usato container fluid siccome uso dentro delle classi col che occupano l'intera 
- larghezza dello schermo (cioè tutte le 12 colonne) e senza di essa avrei avuto una lunga 
- ma sottile linea bianca a destra dello schermo con una barra orizziontale che compariva sotto -->
 <section class="padding-bottom-70 container-fluid">
     <h2 class="page-title text-center">
         <span class="color-red">AVAIL</span><span class="color-yellow">ABLE</span> <span class="color-green">QUE</span><span class="color-blue">STS</span>
     </h2>
     {% if quests %}
     {% for quest in quests %}
-    <!-- In questa caso ogni quest creo una nuova row, probabilmente avrei ottenuto
-     lo stesso risultando anche avendo una sola row per tutte le quest siccome tanto ogni 
-     volta, immagine_laterale-quest-immagine_laterale occupa sempre e comunque 12 colonne -->
     <div class="row margin-bottom-50">
-        <!-- due colonne per ogni immagine laterale. Le figure laterali hanno
-         un'altezza massima di 450 px -->
         <div class="col-2 d-flex align-items-center justify-content-center">
             {% if quest.foto_sinistra %}
             <img src="{{ url_for('static', filename=quest.foto_sinistra) }}" class="img-fluid object-fit-cover lateral-figure" alt="Decoration photo">
             {% endif %}
         </div>
-        <!-- La quest occupa le 8 colonne centrali dello schermo -->
-        <!-- Ho fatto un copia incolla della card trovata su bootstrap che era
-         composta da solo un'immagine e da del testo in sovra-impressione
-         alla quale ho poi applicato delle classi css personalizzate -->
-        <!-- position-relative [bootstrap]: siccome mi serviva un riferimento, che è
-         il contenitore globale, rispetto a cui posizionare le scritte in sovra-impressione -->
         <article class="col-8 card position-relative quest-container p-0">
-            <!-- L'altezza dell'immagine della card ha un'altezza fissa di 450px
-             che è di fatto la stessa altezza delle immagini laterali -->
             <img src="{{ url_for('static', filename=quest.illustration) }}" class="card-img object-fit-cover quest-card-image" alt="Illustration of quest {{quest.title }}">
             <div class="card-img-overlay">
-                <!-- quest-card-text: classe css personalizzata che ha posizione assoluta 
-                 per poter posizionare le scritte e bottoni in basse nella card -->
                 <div class="quest-card-text w-100 d-flex justify-content-between">
-                    <!-- flex-grow-1: servirebbe a prendere l'intero spazio
-                     disponibile lasciato sulla riga ma in questo caso è inutile -->
                     <div class="flex-grow-1 me-2">
                         <h3 class="card-title title-big-yellow">{{ quest.title }}</h3>
                         <div class="d-flex flex-wrap">
@@ -125,8 +84,6 @@
                             <div class="common-badge badge-blue">Duration: {{ quest.duration }} min</div>
                         </div>
                     </div>
-                    <!-- bottone definito come common-button button-yellow per
-                     portare l'utente sulla pagina di dettaglio della quest -->
                     <div class="d-flex justify-content-center align-items-end mb-3 me-4">
                         <a href="{{ url_for('quest_detail', quest_id=quest.id) }}" class="common-button button-yellow text-size-33">View</a>
                     </div> 
@@ -141,9 +98,6 @@
     </div>
     {% endfor %}
     {% else %}
-    <!-- position-relative [bootstrap]: siccome anche in questo caso ho usato di
-     fatto la stessa card/struttura usata per la parte di quest e quindi mi serve un
-     riferimento per poter piazzare le scritte e bottoni (che hanno posizione assoluta) -->
     <div class="col-8 card position-relative quest-container p-0 mx-auto">
         <img src="{{ url_for('static', filename='images/filtraggio.png') }}" class="card-img object-fit-cover" alt="Image no quest found">
         <div class="card-img-overlay">
