@@ -113,6 +113,7 @@
                      prende tutto lo spazio rimasto inutilizzato all'interno della riga e lo
                      riempe con il colore di sfondo (l'altezza della riga è determinata dalla
                      sessione avente la card più alta all'interno di tale riga) -->
+                    <!-- INUTILE utilizzo di flex-column -->
                     <div class="col-5 mb-4 pb-3 d-flex flex-column">
                         <!-- Siccome sopra ho usato flex-column, per NON rovinare il layout
                          iniziale ho dovuto usare una div che contenesse di fatto tutte le
@@ -218,9 +219,10 @@
                             {% endif %}
                         </div>
 
-                        <!-- Classe che di fatto serve solo a riempire con il colore di sfondo
-                         l'altezza mancante della card e nel caso in cui sulla stessa riga
-                         sia presente un'alta card di altezza maggiore -->
+                        <!-- Anzi, questa classe è completamente inutile, non serve a niente
+                         e se facesse qualcosa sarebbe pure sbagliato siccome allungherebbe
+                         la card NON con il colore nero ma con il colore grigio scuro
+                         dello sfondo, il che sarebbe solo sbagliato -->
                         <div class="flex-grow-1"></div>
                     </div>
 

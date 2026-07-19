@@ -56,6 +56,9 @@ def home_filter():
     type=request.form.get("type")
     difficulty=request.form.get("difficulty")
     role=request.form.get("role")
+    # Errore di copia-incolla. Viene detto che il giorno è obbligatorio
+    # ma NON è vero (tuttavia viene scritto così siccome è un copia-incolla
+    # di quanto era invece presente nella sezione di quest_create())
     if day!="" and day not in DAYS_OF_WEEK:
         flash("The day is mandatory and must be selected from the available options", "danger")
         return redirect(url_for('home'))
